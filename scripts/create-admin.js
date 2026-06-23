@@ -32,13 +32,14 @@ if (!MONGODB_URI || !SUPABASE_URL || !SERVICE_KEY) {
 
 const args = process.argv.slice(2);
 if (args.length === 0) {
-  console.log('Usage: node scripts/create-admin.js <email> [role]');
+  console.log('Usage: node scripts/create-admin.js <email> [role] [password]');
   console.log('Available roles: participant, judge, mentor, admin, super_admin');
   process.exit(0);
 }
 
 const email = args[0].trim().toLowerCase();
 const role = (args[1] || 'admin').trim().toLowerCase();
+const password = (args[2] || 'AdminSecurePassword2026!').trim();
 
 const validRoles = ['participant', 'judge', 'mentor', 'admin', 'super_admin'];
 if (!validRoles.includes(role)) {
@@ -66,19 +67,27 @@ async function run() {
     const { data: { users }, error: listError } = await supabaseAdmin.auth.admin.listUsers();
     if (listError) throw listError;
 
-    const user = users.find(u => u.email.toLowerCase() === email);
+    let user = users.find(u => u.email.toLowerCase() === email);
     if (!user) {
-      console.error(`Error: User not found in Supabase Auth. Make sure they have registered via the website first.`);
-      process.exit(1);
+      console.log(`User not found in Supabase Auth. Creating new user with email: ${email}...`);
+      const { data: createData, error: createError } = await supabaseAdmin.auth.admin.createUser({
+        email,
+        password,
+        email_confirm: true,
+        user_metadata: { role, full_name: 'System Administrator' }
+      });
+      if (createError) throw createError;
+      user = createData.user;
+      console.log(`User created successfully. User ID: ${user.id}`);
+    } else {
+      console.log(`Found user in Supabase. User ID: ${user.id}`);
+      console.log(`Updating Supabase metadata role to: ${role}...`);
+      const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(user.id, {
+        user_metadata: { role }
+      });
+      if (updateError) throw updateError;
+      console.log(`Supabase Auth role updated successfully.`);
     }
-
-    console.log(`Found user in Supabase. User ID: ${user.id}`);
-    console.log(`Updating Supabase metadata role to: ${role}...`);
-    const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(user.id, {
-      user_metadata: { role }
-    });
-    if (updateError) throw updateError;
-    console.log(`Supabase Auth role updated successfully.`);
 
     // 3. Connect to MongoDB Atlas and update profile document
     console.log('Connecting to MongoDB Atlas...');
@@ -86,11 +95,15 @@ async function run() {
     console.log('Connected to MongoDB.');
 
     console.log(`Updating Profile document in MongoDB for user: ${email}...`);
-    const profile = await Profile.findOneAndUpdate(
-      { email },
-      { role },
-      { new: true, upsert: true } // Upsert in case document wasn't fully synced
-    );
+    // Delete any existing document to prevent _id mismatches or duplicate key errors
+    await Profile.deleteOne({ email });
+
+    const profile = await Profile.create({
+      _id: user.id,
+      email,
+      role,
+      full_name: user.user_metadata.full_name || 'System Administrator'
+    });
 
     console.log(`MongoDB profile updated successfully. New Profile:`, profile);
     process.exit(0);

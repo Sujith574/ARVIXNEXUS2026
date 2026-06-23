@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { Trophy, Link as LinkIcon, Loader2, Zap, RefreshCw } from 'lucide-react';
+import { Trophy, Link as LinkIcon, Loader2, Zap, RefreshCw, EyeOff } from 'lucide-react';
 
 const MOCK_LEADERBOARD = [
   { team_id: '1', team_name: 'Alpha Coders', project_title: 'AI Grievance Engine', repo_url: 'https://github.com', judges_count: 3, total_score: 38.5 },
@@ -16,6 +16,7 @@ export default function LeaderboardPage() {
   const [leaderboard, setLeaderboard] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [realtimeActive, setRealtimeActive] = useState(true);
+  const [isHidden, setIsHidden] = useState(false);
   const supabase = createClient();
 
   const fetchLeaderboard = async () => {
@@ -23,13 +24,19 @@ export default function LeaderboardPage() {
       const res = await fetch('/api/hackathon/leaderboard');
       if (!res.ok) throw new Error('Failed to fetch leaderboard');
       const data = await res.json();
-      if (data.leaderboard && data.leaderboard.length > 0) {
+      if (data.is_hidden) {
+        setIsHidden(true);
+        setLeaderboard([]);
+      } else if (data.leaderboard && data.leaderboard.length > 0) {
+        setIsHidden(false);
         setLeaderboard(data.leaderboard);
       } else {
+        setIsHidden(false);
         setLeaderboard(MOCK_LEADERBOARD);
       }
     } catch (err) {
       console.error('Leaderboard fetch error, falling back to mock data:', err);
+      setIsHidden(false);
       setLeaderboard(MOCK_LEADERBOARD);
     } finally {
       setLoading(false);
@@ -106,6 +113,16 @@ export default function LeaderboardPage() {
         {loading ? (
           <div className="flex justify-center items-center py-24">
             <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+          </div>
+        ) : isHidden ? (
+          <div className="bg-slate-900/40 p-12 rounded-3xl border border-slate-800 text-center space-y-4 shadow-xl backdrop-blur-sm">
+            <div className="mx-auto w-16 h-16 bg-rose-500/10 border border-rose-500/20 text-rose-450 flex items-center justify-center rounded-full">
+              <EyeOff className="w-8 h-8 animate-pulse" />
+            </div>
+            <h3 className="text-xl font-bold text-white">Leaderboard Temporarily Hidden</h3>
+            <p className="text-slate-400 text-sm max-w-md mx-auto leading-relaxed">
+              Ranks and scores have been hidden by the hackathon administrators for evaluation auditing. Check back later for final standing updates.
+            </p>
           </div>
         ) : (
           <div className="bg-slate-900/20 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">

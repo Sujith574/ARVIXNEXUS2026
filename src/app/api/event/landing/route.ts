@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import EventAgenda from '@/models/EventAgenda';
 import Profile from '@/models/Profile';
+import HackathonRound from '@/models/HackathonRound';
 
 export async function GET() {
   try {
@@ -37,9 +38,17 @@ export async function GET() {
       id: s._id.toString(),
     }));
 
+    // Fetch Hackathon Rounds
+    const roundsList = await HackathonRound.find().sort({ round_number: 1 });
+    const formattedRounds = roundsList.map((r) => ({
+      ...r.toObject(),
+      id: r._id.toString(),
+    }));
+
     return NextResponse.json({
       agenda: formattedAgenda,
       speakers: formattedSpeakers,
+      rounds: formattedRounds,
     });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

@@ -23,6 +23,7 @@ const DEFAULT_SPEAKERS = [
 export default function EventLandingPage() {
   const [agenda, setAgenda] = useState<any[]>([]);
   const [speakers, setSpeakers] = useState<any[]>([]);
+  const [rounds, setRounds] = useState<any[]>([]);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [playStream, setPlayStream] = useState(false);
   const supabase = createClient();
@@ -65,10 +66,25 @@ export default function EventLandingPage() {
         } else {
           setSpeakers(DEFAULT_SPEAKERS);
         }
+
+        if (data.rounds && data.rounds.length > 0) {
+          setRounds(data.rounds);
+        } else {
+          setRounds([
+            { round_number: 1, title: 'Ideation & Stack Submission', date: 'July 10, 2026', timeline: '02:00 PM - 06:00 PM', description: 'Teams register, submit stacks, and pitch core ideas to review panels.' },
+            { round_number: 2, title: 'Prototype Evaluation', date: 'July 11, 2026', timeline: '10:00 AM - 05:00 PM', description: 'Mid-point checkin with technical mentors and initial scoring.' },
+            { round_number: 3, title: 'Grand Finale Pitching', date: 'July 12, 2026', timeline: '09:00 AM - 04:00 PM', description: 'Working prototypes presented to VIP guest panel for final grading.' }
+          ]);
+        }
       } catch (err) {
         console.error('Error fetching event details:', err);
         setAgenda(DEFAULT_AGENDA);
         setSpeakers(DEFAULT_SPEAKERS);
+        setRounds([
+          { round_number: 1, title: 'Ideation & Stack Submission', date: 'July 10, 2026', timeline: '02:00 PM - 06:00 PM', description: 'Teams register, submit stacks, and pitch core ideas to review panels.' },
+          { round_number: 2, title: 'Prototype Evaluation', date: 'July 11, 2026', timeline: '10:00 AM - 05:00 PM', description: 'Mid-point checkin with technical mentors and initial scoring.' },
+          { round_number: 3, title: 'Grand Finale Pitching', date: 'July 12, 2026', timeline: '09:00 AM - 04:00 PM', description: 'Working prototypes presented to VIP guest panel for final grading.' }
+        ]);
       }
     };
 
@@ -207,6 +223,56 @@ export default function EventLandingPage() {
               allowFullScreen
             ></iframe>
           )}
+        </div>
+      </section>
+
+      {/* Hackathon Evaluation Rounds Section */}
+      <section className="py-16 bg-slate-900/10 border-t border-slate-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          
+          <div className="text-center space-y-3">
+            <h3 className="text-2xl font-bold sm:text-3xl text-white tracking-tight">
+              Evaluation & Judging Timeline
+            </h3>
+            <p className="text-slate-400 text-sm max-w-lg mx-auto">
+              Our software development hackathon is structured into 3 competitive rounds. Ensure your team submits prototypes before the evaluation checkpoints.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {rounds.map((round) => (
+              <div
+                key={round.id || round.round_number}
+                className="bg-slate-900/30 p-6 rounded-2xl border border-slate-850 hover:border-blue-500/30 transition-all flex flex-col justify-between space-y-4 group relative overflow-hidden"
+              >
+                {/* Decorative border highlight */}
+                <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-blue-500 to-indigo-500 opacity-70 group-hover:opacity-100 transition-opacity"></div>
+                
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[10px] bg-blue-500/10 text-blue-400 font-bold px-2 py-0.5 rounded border border-blue-500/20">
+                      Round {round.round_number}
+                    </span>
+                    <span className="text-[10px] text-slate-550 font-semibold">{round.timeline}</span>
+                  </div>
+                  
+                  <h4 className="font-bold text-white text-base group-hover:text-blue-400 transition-colors">
+                    {round.title}
+                  </h4>
+                  
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    {round.description}
+                  </p>
+                </div>
+
+                <div className="pt-2 border-t border-slate-850/50 flex justify-between items-center text-[10px] text-slate-500 font-bold">
+                  <span>Checkpoint Date</span>
+                  <span className="text-slate-350">{round.date}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
         </div>
       </section>
 

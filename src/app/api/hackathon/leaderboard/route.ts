@@ -3,10 +3,17 @@ import dbConnect from '@/lib/mongodb';
 import Submission from '@/models/Submission';
 import Score from '@/models/Score';
 import Team from '@/models/Team';
+import SystemSetting from '@/models/SystemSetting';
 
 export async function GET() {
   try {
     await dbConnect();
+
+    // Check leaderboard visibility settings
+    const visibilitySetting = await SystemSetting.findOne({ key: 'leaderboard_visible' });
+    if (visibilitySetting && visibilitySetting.value === false) {
+      return NextResponse.json({ leaderboard: [], is_hidden: true });
+    }
 
     // Ensure models are registered for lookups
     const _dummyScore = Score.modelName;
