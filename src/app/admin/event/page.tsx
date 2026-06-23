@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { Calendar, Plus, Mail, ShieldAlert, Loader2, Key, Bell, FileText, Send, Trash2 } from 'lucide-react';
+import { Calendar, Plus, Mail, ShieldAlert, Loader2, Key, Bell, FileText, Send, Trash2, Edit2, X } from 'lucide-react';
 
 export default function EventManagementPage() {
   const [agenda, setAgenda] = useState<any[]>([]);
@@ -11,14 +11,16 @@ export default function EventManagementPage() {
   const [vipDocs, setVipDocs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Agenda Form
+  // Agenda Form & Edit State
+  const [editingAgendaId, setEditingAgendaId] = useState<string | null>(null);
   const [agendaTitle, setAgendaTitle] = useState('');
   const [agendaDesc, setAgendaDesc] = useState('');
   const [agendaStart, setAgendaStart] = useState('');
   const [agendaEnd, setAgendaEnd] = useState('');
   const [agendaType, setAgendaType] = useState('session');
 
-  // Invitation Form
+  // Invitation Form & Edit State
+  const [editingInvitationId, setEditingInvitationId] = useState<string | null>(null);
   const [inviteeName, setInviteeName] = useState('');
   const [inviteeEmail, setInviteeEmail] = useState('');
   const [inviteeType, setInviteeType] = useState('VIP');
@@ -60,18 +62,47 @@ export default function EventManagementPage() {
     }
   };
 
-  const handleAddAgenda = async (e: React.FormEvent) => {
+  const formatDateTimeLocal = (isoString: string) => {
+    if (!isoString) return '';
+    const date = new Date(isoString);
+    const offset = date.getTimezoneOffset();
+    const localDate = new Date(date.getTime() - offset * 60 * 1000);
+    return localDate.toISOString().slice(0, 16);
+  };
+
+  const handleStartEditAgenda = (slot: any) => {
+    setEditingAgendaId(slot.id);
+    setAgendaTitle(slot.title);
+    setAgendaDesc(slot.description || '');
+    setAgendaStart(formatDateTimeLocal(slot.start_time));
+    setAgendaEnd(formatDateTimeLocal(slot.end_time));
+    setAgendaType(slot.type);
+  };
+
+  const handleCancelEditAgenda = () => {
+    setEditingAgendaId(null);
+    setAgendaTitle('');
+    setAgendaDesc('');
+    setAgendaStart('');
+    setAgendaEnd('');
+    setAgendaType('session');
+  };
+
+  const handleAddOrEditAgenda = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!agendaTitle.trim() || !agendaStart || !agendaEnd) return;
     setActionLoading(true);
     setMsg(null);
+
+    const isEdit = !!editingAgendaId;
 
     try {
       const res = await fetch('/api/admin/event', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          action: 'addAgenda',
+          action: isEdit ? 'editAgenda' : 'addAgenda',
+          id: editingAgendaId || undefined,
           title: agendaTitle.trim(),
           description: agendaDesc.trim() || null,
           start_time: new Date(agendaStart).toISOString(),
@@ -81,13 +112,10 @@ export default function EventManagementPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to publish agenda slot.');
+      if (!res.ok) throw new Error(data.error || `Failed to ${isEdit ? 'update' : 'publish'} agenda slot.`);
 
-      setMsg({ type: 'success', text: 'Agenda slot published successfully!' });
-      setAgendaTitle('');
-      setAgendaDesc('');
-      setAgendaStart('');
-      setAgendaEnd('');
+      setMsg({ type: 'success', text: `Agenda slot ${isEdit ? 'updated' : 'published'} successfully!` });
+      handleCancelEditAgenda();
       await fetchData();
     } catch (err: any) {
       setMsg({ type: 'error', text: err.message });
@@ -96,20 +124,68 @@ export default function EventManagementPage() {
     }
   };
 
-  const handleCreateInvitation = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inviteeName.trim() || !inviteeEmail.trim()) return;
+  const handleDeleteAgenda = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this agenda slot?')) return;
     setActionLoading(true);
     setMsg(null);
-
-    const code = `${inviteeType.substring(0, 3).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
 
     try {
       const res = await fetch('/api/admin/event', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          action: 'createInvitation',
+          action: 'deleteAgenda',
+          id,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to delete agenda slot.');
+
+      setMsg({ type: 'success', text: 'Agenda slot deleted successfully.' });
+      if (editingAgendaId === id) {
+        handleCancelEditAgenda();
+      }
+      await fetchData();
+    } catch (err: any) {
+      setMsg({ type: 'error', text: err.message });
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleStartEditInvitation = (inv: any) => {
+    setEditingInvitationId(inv.id);
+    setInviteeName(inv.invitee_name);
+    setInviteeEmail(inv.email);
+    setInviteeType(inv.type);
+    setInviteMaxUses(inv.max_uses);
+  };
+
+  const handleCancelEditInvitation = () => {
+    setEditingInvitationId(null);
+    setInviteeName('');
+    setInviteeEmail('');
+    setInviteeType('VIP');
+    setInviteMaxUses(1);
+  };
+
+  const handleCreateOrEditInvitation = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inviteeName.trim() || !inviteeEmail.trim()) return;
+    setActionLoading(true);
+    setMsg(null);
+
+    const isEdit = !!editingInvitationId;
+    const code = isEdit ? undefined : `${inviteeType.substring(0, 3).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+
+    try {
+      const res = await fetch('/api/admin/event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: isEdit ? 'editInvitation' : 'createInvitation',
+          id: editingInvitationId || undefined,
           code,
           invitee_name: inviteeName.trim(),
           email: inviteeEmail.trim(),
@@ -119,12 +195,40 @@ export default function EventManagementPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to generate code.');
+      if (!res.ok) throw new Error(data.error || `Failed to ${isEdit ? 'update' : 'generate'} code.`);
 
-      setMsg({ type: 'success', text: `Invitation code ${code} generated.` });
-      setInviteeName('');
-      setInviteeEmail('');
-      setInviteMaxUses(1);
+      setMsg({ type: 'success', text: `Invitation ${isEdit ? 'updated' : 'generated'} successfully.` });
+      handleCancelEditInvitation();
+      await fetchData();
+    } catch (err: any) {
+      setMsg({ type: 'error', text: err.message });
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDeleteInvitation = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this invitation?')) return;
+    setActionLoading(true);
+    setMsg(null);
+
+    try {
+      const res = await fetch('/api/admin/event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'deleteInvitation',
+          id,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to delete invitation.');
+
+      setMsg({ type: 'success', text: 'Invitation deleted successfully.' });
+      if (editingInvitationId === id) {
+        handleCancelEditInvitation();
+      }
       await fetchData();
     } catch (err: any) {
       setMsg({ type: 'error', text: err.message });
@@ -158,6 +262,33 @@ export default function EventManagementPage() {
       setDocTitle('');
       setDocFileUrl('');
       setDocVisibleTo('');
+      await fetchData();
+    } catch (err: any) {
+      setMsg({ type: 'error', text: err.message });
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDeleteVipDoc = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this VIP document?')) return;
+    setActionLoading(true);
+    setMsg(null);
+
+    try {
+      const res = await fetch('/api/admin/event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'deleteVipDoc',
+          id,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to delete VIP document.');
+
+      setMsg({ type: 'success', text: 'VIP document deleted successfully.' });
       await fetchData();
     } catch (err: any) {
       setMsg({ type: 'error', text: err.message });
@@ -245,7 +376,7 @@ export default function EventManagementPage() {
             <Calendar className="w-4 h-4 text-blue-500" /> Event Agenda Slots
           </h3>
 
-          <form onSubmit={handleAddAgenda} className="space-y-4 text-xs">
+          <form onSubmit={handleAddOrEditAgenda} className="space-y-4 text-xs">
             <div>
               <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">
                 Agenda Title
@@ -257,6 +388,18 @@ export default function EventManagementPage() {
                 value={agendaTitle}
                 onChange={(e) => setAgendaTitle(e.target.value)}
                 className="block w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white placeholder-slate-655 focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">
+                Agenda Description (Optional)
+              </label>
+              <textarea
+                placeholder="Brief description of the slot"
+                value={agendaDesc}
+                onChange={(e) => setAgendaDesc(e.target.value)}
+                className="block w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white placeholder-slate-655 focus:outline-none h-16 resize-none"
               />
             </div>
 
@@ -302,24 +445,62 @@ export default function EventManagementPage() {
               </select>
             </div>
 
-            <button
-              type="submit"
-              disabled={actionLoading || !agendaTitle.trim() || !agendaStart}
-              className="w-full flex items-center justify-center gap-1 py-2 px-4 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold text-xs transition-colors shadow-md disabled:opacity-50"
-            >
-              <Plus className="w-3.5 h-3.5" /> Publish Slot
-            </button>
+            <div className="flex gap-2">
+              <button
+                type="submit"
+                disabled={actionLoading || !agendaTitle.trim() || !agendaStart}
+                className="flex-1 flex items-center justify-center gap-1 py-2 px-4 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold text-xs transition-colors shadow-md disabled:opacity-50"
+              >
+                {editingAgendaId ? (
+                  <>
+                    <Edit2 className="w-3.5 h-3.5" /> Save Changes
+                  </>
+                ) : (
+                  <>
+                    <Plus className="w-3.5 h-3.5" /> Publish Slot
+                  </>
+                )}
+              </button>
+              {editingAgendaId && (
+                <button
+                  type="button"
+                  onClick={handleCancelEditAgenda}
+                  className="px-3 py-2 bg-slate-850 hover:bg-slate-800 text-slate-300 rounded-lg text-xs font-semibold flex items-center justify-center transition-colors"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
           </form>
 
           {/* List of slots */}
           <div className="pt-4 border-t border-slate-850 space-y-2.5 max-h-[220px] overflow-y-auto pr-1">
             {agenda.map((slot) => (
-              <div key={slot.id} className="bg-slate-950 p-2.5 border border-slate-850 rounded-lg text-[11px] text-slate-400">
-                <span className="font-semibold text-white block">{slot.title}</span>
-                <span className="text-[10px] text-slate-500 block mt-0.5">
-                  {new Date(slot.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -{' '}
-                  {new Date(slot.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </span>
+              <div key={slot.id} className="bg-slate-950 p-2.5 border border-slate-850 rounded-lg text-[11px] text-slate-400 flex justify-between items-start">
+                <div className="flex-1 min-w-0 mr-2">
+                  <span className="font-semibold text-white block truncate">{slot.title}</span>
+                  <span className="text-[10px] text-slate-500 block mt-0.5">
+                    {new Date(slot.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -{' '}
+                    {new Date(slot.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ({slot.type})
+                  </span>
+                  {slot.description && <span className="text-[10px] text-slate-550 block mt-1 line-clamp-2">{slot.description}</span>}
+                </div>
+                <div className="flex gap-1.5 flex-shrink-0">
+                  <button
+                    onClick={() => handleStartEditAgenda(slot)}
+                    className="p-1 text-slate-400 hover:text-blue-400 rounded transition-colors"
+                    title="Edit Slot"
+                  >
+                    <Edit2 className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={() => handleDeleteAgenda(slot.id)}
+                    className="p-1 text-slate-400 hover:text-rose-500 rounded transition-colors"
+                    title="Delete Slot"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -331,7 +512,7 @@ export default function EventManagementPage() {
             <Key className="w-4 h-4 text-blue-500" /> Reservation Code Generator
           </h3>
 
-          <form onSubmit={handleCreateInvitation} className="space-y-4 text-xs">
+          <form onSubmit={handleCreateOrEditInvitation} className="space-y-4 text-xs">
             <div>
               <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">
                 Invitee Name
@@ -391,25 +572,63 @@ export default function EventManagementPage() {
               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={actionLoading || !inviteeName.trim() || !inviteeEmail.trim()}
-              className="w-full flex items-center justify-center gap-1 py-2 px-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-semibold text-xs transition-colors shadow-md disabled:opacity-50"
-            >
-              <Plus className="w-3.5 h-3.5" /> Generate Code
-            </button>
+            <div className="flex gap-2">
+              <button
+                type="submit"
+                disabled={actionLoading || !inviteeName.trim() || !inviteeEmail.trim()}
+                className="flex-1 flex items-center justify-center gap-1 py-2 px-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-semibold text-xs transition-colors shadow-md disabled:opacity-50"
+              >
+                {editingInvitationId ? (
+                  <>
+                    <Edit2 className="w-3.5 h-3.5" /> Save Changes
+                  </>
+                ) : (
+                  <>
+                    <Plus className="w-3.5 h-3.5" /> Generate Code
+                  </>
+                )}
+              </button>
+              {editingInvitationId && (
+                <button
+                  type="button"
+                  onClick={handleCancelEditInvitation}
+                  className="px-3 py-2 bg-slate-850 hover:bg-slate-800 text-slate-300 rounded-lg text-xs font-semibold flex items-center justify-center transition-colors"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
           </form>
 
           {/* List of generated invites */}
           <div className="pt-4 border-t border-slate-855 space-y-2 max-h-[170px] overflow-y-auto pr-1">
             {invitations.map((inv) => (
               <div key={inv.id} className="bg-slate-950 p-2.5 border border-slate-850 rounded-lg text-[10px] text-slate-450 flex justify-between items-center">
-                <div>
+                <div className="flex-1 min-w-0 mr-2">
                   <span className="font-bold text-white block">{inv.code}</span>
-                  <span className="text-slate-550 block mt-0.5">{inv.invitee_name} ({inv.type})</span>
+                  <span className="text-slate-550 block mt-0.5 truncate">{inv.invitee_name} ({inv.type})</span>
+                  <span className="text-slate-600 block mt-0.5 truncate">{inv.email}</span>
                 </div>
-                <div className="text-right text-slate-500">
-                  Claims: <span className="font-bold text-white">{inv.times_used}</span> / {inv.max_uses}
+                <div className="flex items-center gap-3 flex-shrink-0">
+                  <div className="text-right text-slate-500">
+                    Claims: <span className="font-bold text-white">{inv.times_used}</span> / {inv.max_uses}
+                  </div>
+                  <div className="flex gap-1">
+                    <button
+                      onClick={() => handleStartEditInvitation(inv)}
+                      className="p-1 text-slate-400 hover:text-blue-400 rounded transition-colors"
+                      title="Edit Invitation"
+                    >
+                      <Edit2 className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteInvitation(inv.id)}
+                      className="p-1 text-slate-400 hover:text-rose-500 rounded transition-colors"
+                      title="Delete Invitation"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -477,9 +696,36 @@ export default function EventManagementPage() {
                 disabled={actionLoading || !docTitle.trim() || !docVisibleTo}
                 className="w-full flex items-center justify-center gap-1.5 py-1.5 bg-indigo-650 hover:bg-indigo-600 text-white rounded-lg font-semibold text-xs transition-colors disabled:opacity-50"
               >
-                <FileText className="w-3.5 h-3.5" /> Assign Document
+                <Plus className="w-3.5 h-3.5" /> Assign Document
               </button>
             </form>
+
+            {/* List of uploaded VIP documents */}
+            <div className="pt-4 border-t border-slate-850 space-y-2 max-h-[150px] overflow-y-auto pr-1">
+              {vipDocs.map((doc) => (
+                <div key={doc.id} className="bg-slate-950 p-2 border border-slate-850 rounded-lg text-[10px] text-slate-450 flex justify-between items-center">
+                  <div className="flex-1 min-w-0 mr-2">
+                    <span className="font-bold text-white block truncate">{doc.title}</span>
+                    <span className="text-slate-550 block truncate mt-0.5">Visible to: {doc.profiles?.full_name || 'Unknown'}</span>
+                    <a
+                      href={doc.file_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:underline block mt-0.5 truncate"
+                    >
+                      {doc.file_url}
+                    </a>
+                  </div>
+                  <button
+                    onClick={() => handleDeleteVipDoc(doc.id)}
+                    className="p-1 text-slate-400 hover:text-rose-500 rounded transition-colors flex-shrink-0"
+                    title="Delete Document"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Real-time Stage Cues */}

@@ -130,6 +130,52 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, problem });
     }
 
+    if (action === 'editProblem') {
+      const { id, title, description, track, api_links } = body;
+      if (!id || !title || !description || !track) {
+        return NextResponse.json({ error: 'Missing challenge details' }, { status: 400 });
+      }
+
+      const problem = await ProblemStatement.findByIdAndUpdate(
+        id,
+        { title, description, track, api_links: api_links || [] },
+        { new: true }
+      );
+
+      if (!problem) {
+        return NextResponse.json({ error: 'Problem statement not found' }, { status: 404 });
+      }
+
+      await AuditLog.create({
+        admin_id: user.id,
+        action: 'PROBLEM_STATEMENT_UPDATE',
+        details: { problem_id: id, title, track },
+      });
+
+      return NextResponse.json({ success: true, problem });
+    }
+
+    if (action === 'deleteProblem') {
+      const { id } = body;
+      if (!id) {
+        return NextResponse.json({ error: 'Missing problem ID' }, { status: 400 });
+      }
+
+      const problem = await ProblemStatement.findByIdAndDelete(id);
+
+      if (!problem) {
+        return NextResponse.json({ error: 'Problem statement not found' }, { status: 404 });
+      }
+
+      await AuditLog.create({
+        admin_id: user.id,
+        action: 'PROBLEM_STATEMENT_DELETION',
+        details: { problem_id: id, title: problem.title },
+      });
+
+      return NextResponse.json({ success: true, message: 'Problem statement deleted.' });
+    }
+
     return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

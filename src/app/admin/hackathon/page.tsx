@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { FileCode, Plus, CheckCircle, XCircle, Loader2, ListCollapse, Award, ShieldAlert } from 'lucide-react';
+import { FileCode, Plus, CheckCircle, XCircle, Loader2, ListCollapse, Award, ShieldAlert, Edit3, Trash2 } from 'lucide-react';
 
 export default function HackathonManagementPage() {
   const [problems, setProblems] = useState<any[]>([]);
@@ -16,6 +16,7 @@ export default function HackathonManagementPage() {
   const [track, setTrack] = useState('AI for Governance');
   const [apiName1, setApiName1] = useState('');
   const [apiUrl1, setApiUrl1] = useState('');
+  const [editingProblemId, setEditingProblemId] = useState<string | null>(null);
   const [formLoading, setFormLoading] = useState(false);
   const [msg, setMsg] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
@@ -57,7 +58,8 @@ export default function HackathonManagementPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          action: 'createProblem',
+          action: editingProblemId ? 'editProblem' : 'createProblem',
+          id: editingProblemId || undefined,
           title: title.trim(),
           description: description.trim(),
           track,
@@ -68,16 +70,69 @@ export default function HackathonManagementPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to publish problem statement.');
 
-      setMsg({ type: 'success', text: 'Problem statement added successfully!' });
+      setMsg({
+        type: 'success',
+        text: editingProblemId ? 'Problem statement updated successfully!' : 'Problem statement added successfully!'
+      });
       setTitle('');
       setDescription('');
       setApiName1('');
       setApiUrl1('');
+      setEditingProblemId(null);
       await fetchData(); // Refresh list
     } catch (err: any) {
       setMsg({ type: 'error', text: err.message });
     } finally {
       setFormLoading(false);
+    }
+  };
+
+  const startEditProblem = (prob: any) => {
+    setTitle(prob.title);
+    setDescription(prob.description);
+    setTrack(prob.track);
+    if (prob.api_links && prob.api_links.length > 0) {
+      setApiName1(prob.api_links[0].name || '');
+      setApiUrl1(prob.api_links[0].url || '');
+    } else {
+      setApiName1('');
+      setApiUrl1('');
+    }
+    setEditingProblemId(prob.id);
+  };
+
+  const cancelEdit = () => {
+    setTitle('');
+    setDescription('');
+    setTrack('AI for Governance');
+    setApiName1('');
+    setApiUrl1('');
+    setEditingProblemId(null);
+  };
+
+  const handleDeleteProblem = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this problem statement? This action cannot be undone.')) return;
+    setMsg(null);
+    try {
+      const res = await fetch('/api/admin/hackathon', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'deleteProblem',
+          id,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to delete problem statement.');
+
+      setMsg({ type: 'success', text: 'Problem statement deleted successfully!' });
+      if (editingProblemId === id) {
+        cancelEdit();
+      }
+      await fetchData();
+    } catch (err: any) {
+      setMsg({ type: 'error', text: err.message });
     }
   };
 
@@ -134,7 +189,8 @@ export default function HackathonManagementPage() {
         {/* Create form */}
         <div className="lg:col-span-1 bg-slate-900/40 p-6 rounded-2xl border border-slate-800 backdrop-blur-sm shadow-md space-y-6">
           <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-            <Plus className="w-4 h-4 text-blue-400" /> Create Problem Statement
+            {editingProblemId ? <Edit3 className="w-4 h-4 text-amber-500" /> : <Plus className="w-4 h-4 text-blue-400" />}
+            {editingProblemId ? 'Edit Problem Statement' : 'Create Problem Statement'}
           </h3>
 
           <form onSubmit={handleCreateProblem} className="space-y-4 text-xs">
@@ -203,13 +259,32 @@ export default function HackathonManagementPage() {
               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={formLoading || !title.trim() || !description.trim()}
-              className="w-full flex items-center justify-center gap-1.5 py-2 px-4 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold text-xs transition-colors shadow-md disabled:opacity-50 mt-2"
-            >
-              {formLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>Publish Statement</span>}
-            </button>
+            <div className="flex gap-2 mt-2">
+              {editingProblemId && (
+                <button
+                  type="button"
+                  onClick={cancelEdit}
+                  className="flex-1 py-2 px-4 border border-slate-800 hover:border-slate-700 bg-slate-950 text-slate-350 rounded-lg font-semibold text-xs transition-colors"
+                >
+                  Cancel
+                </button>
+              )}
+              <button
+                type="submit"
+                disabled={formLoading || !title.trim() || !description.trim()}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-4 rounded-lg font-semibold text-xs transition-colors shadow-md disabled:opacity-50 ${
+                  editingProblemId 
+                    ? 'bg-amber-600 hover:bg-amber-500 text-white' 
+                    : 'bg-blue-600 hover:bg-blue-500 text-white'
+                }`}
+              >
+                {formLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <span>{editingProblemId ? 'Save Changes' : 'Publish Statement'}</span>
+                )}
+              </button>
+            </div>
 
           </form>
         </div>
@@ -235,18 +310,35 @@ export default function HackathonManagementPage() {
                     <h4 className="font-semibold text-xs text-white mt-1 leading-snug">{prob.title}</h4>
                     <p className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed">{prob.description}</p>
                   </div>
+                  <div className="flex items-center gap-3 shrink-0 text-xs">
+                    <button
+                      onClick={() => startEditProblem(prob)}
+                      className="text-slate-400 hover:text-amber-500 transition-colors p-1"
+                      title="Edit challenge"
+                    >
+                      <Edit3 className="w-4 h-4" />
+                    </button>
+                    
+                    <button
+                      onClick={() => handleDeleteProblem(prob.id)}
+                      className="text-slate-400 hover:text-rose-500 transition-colors p-1"
+                      title="Delete challenge"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
 
-                  <button
-                    onClick={() => handleToggleActive(prob.id, prob.is_active)}
-                    className="shrink-0 text-xs"
-                    title={prob.is_active ? 'Disable statement' : 'Enable statement'}
-                  >
-                    {prob.is_active ? (
-                      <CheckCircle className="w-4.5 h-4.5 text-emerald-500" />
-                    ) : (
-                      <XCircle className="w-4.5 h-4.5 text-rose-500" />
-                    )}
-                  </button>
+                    <button
+                      onClick={() => handleToggleActive(prob.id, prob.is_active)}
+                      className="p-1 text-slate-400 hover:text-white"
+                      title={prob.is_active ? 'Disable statement' : 'Enable statement'}
+                    >
+                      {prob.is_active ? (
+                        <CheckCircle className="w-4.5 h-4.5 text-emerald-500" />
+                      ) : (
+                        <XCircle className="w-4.5 h-4.5 text-rose-500" />
+                      )}
+                    </button>
+                  </div>
                 </div>
               ))
             )}

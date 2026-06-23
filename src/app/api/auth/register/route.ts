@@ -12,18 +12,19 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Missing required fields: email, password, fullName' }, { status: 400 });
     }
 
-    // 1. Initialize Supabase Admin client using the service role key
-    const supabaseAdmin = createClient(
+    // 1. Initialize standard Supabase client (so email verification is triggered)
+    const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
 
-    // 2. Register user in Supabase Auth with auto-confirmed email (highly convenient for dev environments)
-    const { data: authData, error: signUpError } = await supabaseAdmin.auth.admin.createUser({
+    // 2. Register user in Supabase Auth (standard signup triggers verification email/OTP)
+    const { data: authData, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
-      email_confirm: true,
-      user_metadata: { full_name: fullName },
+      options: {
+        data: { full_name: fullName },
+      },
     });
 
     if (signUpError || !authData.user) {
@@ -32,6 +33,12 @@ export async function POST(request: Request) {
 
     // 3. Connect to MongoDB Atlas
     await dbConnect();
+
+    // Check if profile already exists in MongoDB to prevent duplicate errors
+    const existingProfile = await Profile.findOne({ email });
+    if (existingProfile) {
+      return NextResponse.json({ error: 'An account with this email already exists.' }, { status: 400 });
+    }
 
     // 4. Create user profile in MongoDB matching the Auth UUID
     const newProfile = await Profile.create({

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { User, Phone, Link as LinkIcon, Globe, Award, Save, Loader2, ArrowLeft } from 'lucide-react';
+import { User, Phone, Link as LinkIcon, Globe, Award, Save, Loader2, ArrowLeft, Key } from 'lucide-react';
 import Link from 'next/link';
 
 export default function ProfilePage() {
@@ -16,9 +16,32 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+  const [resetLoading, setResetLoading] = useState(false);
 
   const router = useRouter();
   const supabase = createClient();
+
+  const handleRequestPasswordReset = async () => {
+    if (!profile?.email) return;
+    setResetLoading(true);
+    setMsg(null);
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(profile.email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+
+      if (error) throw error;
+
+      setMsg({ type: 'success', text: 'Password reset OTP sent to your email. Redirecting...' });
+      setTimeout(() => {
+        router.push(`/reset-password?email=${encodeURIComponent(profile.email)}`);
+      }, 2500);
+    } catch (err: any) {
+      setMsg({ type: 'error', text: err.message || 'Failed to request password reset OTP.' });
+      setResetLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -243,6 +266,36 @@ export default function ProfilePage() {
           </form>
 
         </div>
+
+        {/* Security & Password Card */}
+        <div className="bg-slate-900/40 p-8 rounded-2xl border border-slate-800 backdrop-blur-sm shadow-xl space-y-6">
+          <div>
+            <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+              <Key className="w-5 h-5 text-amber-500" /> Security & Password
+            </h2>
+            <p className="text-slate-400 text-sm mt-1">
+              Need to change your password? Request a secure password reset OTP code.
+            </p>
+          </div>
+
+          <div className="pt-2">
+            <button
+              onClick={handleRequestPasswordReset}
+              disabled={resetLoading}
+              className="flex items-center gap-1.5 py-2.5 px-5 bg-amber-600 hover:bg-amber-500 text-white rounded-lg font-semibold text-sm transition-colors shadow-md disabled:opacity-50"
+            >
+              {resetLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Requesting OTP...</span>
+                </>
+              ) : (
+                <span>Request Password Reset OTP</span>
+              )}
+            </button>
+          </div>
+        </div>
+
       </div>
     </div>
   );

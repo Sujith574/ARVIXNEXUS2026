@@ -123,7 +123,7 @@ export default function LoginPage() {
                 Create an account
               </Link>
             </div>
-            <Link href="#" className="font-semibold text-slate-500 hover:text-slate-450 transition-colors">
+            <Link href="/forgot-password" className="font-semibold text-slate-500 hover:text-slate-400 transition-colors">
               Forgot password?
             </Link>
           </div>

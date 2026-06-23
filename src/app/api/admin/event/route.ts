@@ -182,6 +182,125 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true });
     }
 
+    if (action === 'editAgenda') {
+      const { id, title, description, start_time, end_time, type } = body;
+      if (!id || !title || !start_time || !end_time || !type) {
+        return NextResponse.json({ error: 'Missing agenda slot fields' }, { status: 400 });
+      }
+
+      const agendaItem = await EventAgenda.findByIdAndUpdate(
+        id,
+        {
+          title,
+          description: description || '',
+          start_time: new Date(start_time),
+          end_time: new Date(end_time),
+          type,
+        },
+        { new: true }
+      );
+
+      if (!agendaItem) {
+        return NextResponse.json({ error: 'Agenda slot not found' }, { status: 404 });
+      }
+
+      await AuditLog.create({
+        admin_id: user.id,
+        action: 'AGENDA_ITEM_UPDATE',
+        details: { title, agenda_id: id },
+      });
+
+      return NextResponse.json({ success: true, agendaItem });
+    }
+
+    if (action === 'deleteAgenda') {
+      const { id } = body;
+      if (!id) {
+        return NextResponse.json({ error: 'Missing agenda ID' }, { status: 400 });
+      }
+
+      const agendaItem = await EventAgenda.findByIdAndDelete(id);
+
+      if (!agendaItem) {
+        return NextResponse.json({ error: 'Agenda slot not found' }, { status: 404 });
+      }
+
+      await AuditLog.create({
+        admin_id: user.id,
+        action: 'AGENDA_ITEM_DELETION',
+        details: { title: agendaItem.title, agenda_id: id },
+      });
+
+      return NextResponse.json({ success: true, message: 'Agenda slot deleted.' });
+    }
+
+    if (action === 'editInvitation') {
+      const { id, invitee_name, email, type, max_uses } = body;
+      if (!id || !invitee_name || !email || !type || !max_uses) {
+        return NextResponse.json({ error: 'Missing invitation parameters' }, { status: 400 });
+      }
+
+      const invite = await Invitation.findByIdAndUpdate(
+        id,
+        { invitee_name, email, type, max_uses },
+        { new: true }
+      );
+
+      if (!invite) {
+        return NextResponse.json({ error: 'Invitation not found' }, { status: 404 });
+      }
+
+      await AuditLog.create({
+        admin_id: user.id,
+        action: 'INVITATION_CODE_UPDATE',
+        details: { code: invite.code, invitee: invitee_name, email },
+      });
+
+      return NextResponse.json({ success: true, invite });
+    }
+
+    if (action === 'deleteInvitation') {
+      const { id } = body;
+      if (!id) {
+        return NextResponse.json({ error: 'Missing invitation ID' }, { status: 400 });
+      }
+
+      const invite = await Invitation.findByIdAndDelete(id);
+
+      if (!invite) {
+        return NextResponse.json({ error: 'Invitation not found' }, { status: 404 });
+      }
+
+      await AuditLog.create({
+        admin_id: user.id,
+        action: 'INVITATION_CODE_DELETION',
+        details: { code: invite.code, invitee: invite.invitee_name, email: invite.email },
+      });
+
+      return NextResponse.json({ success: true, message: 'Invitation deleted.' });
+    }
+
+    if (action === 'deleteVipDoc') {
+      const { id } = body;
+      if (!id) {
+        return NextResponse.json({ error: 'Missing document ID' }, { status: 400 });
+      }
+
+      const doc = await VipDocument.findByIdAndDelete(id);
+
+      if (!doc) {
+        return NextResponse.json({ error: 'Document not found' }, { status: 404 });
+      }
+
+      await AuditLog.create({
+        admin_id: user.id,
+        action: 'VIP_DOCUMENT_DELETION',
+        details: { title: doc.title, document_id: id },
+      });
+
+      return NextResponse.json({ success: true, message: 'VIP document deleted.' });
+    }
+
     return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
