@@ -10,6 +10,9 @@ export interface IProfile {
   linkedin?: string;
   skills: string[];
   avatar_url?: string;
+  is_speaker?: boolean;
+  organization?: string;
+  bio?: string;
   createdAt: Date;
 }
 
@@ -28,6 +31,9 @@ const ProfileSchema = new Schema<IProfile>(
     linkedin: { type: String },
     skills: { type: [String], default: [] },
     avatar_url: { type: String },
+    is_speaker: { type: Boolean, default: false },
+    organization: { type: String },
+    bio: { type: String },
   },
   { timestamps: { createdAt: 'createdAt', updatedAt: false } }
 );

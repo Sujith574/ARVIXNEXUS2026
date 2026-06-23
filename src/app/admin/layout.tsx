@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import {
   LayoutDashboard, Users, FileCode, Calendar, ShieldCheck,
-  Loader2, Menu, X, ChevronRight, ExternalLink
+  Loader2, Menu, X, ChevronRight, ExternalLink, Settings
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -14,6 +14,7 @@ const NAV_ITEMS = [
   { href: '/admin/users', label: 'User Management', icon: Users },
   { href: '/admin/hackathon', label: 'Hackathon Manager', icon: FileCode },
   { href: '/admin/event', label: 'Event Manager', icon: Calendar },
+  { href: '/admin/settings', label: 'Site Settings', icon: Settings },
   { href: '/admin/audit', label: 'System Audit Logs', icon: ShieldCheck },
 ];
 

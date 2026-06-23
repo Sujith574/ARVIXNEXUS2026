@@ -78,7 +78,7 @@ export default function EventLandingPage() {
             name: s.full_name,
             role: s.linkedin || 'Senior Tech Lead',
             org: s.organization || 'MeitY',
-            bio: s.skills?.length > 0 ? `Expertise in ${s.skills.join(', ')}` : 'Dedicated to national digital infrastructure.',
+            bio: s.bio || (s.skills?.length > 0 ? `Expertise in ${s.skills.join(', ')}` : 'Dedicated to national digital infrastructure.'),
             image: s.avatar_url || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
           })));
         } else {

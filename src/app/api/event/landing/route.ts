@@ -28,10 +28,15 @@ export async function GET() {
       };
     });
 
-    // Fetch speakers (profiles with role admin or super_admin)
-    const speakersList = await Profile.find({
-      role: { $in: ['admin', 'super_admin'] },
-    }).limit(3);
+    // Fetch speakers (profiles with is_speaker: true)
+    let speakersList = await Profile.find({ is_speaker: true });
+
+    // Fallback to admin/super_admin role if no explicit speakers are configured
+    if (speakersList.length === 0) {
+      speakersList = await Profile.find({
+        role: { $in: ['admin', 'super_admin'] },
+      }).limit(3);
+    }
 
     const formattedSpeakers = speakersList.map((s) => ({
       ...s.toObject(),

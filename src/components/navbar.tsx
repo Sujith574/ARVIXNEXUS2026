@@ -41,6 +41,28 @@ export default function Navbar() {
   const [profile, setProfile] = useState<any>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [brandSettings, setBrandSettings] = useState({
+    header_logo_label: 'Govt. of India',
+    header_logo_title: 'National Hackathon Platform',
+  });
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await fetch('/api/settings');
+        if (res.ok) {
+          const data = await res.json();
+          setBrandSettings({
+            header_logo_label: data.header_logo_label || 'Govt. of India',
+            header_logo_title: data.header_logo_title || 'National Hackathon Platform',
+          });
+        }
+      } catch (err) {
+        console.error('Error loading brand settings in Navbar:', err);
+      }
+    };
+    fetchSettings();
+  }, []);
   const router = useRouter();
   const pathname = usePathname();
   const supabase = createClient();
@@ -189,12 +211,12 @@ export default function Navbar() {
               <div className="hidden sm:block">
                 <div className="flex items-center gap-2">
                   <span className="text-[10px] uppercase tracking-widest text-primary font-bold leading-none">
-                    Govt. of India
+                    {brandSettings.header_logo_label}
                   </span>
                   <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse flex-shrink-0" />
                 </div>
                 <h1 className="text-sm font-extrabold tracking-tight text-white leading-tight mt-0.5 group-hover:text-primary transition-colors duration-300">
-                  National Hackathon Platform
+                  {brandSettings.header_logo_title}
                 </h1>
               </div>
               {/* Mobile logo text */}

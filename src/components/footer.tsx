@@ -1,8 +1,41 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Landmark, Mail, ShieldCheck, GitBranch, Globe, Phone, ExternalLink } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [settings, setSettings] = useState({
+    footer_logo_label: 'Government of India',
+    footer_logo_title: 'National Hackathon',
+    footer_description: 'Organised by the Ministry of Electronics & Information Technology (MeitY), promoting developer innovation, digital governance, and national tech capacity building.',
+    footer_copyright: `© ${currentYear} National Launch & Hybrid Hackathon. All rights reserved.`,
+    support_email: 'support@arvix2026.gov.in',
+    support_phone: '+91-11-2436-0199',
+  });
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await fetch('/api/settings');
+        if (res.ok) {
+          const data = await res.json();
+          setSettings({
+            footer_logo_label: data.footer_logo_label || 'Government of India',
+            footer_logo_title: data.footer_logo_title || 'National Hackathon',
+            footer_description: data.footer_description || 'Organised by the Ministry of Electronics & Information Technology (MeitY), promoting developer innovation, digital governance, and national tech capacity building.',
+            footer_copyright: data.footer_copyright || `© ${currentYear} National Launch & Hybrid Hackathon. All rights reserved.`,
+            support_email: data.support_email || 'support@arvix2026.gov.in',
+            support_phone: data.support_phone || '+91-11-2436-0199',
+          });
+        }
+      } catch (err) {
+        console.error('Error fetching settings in Footer:', err);
+      }
+    };
+    fetchSettings();
+  }, [currentYear]);
 
   return (
     <footer className="relative bg-surface text-slate-400 border-t border-white/5 overflow-hidden">
@@ -21,13 +54,13 @@ export default function Footer() {
                 <Landmark className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <p className="text-[10px] uppercase tracking-widest text-primary font-bold">Government of India</p>
-                <p className="text-white font-extrabold tracking-tight leading-tight mt-0.5">National Hackathon</p>
+                <p className="text-[10px] uppercase tracking-widest text-primary font-bold">{settings.footer_logo_label}</p>
+                <p className="text-white font-extrabold tracking-tight leading-tight mt-0.5">{settings.footer_logo_title}</p>
               </div>
             </div>
 
             <p className="text-sm leading-relaxed text-slate-400">
-              Organised by the Ministry of Electronics & Information Technology (MeitY), promoting developer innovation, digital governance, and national tech capacity building.
+              {settings.footer_description}
             </p>
 
             <div className="flex flex-wrap gap-2.5 pt-1">
@@ -98,13 +131,13 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <a
-                  href="mailto:support@arvix2026.gov.in"
+                  href={`mailto:${settings.support_email}`}
                   className="flex items-center gap-2.5 text-sm text-slate-400 hover:text-primary transition-colors duration-300 group"
                 >
                   <div className="w-8 h-8 rounded-lg bg-bg-primary flex items-center justify-center border border-white/5 group-hover:border-primary/20 transition-all duration-300 flex-shrink-0">
                     <Mail className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
                   </div>
-                  <span className="break-all font-medium">support@arvix2026.gov.in</span>
+                  <span className="break-all font-medium">{settings.support_email}</span>
                 </a>
               </li>
               <li>
@@ -112,7 +145,7 @@ export default function Footer() {
                   <div className="w-8 h-8 rounded-lg bg-bg-primary flex items-center justify-center border border-white/5 flex-shrink-0">
                     <Phone className="w-4 h-4 text-primary" />
                   </div>
-                  <span className="font-medium">+91-11-2436-0199</span>
+                  <span className="font-medium">{settings.support_phone}</span>
                 </div>
               </li>
             </ul>
@@ -122,7 +155,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-white/5">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500 font-medium">
-            <p>© {currentYear} National Launch & Hybrid Hackathon. All rights reserved.</p>
+            <p>{settings.footer_copyright}</p>
             <div className="flex items-center gap-6">
               <Link href="/terms" className="hover:text-slate-300 transition-colors">Terms of Use</Link>
               <Link href="/privacy" className="hover:text-slate-300 transition-colors">Privacy Policy</Link>
