@@ -131,7 +131,7 @@ export default function EventLandingPage() {
           />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="relative container-page text-center flex flex-col items-center justify-center">
           {/* Live badge */}
           <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 py-1.5 px-4 rounded-full text-xs font-bold uppercase tracking-wider mb-6 sm:mb-8">
             <Radio className="w-3.5 h-3.5 animate-pulse" />
@@ -188,7 +188,7 @@ export default function EventLandingPage() {
           STATS STRIP
           ═══════════════════════════════════ */}
       <section className="border-y border-slate-800/60 bg-slate-900/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div className="container-page py-6 sm:py-8">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
             {[
               { value: '3', label: 'Evaluation Rounds', icon: Trophy },
@@ -210,7 +210,7 @@ export default function EventLandingPage() {
           COUNTDOWN & STREAM
           ═══════════════════════════════════ */}
       <section className="py-12 sm:py-16 lg:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
+        <div className="container-page space-y-6 sm:space-y-8">
 
           {/* Countdown */}
           <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-5 sm:p-8 flex flex-col sm:flex-row justify-between items-center gap-6">
@@ -275,7 +275,7 @@ export default function EventLandingPage() {
           HACKATHON ROUNDS
           ═══════════════════════════════════ */}
       <section className="py-12 sm:py-16 lg:py-20 border-t border-slate-800/60 bg-slate-900/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container-page">
           <div className="text-center mb-10 sm:mb-14">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-blue-400 mb-3">
               <Shield className="w-4 h-4" />
@@ -295,7 +295,7 @@ export default function EventLandingPage() {
               return (
                 <div
                   key={round.id || round.round_number}
-                  className={`relative bg-slate-900/40 border border-slate-800 ${colors.border} rounded-2xl p-5 sm:p-6 flex flex-col gap-4 hover:bg-slate-900/60 transition-all duration-300 group overflow-hidden`}
+                  className={`relative h-full bg-slate-900/40 border border-slate-800 ${colors.border} rounded-2xl p-5 sm:p-6 flex flex-col gap-4 hover:bg-slate-900/60 transition-all duration-300 group overflow-hidden`}
                 >
                   {/* Top gradient bar */}
                   <div className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r ${colors.bg}`} />
@@ -332,7 +332,7 @@ export default function EventLandingPage() {
           AGENDA & SPEAKERS
           ═══════════════════════════════════ */}
       <section className="py-12 sm:py-16 lg:py-20 border-t border-slate-800/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container-page">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
 
             {/* Agenda — 3 cols */}
@@ -437,7 +437,7 @@ export default function EventLandingPage() {
           PRESS KIT CTA
           ═══════════════════════════════════ */}
       <section className="py-12 sm:py-16 border-t border-slate-800/60 bg-slate-900/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container-page">
           <div className="text-center max-w-2xl mx-auto space-y-4 sm:space-y-5">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-blue-400">
               <Volume2 className="w-4 h-4" />

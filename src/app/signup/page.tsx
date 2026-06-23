@@ -94,8 +94,8 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 py-16 bg-slate-950">
-      <div className="max-w-md w-full space-y-8 bg-slate-900/40 p-8 rounded-2xl border border-slate-800 backdrop-blur-sm shadow-xl">
+    <div className="flex-grow flex items-center justify-center py-16 bg-slate-950">
+      <div className="container-page max-w-md w-full space-y-8 bg-slate-900/40 p-8 rounded-2xl border border-slate-800 backdrop-blur-sm shadow-xl">
         
         {/* Header */}
         <div className="text-center">

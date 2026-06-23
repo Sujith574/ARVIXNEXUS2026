@@ -77,8 +77,8 @@ export default function ProblemsPage() {
   });
 
   return (
-    <div className="flex-grow bg-slate-950 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="flex-grow bg-slate-950 py-12">
+      <div className="container-page space-y-8">
         
         {/* Header Section */}
         <div className="text-center space-y-3">
@@ -141,7 +141,7 @@ export default function ProblemsPage() {
             {filteredProblems.map((problem) => (
               <div
                 key={problem.id}
-                className="bg-slate-900/30 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-blue-500/40 hover:bg-slate-900/40 transition-all duration-300 shadow-lg group"
+                className="bg-slate-900/30 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-blue-500/40 hover:bg-slate-900/40 transition-all duration-300 shadow-lg group h-full"
               >
                 <div className="space-y-4">
                   <div className="flex justify-between items-start">
