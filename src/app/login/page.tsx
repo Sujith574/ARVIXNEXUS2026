@@ -47,8 +47,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 py-16 bg-slate-950">
-      <div className="max-w-md w-full space-y-8 bg-slate-900/40 p-8 rounded-2xl border border-slate-800 backdrop-blur-sm shadow-xl">
+    <div className="flex-grow flex items-center justify-center px-4 py-10 sm:py-16 bg-slate-950">
+      <div className="w-full max-w-md space-y-7 bg-slate-900/50 p-6 sm:p-8 rounded-2xl border border-slate-800 backdrop-blur-sm shadow-2xl shadow-black/40">
         
         {/* Header */}
         <div className="text-center">

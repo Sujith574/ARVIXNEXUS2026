@@ -1,86 +1,122 @@
 import Link from 'next/link';
-import { Landmark, Mail, ShieldCheck } from 'lucide-react';
+import { Landmark, Mail, ShieldCheck, GitBranch, Globe } from 'lucide-react';
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="bg-slate-950 text-slate-400 border-t border-slate-900 py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          
-          {/* Logo / Brand Info */}
-          <div className="md:col-span-2 space-y-4">
-            <div className="flex items-center space-x-3">
-              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-slate-900 border border-slate-800">
-                <Landmark className="w-5 h-5 text-blue-500" />
+    <footer className="relative bg-slate-950 text-slate-400 border-t border-slate-800/60 overflow-hidden">
+      {/* Subtle gradient accent */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-48 bg-blue-500/3 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-8">
+
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-12">
+
+          {/* Brand Info — spans 2 cols on lg */}
+          <div className="sm:col-span-2 lg:col-span-2 space-y-5">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-blue-500/20 flex-shrink-0">
+                <Landmark className="w-5 h-5 text-blue-400" />
               </div>
-              <span className="text-white font-bold tracking-tight">National Launch & Hackathon</span>
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-blue-400/70 font-semibold">Government of India</p>
+                <p className="text-white font-bold tracking-tight leading-tight">National Launch & Hackathon</p>
+              </div>
             </div>
-            <p className="text-sm max-w-sm leading-relaxed">
-              Organised by the Ministry of Electronics & Information Technology (MeitY), Government of India, promoting developer innovation and digital governance systems.
+
+            <p className="text-sm leading-relaxed text-slate-400 max-w-sm">
+              Organised by the Ministry of Electronics & Information Technology (MeitY), promoting developer innovation, digital governance, and national tech capacity building.
             </p>
-            <div className="flex items-center space-x-2 text-xs bg-slate-900/50 text-slate-500 py-1 px-2.5 rounded-md border border-slate-800 w-fit">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-              <span>Secure Government Portal</span>
+
+            <div className="flex flex-wrap gap-2">
+              <div className="inline-flex items-center gap-1.5 text-xs bg-slate-900/60 text-slate-500 py-1.5 px-3 rounded-full border border-slate-800 hover:border-slate-700 transition-colors">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
+                <span>Secure Government Portal</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 text-xs bg-slate-900/60 text-slate-500 py-1.5 px-3 rounded-full border border-slate-800">
+                <Globe className="w-3.5 h-3.5 text-blue-500 flex-shrink-0" />
+                <span>ARVIX NEXUS 2026</span>
+              </div>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Event Links</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/hackathon/problems" className="hover:text-blue-400 transition-colors">
-                  Problem Statements
-                </Link>
-              </li>
-              <li>
-                <Link href="/hackathon/leaderboard" className="hover:text-blue-400 transition-colors">
-                  Leaderboard
-                </Link>
-              </li>
-              <li>
-                <Link href="/event/press" className="hover:text-blue-400 transition-colors">
-                  Press Kit
-                </Link>
-              </li>
-              <li>
-                <Link href="/event/rsvp" className="hover:text-blue-400 transition-colors">
-                  RSVP Registration
-                </Link>
-              </li>
+          {/* Event Links */}
+          <div className="space-y-4">
+            <h4 className="text-xs font-bold text-white uppercase tracking-widest">Event Portal</h4>
+            <ul className="space-y-2.5">
+              {[
+                { href: '/', label: 'Event Home' },
+                { href: '/hackathon/problems', label: 'Problem Statements' },
+                { href: '/hackathon/leaderboard', label: 'Live Leaderboard' },
+                { href: '/event/rsvp', label: 'RSVP Registration' },
+                { href: '/event/press', label: 'Press Kit & Media' },
+              ].map(({ href, label }) => (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className="text-sm text-slate-400 hover:text-blue-400 hover:translate-x-0.5 transition-all duration-200 inline-block"
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Legal / Contact */}
-          <div>
-            <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Support & Legal</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/terms" className="hover:text-blue-400 transition-colors">
-                  Terms & Conditions
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy" className="hover:text-blue-400 transition-colors">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li className="flex items-center gap-1.5 pt-2 text-slate-350 hover:text-white transition-colors">
-                <Mail className="w-4 h-4 text-blue-500" />
-                <a href="mailto:support@your-hackathon.gov.in" className="hover:underline">
-                  support@your-hackathon.gov.in
+          {/* Support & Legal */}
+          <div className="space-y-4">
+            <h4 className="text-xs font-bold text-white uppercase tracking-widest">Support & Legal</h4>
+            <ul className="space-y-2.5">
+              {[
+                { href: '/terms', label: 'Terms & Conditions' },
+                { href: '/privacy', label: 'Privacy Policy' },
+                { href: '/signup', label: 'Register Account' },
+                { href: '/login', label: 'Portal Login' },
+              ].map(({ href, label }) => (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className="text-sm text-slate-400 hover:text-blue-400 hover:translate-x-0.5 transition-all duration-200 inline-block"
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+
+              <li className="pt-1">
+                <a
+                  href="mailto:support@arvix2026.gov.in"
+                  className="flex items-center gap-2 text-sm text-slate-400 hover:text-blue-400 transition-colors duration-200 group"
+                >
+                  <Mail className="w-4 h-4 text-blue-500 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                  <span className="break-all">support@arvix2026.gov.in</span>
                 </a>
               </li>
             </ul>
           </div>
-
         </div>
 
-        <div className="mt-12 pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center text-xs">
-          <p>© {new Date().getFullYear()} National Launch & Hackathon. All rights reserved.</p>
-          <p className="mt-2 md:mt-0 text-slate-600">
-            For demonstration purposes only (your-hackathon.gov.in)
-          </p>
+        {/* Bottom Bar */}
+        <div className="mt-10 sm:mt-14 pt-6 border-t border-slate-800/60">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-slate-600">
+            <p>© {currentYear} National Launch & Hybrid Hackathon 2026. All rights reserved.</p>
+            <div className="flex items-center gap-4">
+              <Link href="/terms" className="hover:text-slate-400 transition-colors">Terms</Link>
+              <Link href="/privacy" className="hover:text-slate-400 transition-colors">Privacy</Link>
+              <a
+                href="https://github.com/Sujith574/ARVIXNEXUS2026"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 hover:text-slate-400 transition-colors"
+              >
+                <GitBranch className="w-3.5 h-3.5" />
+                <span>GitHub</span>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

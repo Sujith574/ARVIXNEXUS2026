@@ -2,23 +2,40 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/client';
-import { Calendar, Clock, MapPin, Play, Radio, Users, ChevronRight, Volume2, Share2 } from 'lucide-react';
+import { Calendar, Clock, MapPin, Play, Radio, Users, ChevronRight, Volume2, Trophy, ArrowRight, Zap, Shield, Star } from 'lucide-react';
 
 const DEFAULT_AGENDA = [
   { time: '09:00 AM', title: 'Delegate Registration & Welcome', speaker: 'Reception Desk', type: 'session' },
-  { time: '10:00 AM', title: 'Inaugural Address & National Launch', speaker: 'Hon’ble Minister, MeitY', type: 'keynote' },
+  { time: '10:00 AM', title: 'Inaugural Address & National Launch', speaker: 'Hon\'ble Minister, MeitY', type: 'keynote' },
   { time: '11:15 AM', title: 'Unveiling of the Digital Stack 2026', speaker: 'MeitY Secretary & Tech Leads', type: 'keynote' },
   { time: '12:00 PM', title: 'Panel: Scaling AI in Public Service Delivery', speaker: 'Industry Experts & Senior IAS Officers', type: 'session' },
   { time: '01:00 PM', title: 'Networking Lunch & Media Interaction', speaker: 'All Delegates', type: 'break' },
-  { time: '02:00 PM', title: 'National Hackathon Opening Ceremony', speaker: 'Hackathon Organizing Committee', type: 'session' }
+  { time: '02:00 PM', title: 'National Hackathon Opening Ceremony', speaker: 'Hackathon Organizing Committee', type: 'session' },
 ];
 
 const DEFAULT_SPEAKERS = [
-  { name: 'Shri Ashwini Vaishnaw', role: 'Hon’ble Minister for Railways, Communications, Electronics & IT', bio: 'Leading the digital transformation initiatives, electronics manufacturing, and tech innovation frameworks across the nation.', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face' },
-  { name: 'Dr. Neeta Verma', role: 'Director General, National Informatics Centre', bio: 'Pioneered government cloud deployment and mobile-first citizen services across Indian districts.', image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face' },
-  { name: 'Dr. Rajendra Kumar, IAS', role: 'Additional Secretary, MeitY', bio: 'Expert in e-governance policies, public service delivery models, and emerging technologies integration.', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face' }
+  { name: 'Shri Ashwini Vaishnaw', role: 'Hon\'ble Minister, MeitY', bio: 'Leading digital transformation initiatives and tech innovation frameworks across the nation.', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&h=80&fit=crop&crop=face' },
+  { name: 'Dr. Neeta Verma', role: 'Director General, NIC', bio: 'Pioneered government cloud deployment and mobile-first citizen services across Indian districts.', image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=80&h=80&fit=crop&crop=face' },
+  { name: 'Dr. Rajendra Kumar, IAS', role: 'Additional Secretary, MeitY', bio: 'Expert in e-governance policies and emerging technologies integration.', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face' },
 ];
+
+const DEFAULT_ROUNDS = [
+  { round_number: 1, title: 'Ideation & Stack Submission', date: 'July 10, 2026', timeline: '02:00 PM – 06:00 PM', description: 'Teams register, submit stacks, and pitch core ideas to review panels.' },
+  { round_number: 2, title: 'Prototype Evaluation', date: 'July 11, 2026', timeline: '10:00 AM – 05:00 PM', description: 'Mid-point checkin with technical mentors and initial scoring.' },
+  { round_number: 3, title: 'Grand Finale Pitching', date: 'July 12, 2026', timeline: '09:00 AM – 04:00 PM', description: 'Working prototypes presented to VIP guest panel for final grading.' },
+];
+
+const ROUND_COLORS = [
+  { bg: 'from-blue-500 to-blue-600', badge: 'bg-blue-500/10 text-blue-400 border-blue-500/20', border: 'hover:border-blue-500/40' },
+  { bg: 'from-indigo-500 to-indigo-600', badge: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20', border: 'hover:border-indigo-500/40' },
+  { bg: 'from-violet-500 to-violet-600', badge: 'bg-violet-500/10 text-violet-400 border-violet-500/20', border: 'hover:border-violet-500/40' },
+];
+
+const AGENDA_TYPE_STYLES: Record<string, string> = {
+  keynote: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  session: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  break: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+};
 
 export default function EventLandingPage() {
   const [agenda, setAgenda] = useState<any[]>([]);
@@ -26,322 +43,428 @@ export default function EventLandingPage() {
   const [rounds, setRounds] = useState<any[]>([]);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [playStream, setPlayStream] = useState(false);
-  const supabase = createClient();
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-  // Set event date for July 10, 2026
   const eventDate = new Date('2026-07-10T09:00:00+05:30').getTime();
 
   useEffect(() => {
-    // 1. Fetch agenda & speakers from MongoDB API
     const fetchEventData = async () => {
       try {
         const res = await fetch('/api/event/landing');
-        if (!res.ok) throw new Error('Failed to fetch event data');
+        if (!res.ok) throw new Error('Failed to fetch');
         const data = await res.json();
 
-        if (data.agenda && data.agenda.length > 0) {
-          // Map database records to timeline format
-          const formatted = data.agenda.map((item: any) => {
-            const start = new Date(item.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            return {
-              time: start,
-              title: item.title,
-              speaker: item.speaker?.full_name || item.description || 'Guest Speaker',
-              type: item.type
-            };
-          });
-          setAgenda(formatted);
+        if (data.agenda?.length > 0) {
+          setAgenda(data.agenda.map((item: any) => ({
+            time: new Date(item.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            title: item.title,
+            speaker: item.speaker?.full_name || item.description || 'Guest Speaker',
+            type: item.type,
+          })));
         } else {
           setAgenda(DEFAULT_AGENDA);
         }
 
-        if (data.speakers && data.speakers.length > 0) {
-          const mappedSpeakers = data.speakers.map((s: any) => ({
+        if (data.speakers?.length > 0) {
+          setSpeakers(data.speakers.map((s: any) => ({
             name: s.full_name,
             role: s.linkedin || 'Senior Tech Lead, MeitY',
-            bio: s.skills && s.skills.length > 0 ? `Expertise in ${s.skills.join(', ')}` : 'Dedicated to building national digital infrastructure and scaling tech innovation.',
-            image: s.avatar_url || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face'
-          }));
-          setSpeakers(mappedSpeakers);
+            bio: s.skills?.length > 0 ? `Expertise in ${s.skills.join(', ')}` : 'Dedicated to national digital infrastructure.',
+            image: s.avatar_url || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face',
+          })));
         } else {
           setSpeakers(DEFAULT_SPEAKERS);
         }
 
-        if (data.rounds && data.rounds.length > 0) {
-          setRounds(data.rounds);
-        } else {
-          setRounds([
-            { round_number: 1, title: 'Ideation & Stack Submission', date: 'July 10, 2026', timeline: '02:00 PM - 06:00 PM', description: 'Teams register, submit stacks, and pitch core ideas to review panels.' },
-            { round_number: 2, title: 'Prototype Evaluation', date: 'July 11, 2026', timeline: '10:00 AM - 05:00 PM', description: 'Mid-point checkin with technical mentors and initial scoring.' },
-            { round_number: 3, title: 'Grand Finale Pitching', date: 'July 12, 2026', timeline: '09:00 AM - 04:00 PM', description: 'Working prototypes presented to VIP guest panel for final grading.' }
-          ]);
-        }
-      } catch (err) {
-        console.error('Error fetching event details:', err);
+        setRounds(data.rounds?.length > 0 ? data.rounds : DEFAULT_ROUNDS);
+      } catch {
         setAgenda(DEFAULT_AGENDA);
         setSpeakers(DEFAULT_SPEAKERS);
-        setRounds([
-          { round_number: 1, title: 'Ideation & Stack Submission', date: 'July 10, 2026', timeline: '02:00 PM - 06:00 PM', description: 'Teams register, submit stacks, and pitch core ideas to review panels.' },
-          { round_number: 2, title: 'Prototype Evaluation', date: 'July 11, 2026', timeline: '10:00 AM - 05:00 PM', description: 'Mid-point checkin with technical mentors and initial scoring.' },
-          { round_number: 3, title: 'Grand Finale Pitching', date: 'July 12, 2026', timeline: '09:00 AM - 04:00 PM', description: 'Working prototypes presented to VIP guest panel for final grading.' }
-        ]);
+        setRounds(DEFAULT_ROUNDS);
+      } finally {
+        setDataLoaded(true);
       }
     };
 
     fetchEventData();
 
-    // 2. Countdown timer loop
     const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const difference = eventDate - now;
-
-      if (difference <= 0) {
+      const diff = eventDate - Date.now();
+      if (diff <= 0) {
         clearInterval(interval);
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       } else {
-        const d = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-        const s = Math.floor((difference % (1000 * 60)) / 1000);
-        setTimeLeft({ days: d, hours: h, minutes: m, seconds: s });
+        setTimeLeft({
+          days: Math.floor(diff / 86400000),
+          hours: Math.floor((diff % 86400000) / 3600000),
+          minutes: Math.floor((diff % 3600000) / 60000),
+          seconds: Math.floor((diff % 60000) / 1000),
+        });
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [supabase]);
+  }, []);
+
+  const countdownUnits = [
+    { label: 'Days', value: timeLeft.days },
+    { label: 'Hours', value: timeLeft.hours },
+    { label: 'Mins', value: timeLeft.minutes },
+    { label: 'Secs', value: timeLeft.seconds },
+  ];
 
   return (
-    <div className="flex-grow bg-slate-950 text-slate-100 flex flex-col">
-      
-      {/* Hero Section */}
-      <section className="relative overflow-hidden pt-32 pb-24 border-b border-slate-900 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(30,58,138,0.2),rgba(255,255,255,0))]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8 relative z-10">
-          
-          <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 py-1.5 px-3.5 rounded-full text-xs font-semibold uppercase tracking-wider animate-pulse">
-            <Radio className="w-3.5 h-3.5" /> Hybrid Launch Ceremony & Hackathon 2026
+    <div className="flex-grow bg-slate-950 text-slate-100 flex flex-col overflow-x-hidden">
+
+      {/* ═══════════════════════════════════
+          HERO SECTION
+          ═══════════════════════════════════ */}
+      <section className="relative overflow-hidden pt-20 sm:pt-28 lg:pt-36 pb-16 sm:pb-24">
+        {/* Background glows */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-blue-600/8 rounded-full blur-3xl" />
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-indigo-600/6 rounded-full blur-2xl" />
+          <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-violet-600/5 rounded-full blur-2xl" />
+          {/* Grid pattern */}
+          <div className="absolute inset-0 opacity-[0.015]"
+            style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)', backgroundSize: '50px 50px' }}
+          />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          {/* Live badge */}
+          <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 py-1.5 px-4 rounded-full text-xs font-bold uppercase tracking-wider mb-6 sm:mb-8">
+            <Radio className="w-3.5 h-3.5 animate-pulse" />
+            Hybrid Launch Ceremony & Hackathon 2026
           </div>
 
-          <h1 className="text-4xl font-extrabold sm:text-6xl text-white tracking-tight leading-tight max-w-4xl mx-auto">
-            Unveiling the Future of{' '}
-            <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-indigo-500 bg-clip-text text-transparent">
+          {/* Hero heading */}
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-white tracking-tight leading-[1.1] mb-5 sm:mb-6 text-center">
+            Unveiling the Future of
+            <span className="block bg-gradient-to-r from-blue-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent mt-1">
               Digital Governance
             </span>
           </h1>
 
-          <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-            Join the central government ceremony and pitch your solutions in India’s premier hybrid software hackathon. Connect with VIPs, industry mentors, and peers.
+          <p className="text-slate-400 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed mb-8 sm:mb-10 text-center">
+            Join India&apos;s premier hybrid software hackathon. Connect with VIPs, industry mentors, and the brightest developer minds across the nation.
           </p>
 
-          {/* Quick info grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto pt-4 text-sm font-semibold text-slate-350">
-            <div className="flex items-center justify-center gap-2.5 bg-slate-900/30 p-3 rounded-xl border border-slate-850">
-              <Calendar className="w-5 h-5 text-blue-500" />
-              <span>July 10-12, 2026</span>
-            </div>
-            <div className="flex items-center justify-center gap-2.5 bg-slate-900/30 p-3 rounded-xl border border-slate-850">
-              <MapPin className="w-5 h-5 text-blue-500" />
-              <span>Vigyan Bhawan, New Delhi + Online</span>
-            </div>
-            <div className="flex items-center justify-center gap-2.5 bg-slate-900/30 p-3 rounded-xl border border-slate-850">
-              <Users className="w-5 h-5 text-blue-500" />
-              <span>1000+ Participants</span>
-            </div>
+          {/* Info chips */}
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10">
+            {[
+              { icon: Calendar, text: 'July 10–12, 2026' },
+              { icon: MapPin, text: 'Vigyan Bhawan, New Delhi' },
+              { icon: Users, text: '1000+ Participants' },
+            ].map(({ icon: Icon, text }) => (
+              <div key={text} className="flex items-center gap-2 bg-slate-900/60 border border-slate-800 text-slate-300 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium">
+                <Icon className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                <span>{text}</span>
+              </div>
+            ))}
           </div>
 
-          {/* Action CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+          {/* CTA buttons */}
+          <div className="flex flex-col xs:flex-row gap-3 sm:gap-4 justify-center items-center">
             <Link
               href="/event/rsvp"
-              className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-lg font-bold text-sm shadow-lg hover:shadow-blue-550/10 transition-all flex items-center justify-center gap-1.5"
+              className="w-full xs:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl font-bold text-sm sm:text-base shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-0.5"
             >
               <span>RSVP Invitation</span>
               <ChevronRight className="w-4 h-4" />
             </Link>
             <Link
               href="/signup"
-              className="w-full sm:w-auto px-8 py-3 border border-slate-800 hover:border-slate-700 bg-slate-900/40 text-slate-300 hover:text-white rounded-lg font-bold text-sm transition-all flex items-center justify-center"
+              className="w-full xs:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 border border-slate-700 hover:border-slate-600 bg-slate-900/50 hover:bg-slate-800/60 text-slate-300 hover:text-white rounded-xl font-bold text-sm sm:text-base transition-all duration-300 hover:-translate-y-0.5"
             >
-              Register for Hackathon
+              <span>Register for Hackathon</span>
+              <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
-
         </div>
       </section>
 
-      {/* Live Countdown & Broadcast */}
-      <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        
-        {/* Countdown Dials */}
-        <div className="bg-slate-900/40 p-8 rounded-2xl border border-slate-800 backdrop-blur-sm shadow-xl flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="text-center md:text-left space-y-1.5">
-            <h3 className="text-lg font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-              <Clock className="w-5 h-5 text-blue-500" /> Countdown to Launch
-            </h3>
-            <p className="text-slate-400 text-xs">Vigyan Bhawan Inaugural session starts in New Delhi.</p>
-          </div>
-
-          <div className="flex items-center gap-4 sm:gap-6 font-mono">
+      {/* ═══════════════════════════════════
+          STATS STRIP
+          ═══════════════════════════════════ */}
+      <section className="border-y border-slate-800/60 bg-slate-900/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
             {[
-              { label: 'Days', value: timeLeft.days },
-              { label: 'Hours', value: timeLeft.hours },
-              { label: 'Mins', value: timeLeft.minutes },
-              { label: 'Secs', value: timeLeft.seconds }
-            ].map((unit, idx) => (
-              <div key={idx} className="flex flex-col items-center">
-                <div className="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-slate-950 border border-slate-850 text-xl sm:text-2xl font-extrabold text-blue-400 shadow-md">
-                  {unit.value.toString().padStart(2, '0')}
-                </div>
-                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 mt-2">{unit.label}</span>
+              { value: '3', label: 'Evaluation Rounds', icon: Trophy },
+              { value: '48h', label: 'Hackathon Duration', icon: Clock },
+              { value: '₹10L+', label: 'Prize Pool', icon: Star },
+              { value: '100%', label: 'Online Ready', icon: Zap },
+            ].map(({ value, label, icon: Icon }) => (
+              <div key={label} className="text-center space-y-1.5 py-2">
+                <Icon className="w-5 h-5 text-blue-400 mx-auto mb-2" />
+                <p className="text-2xl sm:text-3xl font-black text-white">{value}</p>
+                <p className="text-xs sm:text-sm text-slate-500 font-medium">{label}</p>
               </div>
             ))}
           </div>
         </div>
+      </section>
 
-        {/* Video Embed Section */}
-        <div className="bg-slate-900/40 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl relative aspect-video">
-          {!playStream ? (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 backdrop-blur-sm z-10 p-6 text-center space-y-4">
-              <div className="inline-flex items-center gap-1.5 bg-rose-950/40 border border-rose-900/50 text-rose-400 py-1 px-3 rounded-full text-xs font-semibold uppercase">
-                <Radio className="w-3.5 h-3.5 animate-pulse" /> Live Broadcast Offline
+      {/* ═══════════════════════════════════
+          COUNTDOWN & STREAM
+          ═══════════════════════════════════ */}
+      <section className="py-12 sm:py-16 lg:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
+
+          {/* Countdown */}
+          <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-5 sm:p-8 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <div className="text-center sm:text-left">
+              <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
+                <Clock className="w-5 h-5 text-blue-400" />
+                <h3 className="text-base sm:text-lg font-bold text-white uppercase tracking-wider">Countdown to Launch</h3>
               </div>
-              <h4 className="text-xl font-bold text-white">Stream starts July 10, 09:30 AM IST</h4>
-              <p className="text-slate-505 text-sm max-w-sm">Watch the keynotes, technology demonstrations, and launch cues live from Vigyan Bhawan.</p>
-              <button
-                onClick={() => setPlayStream(true)}
-                className="flex items-center gap-2 py-2.5 px-6 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold text-sm shadow-md hover:shadow-lg transition-all"
-              >
-                <Play className="w-4 h-4 fill-white" />
-                <span>Preview Stream Frame</span>
-              </button>
+              <p className="text-slate-500 text-xs sm:text-sm">Vigyan Bhawan Inaugural session — New Delhi</p>
             </div>
-          ) : (
-            <iframe
-              className="w-full h-full"
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0&mute=1"
-              title="Government Launch Live Stream"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-          )}
+            <div className="flex items-center gap-3 sm:gap-5">
+              {countdownUnits.map((unit, i) => (
+                <div key={unit.label} className="flex items-center gap-3 sm:gap-5">
+                  <div className="flex flex-col items-center">
+                    <div className="flex items-center justify-center w-14 h-14 sm:w-18 sm:h-18 rounded-xl bg-slate-950 border border-slate-800 text-xl sm:text-3xl font-black text-blue-400 tabular-nums shadow-inner">
+                      {String(unit.value).padStart(2, '0')}
+                    </div>
+                    <span className="text-[9px] sm:text-[11px] uppercase font-bold tracking-widest text-slate-600 mt-1.5">{unit.label}</span>
+                  </div>
+                  {i < countdownUnits.length - 1 && (
+                    <span className="text-slate-700 text-xl font-bold pb-4">:</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Video Embed */}
+          <div className="bg-slate-900/50 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl relative aspect-video">
+            {!playStream ? (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/90 z-10 p-6 text-center space-y-4">
+                <div className="inline-flex items-center gap-2 bg-rose-950/40 border border-rose-800/50 text-rose-400 py-1 px-3 rounded-full text-xs font-bold uppercase">
+                  <Radio className="w-3.5 h-3.5 animate-pulse" />
+                  Live Broadcast Offline
+                </div>
+                <div>
+                  <h4 className="text-lg sm:text-xl font-bold text-white mb-1">Stream starts July 10, 09:30 AM IST</h4>
+                  <p className="text-slate-500 text-xs sm:text-sm max-w-xs mx-auto">Watch keynotes, technology demos, and launch cues live from Vigyan Bhawan.</p>
+                </div>
+                <button
+                  onClick={() => setPlayStream(true)}
+                  className="flex items-center gap-2 py-2.5 px-6 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold text-sm transition-all duration-200 shadow-lg shadow-blue-500/20 hover:-translate-y-0.5"
+                >
+                  <Play className="w-4 h-4 fill-white" />
+                  Preview Stream
+                </button>
+              </div>
+            ) : (
+              <iframe
+                className="w-full h-full"
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0&mute=1"
+                title="Government Launch Live Stream"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            )}
+          </div>
         </div>
       </section>
 
-      {/* Hackathon Evaluation Rounds Section */}
-      <section className="py-16 bg-slate-900/10 border-t border-slate-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          
-          <div className="text-center space-y-3">
-            <h3 className="text-2xl font-bold sm:text-3xl text-white tracking-tight">
-              Evaluation & Judging Timeline
-            </h3>
-            <p className="text-slate-400 text-sm max-w-lg mx-auto">
-              Our software development hackathon is structured into 3 competitive rounds. Ensure your team submits prototypes before the evaluation checkpoints.
+      {/* ═══════════════════════════════════
+          HACKATHON ROUNDS
+          ═══════════════════════════════════ */}
+      <section className="py-12 sm:py-16 lg:py-20 border-t border-slate-800/60 bg-slate-900/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10 sm:mb-14">
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-blue-400 mb-3">
+              <Shield className="w-4 h-4" />
+              Evaluation Structure
+            </div>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight mb-3">
+              3-Round Judging Timeline
+            </h2>
+            <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto">
+              Our hackathon follows a structured 3-round evaluation. Ensure your team submits prototypes before each checkpoint.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {rounds.map((round) => (
-              <div
-                key={round.id || round.round_number}
-                className="bg-slate-900/30 p-6 rounded-2xl border border-slate-850 hover:border-blue-500/30 transition-all flex flex-col justify-between space-y-4 group relative overflow-hidden"
-              >
-                {/* Decorative border highlight */}
-                <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-blue-500 to-indigo-500 opacity-70 group-hover:opacity-100 transition-opacity"></div>
-                
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-[10px] bg-blue-500/10 text-blue-400 font-bold px-2 py-0.5 rounded border border-blue-500/20">
-                      Round {round.round_number}
-                    </span>
-                    <span className="text-[10px] text-slate-550 font-semibold">{round.timeline}</span>
-                  </div>
-                  
-                  <h4 className="font-bold text-white text-base group-hover:text-blue-400 transition-colors">
-                    {round.title}
-                  </h4>
-                  
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    {round.description}
-                  </p>
-                </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {rounds.map((round, i) => {
+              const colors = ROUND_COLORS[i % ROUND_COLORS.length];
+              return (
+                <div
+                  key={round.id || round.round_number}
+                  className={`relative bg-slate-900/40 border border-slate-800 ${colors.border} rounded-2xl p-5 sm:p-6 flex flex-col gap-4 hover:bg-slate-900/60 transition-all duration-300 group overflow-hidden`}
+                >
+                  {/* Top gradient bar */}
+                  <div className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r ${colors.bg}`} />
 
-                <div className="pt-2 border-t border-slate-850/50 flex justify-between items-center text-[10px] text-slate-500 font-bold">
-                  <span>Checkpoint Date</span>
-                  <span className="text-slate-350">{round.date}</span>
+                  {/* Round label + timeline stacked */}
+                  <div className="flex flex-col gap-1">
+                    <div className={`inline-flex items-center gap-1 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full border w-fit ${colors.badge}`}>
+                      Round {round.round_number}
+                    </div>
+                    <p className="text-[11px] text-slate-500 font-medium leading-snug break-words">{round.timeline}</p>
+                  </div>
+
+                  <div>
+                    <h3 className="text-base sm:text-lg font-bold text-white leading-snug group-hover:text-blue-300 transition-colors duration-200">
+                      {round.title}
+                    </h3>
+                    <p className="mt-2 text-xs sm:text-sm text-slate-400 leading-relaxed">
+                      {round.description}
+                    </p>
+                  </div>
+
+                  <div className="pt-3 border-t border-slate-800/60 mt-auto">
+                    <p className="text-[10px] text-slate-600 uppercase tracking-wider font-bold mb-0.5">Checkpoint Date</p>
+                    <p className="text-xs sm:text-sm text-slate-300 font-semibold break-words">{round.date}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════
+          AGENDA & SPEAKERS
+          ═══════════════════════════════════ */}
+      <section className="py-12 sm:py-16 lg:py-20 border-t border-slate-800/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
+
+            {/* Agenda — 3 cols */}
+            <div className="lg:col-span-3 space-y-6">
+              <div>
+                <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-blue-400 mb-2">
+                  <Calendar className="w-4 h-4" />
+                  Day Schedule
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">Official Agenda</h2>
+                <p className="text-slate-500 text-sm mt-1">Time schedule for the inaugural day — subject to change.</p>
+              </div>
+
+              <div className="relative pl-8">
+                {/* Vertical timeline line */}
+                <div className="absolute left-3 top-2 bottom-2 w-px bg-gradient-to-b from-blue-500/50 via-slate-700/50 to-transparent" />
+
+                <div className="space-y-4">
+                  {agenda.map((item, idx) => {
+                    const typeStyle = AGENDA_TYPE_STYLES[item.type] || AGENDA_TYPE_STYLES.session;
+                    return (
+                      <div key={idx} className="relative flex gap-3 sm:gap-4">
+                        {/* Dot — positioned on the left track */}
+                        <div className="absolute -left-8 flex-shrink-0 flex items-start pt-1">
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black border-2 z-10
+                            ${item.type === 'keynote' ? 'bg-amber-500/20 border-amber-500/50 text-amber-400' : item.type === 'break' ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400' : 'bg-blue-500/20 border-blue-500/50 text-blue-400'}`}>
+                            {idx + 1}
+                          </div>
+                        </div>
+
+                        {/* Content card */}
+                        <div className="flex-grow min-w-0 bg-slate-900/40 border border-slate-800 rounded-xl p-3.5 sm:p-4 hover:border-slate-700 transition-colors">
+                          <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                            <span className="text-[10px] font-bold text-slate-500 flex items-center gap-1">
+                              <Clock className="w-3 h-3 text-blue-500" />
+                              {item.time}
+                            </span>
+                            <span className={`text-[9px] font-bold uppercase px-2 py-0.5 rounded-full border ${typeStyle}`}>
+                              {item.type}
+                            </span>
+                          </div>
+                          <h4 className="font-semibold text-sm sm:text-base text-white leading-snug">{item.title}</h4>
+                          <p className="text-xs text-slate-500 mt-0.5 truncate">{item.speaker}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
 
+            {/* Speakers — 2 cols */}
+            <div className="lg:col-span-2 space-y-6">
+              <div>
+                <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-blue-400 mb-2">
+                  <Users className="w-4 h-4" />
+                  Keynote Speakers
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">Distinguished Guests</h2>
+                <p className="text-slate-500 text-sm mt-1">Dignitaries conducting keynotes and panels.</p>
+              </div>
+
+              <div className="space-y-4">
+                {speakers.map((sp, idx) => (
+                  <div
+                    key={idx}
+                    className="flex gap-4 bg-slate-900/40 border border-slate-800 hover:border-slate-700 rounded-xl p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20 group"
+                  >
+                    <img
+                      src={sp.image}
+                      alt={sp.name}
+                      className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl object-cover border border-slate-700 flex-shrink-0 group-hover:border-slate-600 transition-colors"
+                      loading="lazy"
+                    />
+                    <div className="min-w-0 space-y-1">
+                      <h4 className="font-bold text-sm sm:text-base text-white truncate">{sp.name}</h4>
+                      <p className="text-[10px] sm:text-xs text-blue-400 font-bold uppercase tracking-wide leading-tight">{sp.role}</p>
+                      <p className="text-xs text-slate-500 leading-relaxed line-clamp-2">{sp.bio}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTA Card */}
+              <div className="bg-gradient-to-br from-blue-900/20 to-indigo-900/20 border border-blue-800/30 rounded-xl p-5 text-center space-y-3">
+                <Trophy className="w-8 h-8 text-amber-400 mx-auto" />
+                <h4 className="font-bold text-white text-sm">Ready to Compete?</h4>
+                <p className="text-xs text-slate-400">Register your team and start building your prototype.</p>
+                <Link
+                  href="/signup"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors"
+                >
+                  Create Account <ChevronRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Agenda & Speaker Roster Grid */}
-      <section className="py-16 bg-slate-900/10 border-t border-b border-slate-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-12">
-          
-          {/* Agenda Section */}
-          <div className="lg:col-span-2 space-y-6">
-            <div>
-              <h3 className="text-2xl font-bold tracking-tight text-white">Official Agenda</h3>
-              <p className="text-slate-400 text-xs mt-1">Time schedule for the inaugural day, subject to change.</p>
+      {/* ═══════════════════════════════════
+          PRESS KIT CTA
+          ═══════════════════════════════════ */}
+      <section className="py-12 sm:py-16 border-t border-slate-800/60 bg-slate-900/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto space-y-4 sm:space-y-5">
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-blue-400">
+              <Volume2 className="w-4 h-4" />
+              Official Media
             </div>
-
-            <div className="relative border-l border-slate-800 ml-3.5 space-y-6 pl-6 pt-2">
-              {agenda.map((item, idx) => (
-                <div key={idx} className="relative">
-                  <div className="absolute -left-10 top-1.5 flex items-center justify-center w-8 h-8 rounded-full bg-slate-950 border border-slate-850 text-[10px] font-bold text-blue-400">
-                    {idx + 1}
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-bold text-slate-500 flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-blue-500" /> {item.time}
-                    </span>
-                    <h4 className="font-semibold text-sm text-white">{item.title}</h4>
-                    <p className="text-xs text-slate-400">{item.speaker}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Speakers Section */}
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-2xl font-bold tracking-tight text-white">Distinguished Speakers</h3>
-              <p className="text-slate-400 text-xs mt-1">Dignitaries conducting keynotes and panels.</p>
-            </div>
-
-            <div className="space-y-4">
-              {speakers.map((sp, idx) => (
-                <div key={idx} className="bg-slate-900/30 p-4 rounded-xl border border-slate-850 flex gap-4 hover:border-slate-750 transition-colors">
-                  <img src={sp.image} alt={sp.name} className="w-12 h-12 rounded-full border border-slate-800 object-cover" />
-                  <div className="space-y-1">
-                    <h4 className="font-semibold text-sm text-white">{sp.name}</h4>
-                    <p className="text-[10px] text-blue-400 font-bold uppercase">{sp.role}</p>
-                    <p className="text-xs text-slate-500 leading-relaxed">{sp.bio}</p>
-                  </div>
-                </div>
-              ))}
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">Media & Press Assets</h2>
+            <p className="text-slate-400 text-sm sm:text-base">
+              Download embargoed press releases, official photos, speaker bios, and stage itineraries in the digital press kit.
+            </p>
+            <div className="flex flex-col xs:flex-row gap-3 justify-center">
+              <Link
+                href="/event/press"
+                className="inline-flex items-center justify-center gap-2 py-2.5 px-6 border border-slate-700 hover:border-slate-600 bg-slate-900/60 hover:bg-slate-800/60 text-slate-300 hover:text-white rounded-xl text-sm font-semibold transition-all duration-200"
+              >
+                <Volume2 className="w-4 h-4 text-blue-400" />
+                Access Digital Press Kit
+              </Link>
+              <Link
+                href="/hackathon/leaderboard"
+                className="inline-flex items-center justify-center gap-2 py-2.5 px-6 border border-amber-800/40 bg-amber-950/20 hover:bg-amber-950/40 text-amber-400 hover:text-amber-300 rounded-xl text-sm font-semibold transition-all duration-200"
+              >
+                <Trophy className="w-4 h-4" />
+                View Leaderboard
+              </Link>
             </div>
           </div>
-
         </div>
-      </section>
-
-      {/* Press Kit callout */}
-      <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center bg-gradient-to-r from-blue-950/20 to-indigo-950/20 rounded-3xl border border-slate-900 shadow-xl space-y-6">
-        <h3 className="text-2xl font-bold text-white">Official Media & Press Assets</h3>
-        <p className="text-slate-400 text-sm max-w-md mx-auto">
-          Download embargoed press releases, official media photos, speaker bios, and stage itineraries in the digital press kit.
-        </p>
-        <Link
-          href="/event/press"
-          className="inline-flex items-center gap-1.5 py-2.5 px-6 border border-slate-800 hover:border-slate-700 bg-slate-950 hover:bg-slate-900 text-slate-350 hover:text-white rounded-lg text-sm font-semibold transition-all"
-        >
-          <Volume2 className="w-4 h-4 text-blue-500" />
-          <span>Access Digital Press Kit</span>
-        </Link>
       </section>
 
     </div>
