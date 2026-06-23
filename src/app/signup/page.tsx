@@ -141,9 +141,9 @@ export default function SignupPage() {
             </div>
           ) : showOtpScreen ? (
             <form className="space-y-6" onSubmit={handleVerifyOtp}>
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <label htmlFor="otp-code" className="block text-xs font-bold uppercase tracking-wider text-slate-400 text-center">
+              <div className="space-y-6">
+                <div className="flex flex-col">
+                  <label htmlFor="otp-code" className="form-label text-center">
                     6-Digit OTP Code
                   </label>
                   <input
@@ -153,7 +153,7 @@ export default function SignupPage() {
                     maxLength={6}
                     value={otpCode}
                     onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
-                    className="block w-full px-4 py-3.5 bg-bg-primary border border-white/5 rounded-xl text-white text-center tracking-[0.6em] text-2xl font-bold placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300"
+                    className="block w-full h-[52px] bg-bg-primary border border-white/10 rounded-xl text-white text-center tracking-[0.6em] text-2xl font-bold placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300"
                     placeholder="000000"
                   />
                 </div>
@@ -179,7 +179,7 @@ export default function SignupPage() {
               <button
                 type="submit"
                 disabled={otpLoading || otpCode.length !== 6}
-                className="w-full flex justify-center items-center gap-2 py-4 px-4 bg-gradient-to-r from-primary to-secondary hover:opacity-95 text-white rounded-xl text-sm font-bold shadow-lg shadow-primary/10 hover:shadow-primary/25 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+                className="w-full h-[52px] flex justify-center items-center gap-2 px-4 bg-gradient-to-r from-primary to-secondary hover:opacity-95 text-white rounded-xl text-sm font-bold shadow-lg shadow-primary/10 hover:shadow-primary/25 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
               >
                 {otpLoading ? (
                   <>
@@ -196,11 +196,11 @@ export default function SignupPage() {
             </form>
           ) : (
             <form className="space-y-6" onSubmit={handleSignup}>
-              <div className="space-y-5">
+              <div className="space-y-6">
                 
                 {/* Full Name */}
-                <div className="space-y-2">
-                  <label htmlFor="fullname" className="block text-xs font-bold uppercase tracking-wider text-slate-400">
+                <div className="flex flex-col">
+                  <label htmlFor="fullname" className="form-label">
                     Full Name
                   </label>
                   <div className="relative group">
@@ -214,15 +214,15 @@ export default function SignupPage() {
                       required
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      className="block w-full pl-12 pr-4 py-3.5 bg-bg-primary border border-white/5 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300 text-sm"
+                      className="form-input"
                       placeholder="Enter your full name"
                     />
                   </div>
                 </div>
 
                 {/* Email Address */}
-                <div className="space-y-2">
-                  <label htmlFor="email-address" className="block text-xs font-bold uppercase tracking-wider text-slate-400">
+                <div className="flex flex-col">
+                  <label htmlFor="email-address" className="form-label">
                     Email Address
                   </label>
                   <div className="relative group">
@@ -237,15 +237,15 @@ export default function SignupPage() {
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="block w-full pl-12 pr-4 py-3.5 bg-bg-primary border border-white/5 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300 text-sm"
+                      className="form-input"
                       placeholder="name@example.com"
                     />
                   </div>
                 </div>
 
                 {/* Password */}
-                <div className="space-y-2">
-                  <label htmlFor="password" className="block text-xs font-bold uppercase tracking-wider text-slate-400">
+                <div className="flex flex-col">
+                  <label htmlFor="password" className="form-label">
                     Password
                   </label>
                   <div className="relative group">
@@ -260,7 +260,7 @@ export default function SignupPage() {
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="block w-full pl-12 pr-12 py-3.5 bg-bg-primary border border-white/5 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300 text-sm"
+                      className="form-input"
                       placeholder="Create a strong password"
                     />
                     <button
@@ -282,7 +282,7 @@ export default function SignupPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center items-center gap-2 py-4 px-4 bg-gradient-to-r from-primary to-secondary hover:opacity-95 text-white rounded-xl text-sm font-bold shadow-lg shadow-primary/10 hover:shadow-primary/25 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+                className="w-full h-[52px] flex justify-center items-center gap-2 px-4 bg-gradient-to-r from-primary to-secondary hover:opacity-95 text-white rounded-xl text-sm font-bold shadow-lg shadow-primary/10 hover:shadow-primary/25 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
               >
                 {loading ? (
                   <>
