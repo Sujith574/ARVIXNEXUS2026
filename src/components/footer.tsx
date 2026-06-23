@@ -10,7 +10,7 @@ export default function Footer() {
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-48 bg-blue-500/3 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="relative container-page pt-24 sm:pt-32 pb-16">
+      <div className="relative w-full max-w-[1400px] mx-auto px-6 pt-24 sm:pt-32 pb-16">
 
         {/* Main Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-12 lg:gap-16">

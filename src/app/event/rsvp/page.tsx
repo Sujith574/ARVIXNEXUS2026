@@ -74,8 +74,8 @@ export default function RSVPPage() {
   };
 
   return (
-    <div className="flex-grow bg-slate-950 py-12">
-      <div className="container-page max-w-xl space-y-6">
+    <div className="flex-grow bg-slate-950 py-16 sm:py-24">
+      <div className="w-full max-w-xl mx-auto px-6 space-y-8">
         
         {/* Back Link */}
         <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-white transition-colors">

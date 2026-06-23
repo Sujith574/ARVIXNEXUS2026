@@ -61,7 +61,7 @@ export default function LeaderboardPage() {
 
   return (
     <div className="flex-grow bg-slate-950">
-      <div className="container-page py-10 sm:py-14 lg:py-16 space-y-6 sm:space-y-8">
+      <div className="w-full max-w-[1400px] mx-auto px-6 py-10 sm:py-14 lg:py-16 space-y-6 sm:space-y-8">
 
         {/* Header */}
         <div className="text-center space-y-3">

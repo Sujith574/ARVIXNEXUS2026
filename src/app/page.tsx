@@ -131,7 +131,7 @@ export default function EventLandingPage() {
           />
         </div>
 
-        <div className="relative container-page text-center flex flex-col items-center justify-center">
+        <div className="relative w-full max-w-[1400px] mx-auto px-6 text-center flex flex-col items-center justify-center">
           {/* Live badge */}
           <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 py-1.5 px-4 rounded-full text-xs font-bold uppercase tracking-wider mb-8 sm:mb-10">
             <Radio className="w-3.5 h-3.5 animate-pulse" />
@@ -188,7 +188,7 @@ export default function EventLandingPage() {
           STATS STRIP
           ═══════════════════════════════════ */}
       <section className="border-y border-slate-800/40 bg-slate-950/40 py-16 sm:py-24">
-        <div className="container-page">
+        <div className="w-full max-w-[1400px] mx-auto px-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {[
               { value: '3', label: 'Evaluation Rounds', icon: Trophy },
@@ -212,7 +212,7 @@ export default function EventLandingPage() {
           COUNTDOWN & STREAM
           ═══════════════════════════════════ */}
       <section className="py-12 sm:py-16 lg:py-20">
-        <div className="container-page space-y-6 sm:space-y-8">
+        <div className="w-full max-w-[1400px] mx-auto px-6 space-y-6 sm:space-y-8">
 
           {/* Countdown */}
           <div className="bg-gradient-to-br from-slate-900/60 to-slate-900/20 border border-slate-800/80 rounded-3xl p-8 sm:p-12 lg:p-16 flex flex-col lg:flex-row justify-between items-center gap-8 shadow-2xl relative overflow-hidden">
@@ -278,7 +278,7 @@ export default function EventLandingPage() {
           HACKATHON ROUNDS
           ═══════════════════════════════════ */}
       <section className="section-py border-t border-slate-800/60 bg-slate-900/10">
-        <div className="container-page animate-fade-in">
+        <div className="w-full max-w-[1400px] mx-auto px-6 animate-fade-in">
           <div className="text-center mb-16 sm:mb-20">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-blue-400 mb-3">
               <Shield className="w-4 h-4" />
@@ -335,7 +335,7 @@ export default function EventLandingPage() {
           AGENDA & SPEAKERS
           ═══════════════════════════════════ */}
       <section className="section-py border-t border-slate-800/60">
-        <div className="container-page">
+        <div className="w-full max-w-[1400px] mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
 
             {/* Agenda — 3 cols */}
@@ -440,7 +440,7 @@ export default function EventLandingPage() {
           PRESS KIT CTA
           ═══════════════════════════════════ */}
       <section className="section-py border-t border-slate-800/60 bg-slate-900/10">
-        <div className="container-page animate-fade-in">
+        <div className="w-full max-w-[1400px] mx-auto px-6 animate-fade-in">
           <div className="text-center max-w-2xl mx-auto space-y-5">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-blue-400">
               <Volume2 className="w-4 h-4" />

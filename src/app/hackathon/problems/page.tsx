@@ -78,7 +78,7 @@ export default function ProblemsPage() {
 
   return (
     <div className="flex-grow bg-slate-950 py-12">
-      <div className="container-page space-y-8">
+      <div className="w-full max-w-[1400px] mx-auto px-6 space-y-8">
         
         {/* Header Section */}
         <div className="text-center space-y-3">

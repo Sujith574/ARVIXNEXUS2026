@@ -164,7 +164,7 @@ export default function Navbar() {
             : 'bg-slate-950/80 backdrop-blur-md border-b border-slate-800/50'
           }`}
       >
-        <div className="container-page">
+        <div className="w-full max-w-[1400px] mx-auto px-6">
           <div className="flex items-center justify-between h-16 sm:h-18 lg:h-20">
 
             {/* ── Logo ── */}
