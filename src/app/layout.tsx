@@ -49,7 +49,7 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${jetbrainsMono.variable} h-full scroll-smooth`}
     >
-      <body className="min-h-full bg-slate-950 text-slate-100 flex flex-col antialiased selection:bg-blue-500/30 selection:text-white">
+      <body className="min-h-full bg-[#050816] text-slate-100 flex flex-col antialiased selection:bg-blue-500/30 selection:text-white">
         <Navbar />
         <main className="flex-grow flex flex-col">{children}</main>
         <Footer />

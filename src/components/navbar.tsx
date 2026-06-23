@@ -174,7 +174,7 @@ export default function Navbar() {
             : 'bg-bg-primary/40 backdrop-blur-md border-b border-white/5 py-5'
           }`}
       >
-        <div className="w-full max-w-[1400px] mx-auto px-8">
+        <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16">
           <div className="flex items-center justify-between h-14">
 
             {/* ── Logo ── */}

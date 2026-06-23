@@ -140,7 +140,7 @@ export default function EventLandingPage() {
           />
         </div>
 
-        <div className="relative w-full max-w-[1400px] mx-auto px-8 z-10">
+        <div className="relative w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             
             {/* Left side content */}
@@ -266,7 +266,7 @@ export default function EventLandingPage() {
       {/* ═══════════════════════════════════
           COUNTDOWN SECTION
           ═══════════════════════════════════ */}
-      <section id="countdown" className="relative z-10 w-full max-w-[1400px] mx-auto px-8 mb-16">
+      <section id="countdown" className="relative z-10 w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 mb-16">
         <div className="glass-card gradient-border-glow p-8 sm:p-10 flex flex-col lg:flex-row justify-between items-center gap-8">
           <div className="text-center lg:text-left space-y-2 max-w-md">
             <div className="flex items-center justify-center lg:justify-start gap-2.5">
@@ -299,7 +299,7 @@ export default function EventLandingPage() {
       {/* ═══════════════════════════════════
           STATISTICS SECTION
           ═══════════════════════════════════ */}
-      <section className="relative z-10 w-full max-w-[1400px] mx-auto px-8 py-12">
+      <section className="relative z-10 w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
             { value: '25,000+', label: 'Applicants nationwide', icon: Users, color: 'text-primary' },
@@ -323,7 +323,7 @@ export default function EventLandingPage() {
       {/* ═══════════════════════════════════
           STREAM / VIDEO SECTION
           ═══════════════════════════════════ */}
-      <section className="relative z-10 w-full max-w-[1400px] mx-auto px-8 py-12">
+      <section className="relative z-10 w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 py-12">
         <div className="glass-card overflow-hidden gradient-border-glow relative aspect-video w-full max-w-[1000px] mx-auto shadow-2xl">
           {!playStream ? (
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-bg-primary/95 z-10 p-6 text-center space-y-5">
@@ -359,7 +359,7 @@ export default function EventLandingPage() {
           TIMELINE SECTION (JUDGING TIMELINE)
           ═══════════════════════════════════ */}
       <section id="timeline" className="section-py relative z-10">
-        <div className="w-full max-w-[1400px] mx-auto px-8">
+        <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16">
           <div className="text-center mb-16 max-w-2xl mx-auto space-y-3">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
               <Shield className="w-4 h-4" />
@@ -424,7 +424,7 @@ export default function EventLandingPage() {
           AGENDA SECTION
           ═══════════════════════════════════ */}
       <section className="section-py relative bg-surface/30 border-y border-white/5">
-        <div className="w-full max-w-[1400px] mx-auto px-8">
+        <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             
             {/* Left Col Info */}
@@ -523,7 +523,7 @@ export default function EventLandingPage() {
           SPEAKERS SECTION
           ═══════════════════════════════════ */}
       <section id="speakers" className="section-py relative z-10">
-        <div className="w-full max-w-[1400px] mx-auto px-8">
+        <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16">
           <div className="text-center mb-16 max-w-2xl mx-auto space-y-3">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
               <Users className="w-4 h-4" />
@@ -610,7 +610,7 @@ export default function EventLandingPage() {
           MEDIA ASSETS CTA
           ═══════════════════════════════════ */}
       <section className="section-py bg-surface/20 border-t border-white/5">
-        <div className="w-full max-w-[1400px] mx-auto px-8">
+        <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16">
           <div className="text-center max-w-2xl mx-auto space-y-6">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
               <Volume2 className="w-4.5 h-4.5" />
