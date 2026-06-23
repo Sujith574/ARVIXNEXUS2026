@@ -47,97 +47,97 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex-grow flex items-center justify-center section-py bg-slate-950">
-      <div className="w-full max-w-md mx-auto px-6">
-        <div className="space-y-8 bg-slate-900/50 p-8 sm:p-10 rounded-3xl border border-slate-800 backdrop-blur-sm shadow-2xl shadow-black/40">
-        
-        {/* Header */}
-        <div className="text-center">
-          <div className="mx-auto flex items-center justify-center w-14 h-14 rounded-full bg-blue-500/10 border border-blue-500/20 mb-4">
-            <Landmark className="w-7 h-7 text-blue-400" />
-          </div>
-          <h2 className="text-3xl font-extrabold tracking-tight text-white">
-            Portal Access
-          </h2>
-          <p className="mt-2 text-sm text-slate-400">
-            Sign in to access your hackathon teams, scorecards, or secure VIP itinerary.
-          </p>
-        </div>
+    <div className="flex-grow flex items-center justify-center section-py bg-slate-950 relative overflow-hidden">
+      {/* Decorative background glows */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-indigo-600/5 rounded-full blur-3xl animate-pulse" />
+      </div>
 
-        {errorMsg && (
-          <div className="bg-rose-950/30 border border-rose-900/50 text-rose-350 p-3.5 rounded-lg text-sm text-center">
-            {errorMsg}
+      <div className="w-full max-w-[460px] mx-auto px-4 sm:px-6 relative z-10">
+        <div className="bg-slate-900/40 border border-slate-800/80 backdrop-blur-md rounded-3xl p-8 sm:p-10 shadow-2xl shadow-black/60 space-y-8">
+          
+          {/* Header */}
+          <div className="text-center space-y-3">
+            <div className="mx-auto flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-750 shadow-lg shadow-blue-500/20">
+              <Landmark className="w-7 h-7 text-white" />
+            </div>
+            <div className="space-y-1.5">
+              <h2 className="text-3xl font-black tracking-tight text-white">
+                Portal Access
+              </h2>
+              <p className="text-sm text-slate-400 leading-relaxed max-w-sm mx-auto">
+                Sign in to access your hackathon teams, scorecards, or secure VIP itinerary.
+              </p>
+            </div>
           </div>
-        )}
 
-        <form className="mt-8 space-y-6" onSubmit={handleLogin}>
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="email-address" className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
-                Email Address
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-slate-500" />
+          {errorMsg && (
+            <div className="bg-rose-950/30 border border-rose-900/50 text-rose-350 p-4 rounded-xl text-xs text-center font-medium">
+              {errorMsg}
+            </div>
+          )}
+
+          <form className="space-y-6" onSubmit={handleLogin}>
+            <div className="space-y-4">
+              <div className="space-y-1.5">
+                <label htmlFor="email-address" className="block text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  Email Address
+                </label>
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                    <Mail className="h-4.5 w-4.5 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
+                  </div>
+                  <input
+                    id="email-address"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="block w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-650 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm"
+                    placeholder="name@agency.gov.in"
+                  />
                 </div>
-                <input
-                  id="email-address"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all text-sm"
-                  placeholder="name@agency.gov.in"
-                />
+              </div>
+
+              <div className="space-y-1.5">
+                <div className="flex justify-between items-center">
+                  <label htmlFor="password" className="block text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                    Password
+                  </label>
+                  <Link href="/forgot-password" className="text-xs font-semibold text-slate-400 hover:text-blue-400 transition-colors">
+                    Forgot password?
+                  </Link>
+                </div>
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                    <Lock className="h-4.5 w-4.5 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
+                  </div>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autoComplete="current-password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="block w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-650 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm"
+                    placeholder="••••••••"
+                  />
+                </div>
               </div>
             </div>
 
-            <div>
-              <label htmlFor="password" className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
-                Password
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-slate-500" />
-                </div>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all text-sm"
-                  placeholder="••••••••"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between text-sm">
-            <div className="text-slate-400">
-              New user?{' '}
-              <Link href="/signup" className="font-semibold text-blue-400 hover:text-blue-300 transition-colors">
-                Create an account
-              </Link>
-            </div>
-            <Link href="/forgot-password" className="font-semibold text-slate-500 hover:text-slate-400 transition-colors">
-              Forgot password?
-            </Link>
-          </div>
-
-          <div className="space-y-3">
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-lg text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-550 transition-all shadow-lg hover:shadow-blue-500/10 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex justify-center items-center gap-2 py-3.5 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-blue-500/10 hover:shadow-blue-500/25 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>
-                  <Loader2 className="animate-spin h-5 w-5" />
+                  <Loader2 className="animate-spin h-4 w-4" />
                   Authenticating...
                 </>
               ) : (
@@ -149,17 +149,17 @@ export default function LoginPage() {
             </button>
 
             <div className="flex items-center gap-3 my-6">
-              <div className="flex-grow border-t border-slate-800"></div>
-              <span className="text-xs text-slate-500 uppercase tracking-widest font-semibold">Or</span>
-              <div className="flex-grow border-t border-slate-800"></div>
+              <div className="flex-grow border-t border-slate-800/80"></div>
+              <span className="text-xs text-slate-500 uppercase tracking-widest font-bold">Or</span>
+              <div className="flex-grow border-t border-slate-800/80"></div>
             </div>
 
             <button
               type="button"
               onClick={handleGoogleLogin}
-              className="w-full flex justify-center items-center gap-2.5 py-3 px-4 bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-lg text-sm font-semibold text-slate-350 hover:text-white transition-all focus:outline-none focus:ring-2 focus:ring-slate-700"
+              className="w-full flex justify-center items-center gap-2.5 py-3 px-4 bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-xl text-sm font-semibold text-slate-300 hover:text-white transition-all active:scale-[0.98] focus:outline-none"
             >
-              <svg className="w-5 h-5" viewBox="0 0 24 24">
+              <svg className="w-4.5 h-4.5" viewBox="0 0 24 24">
                 <path
                   fill="currentColor"
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -179,9 +179,15 @@ export default function LoginPage() {
               </svg>
               <span>Continue with Google</span>
             </button>
+          </form>
+
+          <div className="text-center text-sm text-slate-400 pt-2">
+            New user?{' '}
+            <Link href="/signup" className="font-semibold text-blue-400 hover:text-blue-300 transition-colors">
+              Create an account
+            </Link>
           </div>
 
-        </form>
         </div>
       </div>
     </div>
