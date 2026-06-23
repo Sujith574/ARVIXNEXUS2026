@@ -4,11 +4,12 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { Mail, Lock, Landmark, Loader2, ArrowRight } from 'lucide-react';
+import { Mail, Lock, Landmark, Loader2, ArrowRight, Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const router = useRouter();
@@ -47,46 +48,48 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex-grow flex items-center justify-center section-py bg-slate-950 relative overflow-hidden">
-      {/* Decorative background glows */}
+    <div className="flex-grow flex items-center justify-center section-py bg-bg-primary relative overflow-hidden min-h-[80vh]">
+      {/* Background ambient glows */}
       <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-3xl" />
-        <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-indigo-600/5 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-primary/5 rounded-full blur-[100px]" />
+        <div className="absolute top-1/3 left-1/4 w-80 h-80 bg-secondary/4 rounded-full blur-[90px] animate-pulse" />
       </div>
 
-      <div className="w-full max-w-[460px] mx-auto px-4 sm:px-6 relative z-10">
-        <div className="bg-slate-900/40 border border-slate-800/80 backdrop-blur-md rounded-3xl p-8 sm:p-10 shadow-2xl shadow-black/60 space-y-8">
+      <div className="w-full max-w-[520px] mx-auto px-6 relative z-10">
+        <div className="glass-card card-padding gradient-border-glow space-y-8 shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
           
           {/* Header */}
           <div className="text-center space-y-3">
-            <div className="mx-auto flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-750 shadow-lg shadow-blue-500/20">
+            <div className="mx-auto flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-secondary shadow-lg shadow-primary/20">
               <Landmark className="w-7 h-7 text-white" />
             </div>
             <div className="space-y-1.5">
-              <h2 className="text-3xl font-black tracking-tight text-white">
-                Portal Access
+              <h2 className="text-3xl font-extrabold tracking-tight text-white">
+                Portal Sign In
               </h2>
-              <p className="text-sm text-slate-400 leading-relaxed max-w-sm mx-auto">
-                Sign in to access your hackathon teams, scorecards, or secure VIP itinerary.
+              <p className="text-sm text-slate-450 leading-relaxed">
+                Access your hackathon teams, submissions, or secure VIP itineraries.
               </p>
             </div>
           </div>
 
           {errorMsg && (
-            <div className="bg-rose-950/30 border border-rose-900/50 text-rose-350 p-4 rounded-xl text-xs text-center font-medium">
+            <div className="bg-danger/10 border border-danger/20 text-danger p-4 rounded-xl text-xs text-center font-bold">
               {errorMsg}
             </div>
           )}
 
           <form className="space-y-6" onSubmit={handleLogin}>
-            <div className="space-y-4">
-              <div className="space-y-1.5">
-                <label htmlFor="email-address" className="block text-[11px] font-bold uppercase tracking-wider text-slate-400">
+            <div className="space-y-5">
+              
+              {/* Email Field */}
+              <div className="space-y-2">
+                <label htmlFor="email-address" className="block text-xs font-bold uppercase tracking-wider text-slate-400">
                   Email Address
                 </label>
                 <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                    <Mail className="h-4.5 w-4.5 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Mail className="h-5 w-5 text-slate-500 group-focus-within:text-primary transition-colors duration-300" />
                   </div>
                   <input
                     id="email-address"
@@ -96,70 +99,86 @@ export default function LoginPage() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-650 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm"
+                    className="block w-full pl-12 pr-4 py-3.5 bg-bg-primary border border-white/5 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300 text-sm"
                     placeholder="name@agency.gov.in"
                   />
                 </div>
               </div>
 
-              <div className="space-y-1.5">
+              {/* Password Field */}
+              <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <label htmlFor="password" className="block text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  <label htmlFor="password" className="block text-xs font-bold uppercase tracking-wider text-slate-400">
                     Password
                   </label>
-                  <Link href="/forgot-password" className="text-xs font-semibold text-slate-400 hover:text-blue-400 transition-colors">
+                  <Link href="/forgot-password" className="text-xs font-bold text-primary hover:underline transition-colors">
                     Forgot password?
                   </Link>
                 </div>
                 <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                    <Lock className="h-4.5 w-4.5 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Lock className="h-5 w-5 text-slate-500 group-focus-within:text-primary transition-colors duration-300" />
                   </div>
                   <input
                     id="password"
                     name="password"
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     autoComplete="current-password"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-650 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm"
+                    className="block w-full pl-12 pr-12 py-3.5 bg-bg-primary border border-white/5 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300 text-sm"
                     placeholder="••••••••"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-500 hover:text-slate-350 transition-colors"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
+                  </button>
                 </div>
               </div>
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center items-center gap-2 py-3.5 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-blue-500/10 hover:shadow-blue-500/25 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex justify-center items-center gap-2 py-4 px-4 bg-gradient-to-r from-primary to-secondary hover:opacity-95 text-white rounded-xl text-sm font-bold shadow-lg shadow-primary/10 hover:shadow-primary/25 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
             >
               {loading ? (
                 <>
                   <Loader2 className="animate-spin h-4 w-4" />
-                  Authenticating...
+                  <span>Authenticating...</span>
                 </>
               ) : (
                 <>
-                  <span>Sign In</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span>Sign In to Portal</span>
+                  <ArrowRight className="w-4 w-4" />
                 </>
               )}
             </button>
 
-            <div className="flex items-center gap-3 my-6">
-              <div className="flex-grow border-t border-slate-800/80"></div>
-              <span className="text-xs text-slate-500 uppercase tracking-widest font-bold">Or</span>
-              <div className="flex-grow border-t border-slate-800/80"></div>
+            {/* Divider */}
+            <div className="flex items-center gap-4 my-6">
+              <div className="flex-grow border-t border-white/5"></div>
+              <span className="text-xs text-slate-550 uppercase tracking-widest font-bold">Or continue with</span>
+              <div className="flex-grow border-t border-white/5"></div>
             </div>
 
+            {/* Google Login */}
             <button
               type="button"
               onClick={handleGoogleLogin}
-              className="w-full flex justify-center items-center gap-2.5 py-3 px-4 bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-xl text-sm font-semibold text-slate-300 hover:text-white transition-all active:scale-[0.98] focus:outline-none"
+              className="w-full flex justify-center items-center gap-3 py-3 px-4 bg-bg-primary hover:bg-slate-900 border border-white/5 hover:border-white/10 rounded-xl text-sm font-bold text-slate-300 hover:text-white transition-all duration-300"
             >
-              <svg className="w-4.5 h-4.5" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
                 <path
                   fill="currentColor"
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -177,14 +196,15 @@ export default function LoginPage() {
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
                 />
               </svg>
-              <span>Continue with Google</span>
+              <span>Google Account</span>
             </button>
           </form>
 
-          <div className="text-center text-sm text-slate-400 pt-2">
+          {/* Footer Link */}
+          <div className="text-center text-sm text-slate-450 pt-2 font-medium">
             New user?{' '}
-            <Link href="/signup" className="font-semibold text-blue-400 hover:text-blue-300 transition-colors">
-              Create an account
+            <Link href="/signup" className="font-bold text-primary hover:underline transition-colors">
+              Create registration key
             </Link>
           </div>
 

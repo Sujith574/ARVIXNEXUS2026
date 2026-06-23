@@ -4,12 +4,13 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { User, Mail, Lock, Landmark, Loader2, ArrowRight, ShieldCheck, ArrowLeft } from 'lucide-react';
+import { User, Mail, Lock, Landmark, Loader2, ArrowRight, ShieldCheck, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 
 export default function SignupPage() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -94,19 +95,19 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex-grow flex items-center justify-center section-py bg-slate-950 relative overflow-hidden">
+    <div className="flex-grow flex items-center justify-center section-py bg-bg-primary relative overflow-hidden min-h-[85vh]">
       {/* Decorative background glows */}
       <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-3xl" />
-        <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-indigo-600/5 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-primary/5 rounded-full blur-[100px]" />
+        <div className="absolute top-1/3 left-1/4 w-80 h-80 bg-secondary/4 rounded-full blur-[90px] animate-pulse" />
       </div>
 
-      <div className="w-full max-w-[460px] mx-auto px-4 sm:px-6 relative z-10">
-        <div className="bg-slate-900/40 border border-slate-800/80 backdrop-blur-md rounded-3xl p-8 sm:p-10 shadow-2xl shadow-black/60 space-y-8">
+      <div className="w-full max-w-[520px] mx-auto px-6 relative z-10">
+        <div className="glass-card card-padding gradient-border-glow space-y-8 shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
         
           {/* Header */}
           <div className="text-center space-y-3">
-            <div className="mx-auto flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-750 shadow-lg shadow-blue-500/20">
+            <div className="mx-auto flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-secondary shadow-lg shadow-primary/20">
               {showOtpScreen ? (
                 <ShieldCheck className="w-7 h-7 text-white" />
               ) : (
@@ -114,26 +115,26 @@ export default function SignupPage() {
               )}
             </div>
             <div className="space-y-1.5">
-              <h2 className="text-3xl font-black tracking-tight text-white">
-                {showOtpScreen ? 'Verify Email' : 'Register'}
+              <h2 className="text-3xl font-extrabold tracking-tight text-white animate-fade-in">
+                {showOtpScreen ? 'Security Code' : 'Create Account'}
               </h2>
-              <p className="text-sm text-slate-400 leading-relaxed max-w-sm mx-auto">
+              <p className="text-sm text-slate-455 leading-relaxed max-w-sm mx-auto">
                 {showOtpScreen 
-                  ? `We have sent a verification code to ${email}`
-                  : 'Create an account to join or form teams, submit projects, and RSVP.'}
+                  ? `Enter the 6-digit verification code sent to ${email}`
+                  : 'Register your digital key to join teams, submit projects, and RSVP.'}
               </p>
             </div>
           </div>
 
           {errorMsg && (
-            <div className="bg-rose-950/30 border border-rose-900/50 text-rose-350 p-4 rounded-xl text-xs text-center font-medium">
+            <div className="bg-danger/10 border border-danger/20 text-danger p-4 rounded-xl text-xs text-center font-bold">
               {errorMsg}
             </div>
           )}
 
           {success ? (
-            <div className="bg-emerald-950/20 border border-emerald-900/40 text-emerald-400 p-6 rounded-2xl text-center space-y-2">
-              <h3 className="font-bold text-base">Verification Successful!</h3>
+            <div className="bg-success/10 border border-success/20 text-success p-6 rounded-2xl text-center space-y-2.5">
+              <h3 className="font-extrabold text-base">Verification Successful!</h3>
               <p className="text-xs text-slate-400">
                 Your email has been verified. Redirecting to the Login portal...
               </p>
@@ -141,8 +142,8 @@ export default function SignupPage() {
           ) : showOtpScreen ? (
             <form className="space-y-6" onSubmit={handleVerifyOtp}>
               <div className="space-y-4">
-                <div className="space-y-1.5">
-                  <label htmlFor="otp-code" className="block text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                <div className="space-y-2">
+                  <label htmlFor="otp-code" className="block text-xs font-bold uppercase tracking-wider text-slate-400 text-center">
                     6-Digit OTP Code
                   </label>
                   <input
@@ -152,24 +153,24 @@ export default function SignupPage() {
                     maxLength={6}
                     value={otpCode}
                     onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
-                    className="block w-full px-3 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white text-center tracking-[0.5em] text-xl font-bold placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                    className="block w-full px-4 py-3.5 bg-bg-primary border border-white/5 rounded-xl text-white text-center tracking-[0.6em] text-2xl font-bold placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300"
                     placeholder="000000"
                   />
                 </div>
               </div>
 
-              <div className="flex justify-between items-center text-xs">
+              <div className="flex justify-between items-center text-xs pt-2">
                 <button
                   type="button"
                   onClick={() => setShowOtpScreen(false)}
-                  className="flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors"
+                  className="flex items-center gap-1.5 text-slate-450 hover:text-white font-semibold transition-colors"
                 >
-                  <ArrowLeft className="w-3.5 h-3.5" /> Back to Signup
+                  <ArrowLeft className="w-4 h-4" /> Back to Signup
                 </button>
                 <button
                   type="button"
                   onClick={handleResendOtp}
-                  className="font-semibold text-blue-400 hover:text-blue-300 transition-colors"
+                  className="font-bold text-primary hover:underline transition-colors"
                 >
                   Resend Code
                 </button>
@@ -178,12 +179,12 @@ export default function SignupPage() {
               <button
                 type="submit"
                 disabled={otpLoading || otpCode.length !== 6}
-                className="w-full flex justify-center items-center gap-2 py-3.5 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-blue-500/10 hover:shadow-blue-500/25 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center items-center gap-2 py-4 px-4 bg-gradient-to-r from-primary to-secondary hover:opacity-95 text-white rounded-xl text-sm font-bold shadow-lg shadow-primary/10 hover:shadow-primary/25 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
               >
                 {otpLoading ? (
                   <>
                     <Loader2 className="animate-spin h-4 w-4" />
-                    Verifying...
+                    <span>Verifying...</span>
                   </>
                 ) : (
                   <>
@@ -195,14 +196,16 @@ export default function SignupPage() {
             </form>
           ) : (
             <form className="space-y-6" onSubmit={handleSignup}>
-              <div className="space-y-4">
-                <div className="space-y-1.5">
-                  <label htmlFor="fullname" className="block text-[11px] font-bold uppercase tracking-wider text-slate-400">
+              <div className="space-y-5">
+                
+                {/* Full Name */}
+                <div className="space-y-2">
+                  <label htmlFor="fullname" className="block text-xs font-bold uppercase tracking-wider text-slate-400">
                     Full Name
                   </label>
                   <div className="relative group">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                      <User className="h-4.5 w-4.5 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <User className="h-5 w-5 text-slate-500 group-focus-within:text-primary transition-colors duration-300" />
                     </div>
                     <input
                       id="fullname"
@@ -211,19 +214,20 @@ export default function SignupPage() {
                       required
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      className="block w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-650 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm"
+                      className="block w-full pl-12 pr-4 py-3.5 bg-bg-primary border border-white/5 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300 text-sm"
                       placeholder="Enter your full name"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label htmlFor="email-address" className="block text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                {/* Email Address */}
+                <div className="space-y-2">
+                  <label htmlFor="email-address" className="block text-xs font-bold uppercase tracking-wider text-slate-400">
                     Email Address
                   </label>
                   <div className="relative group">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                      <Mail className="h-4.5 w-4.5 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <Mail className="h-5 w-5 text-slate-500 group-focus-within:text-primary transition-colors duration-300" />
                     </div>
                     <input
                       id="email-address"
@@ -233,31 +237,44 @@ export default function SignupPage() {
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="block w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-650 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm"
+                      className="block w-full pl-12 pr-4 py-3.5 bg-bg-primary border border-white/5 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300 text-sm"
                       placeholder="name@example.com"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label htmlFor="password" className="block text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                {/* Password */}
+                <div className="space-y-2">
+                  <label htmlFor="password" className="block text-xs font-bold uppercase tracking-wider text-slate-400">
                     Password
                   </label>
                   <div className="relative group">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                      <Lock className="h-4.5 w-4.5 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <Lock className="h-5 w-5 text-slate-500 group-focus-within:text-primary transition-colors duration-300" />
                     </div>
                     <input
                       id="password"
                       name="password"
-                      type="password"
+                      type={showPassword ? 'text' : 'password'}
                       autoComplete="new-password"
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="block w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-650 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm"
+                      className="block w-full pl-12 pr-12 py-3.5 bg-bg-primary border border-white/5 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300 text-sm"
                       placeholder="Create a strong password"
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-500 hover:text-slate-350 transition-colors"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -265,16 +282,16 @@ export default function SignupPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center items-center gap-2 py-3.5 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-blue-500/10 hover:shadow-blue-500/25 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center items-center gap-2 py-4 px-4 bg-gradient-to-r from-primary to-secondary hover:opacity-95 text-white rounded-xl text-sm font-bold shadow-lg shadow-primary/10 hover:shadow-primary/25 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
               >
                 {loading ? (
                   <>
                     <Loader2 className="animate-spin h-4 w-4" />
-                    Registering...
+                    <span>Creating account...</span>
                   </>
                 ) : (
                   <>
-                    <span>Create Account</span>
+                    <span>Create Credentials Key</span>
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}
@@ -282,10 +299,10 @@ export default function SignupPage() {
             </form>
           )}
 
-          <div className="text-center text-sm text-slate-400 pt-2">
+          <div className="text-center text-sm text-slate-450 pt-2 font-medium">
             Already have an account?{' '}
-            <Link href="/login" className="font-semibold text-blue-400 hover:text-blue-300 transition-colors">
-              Sign in
+            <Link href="/login" className="font-bold text-primary hover:underline transition-colors">
+              Sign in here
             </Link>
           </div>
 
