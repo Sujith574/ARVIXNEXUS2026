@@ -137,11 +137,11 @@ export default function ProblemsPage() {
             <p className="font-semibold text-sm">No problem statements match your filters.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
             {filteredProblems.map((problem) => (
               <div
                 key={problem.id}
-                className="bg-slate-900/30 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-blue-500/40 hover:bg-slate-900/40 transition-all duration-300 shadow-lg group h-full"
+                className="bg-slate-900/30 border border-slate-800 rounded-3xl p-8 sm:p-10 flex flex-col justify-between hover:border-blue-500/40 hover:bg-slate-900/40 transition-all duration-300 shadow-lg group h-full"
               >
                 <div className="space-y-4">
                   <div className="flex justify-between items-start">

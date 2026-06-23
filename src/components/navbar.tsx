@@ -22,7 +22,7 @@ function NavLink({ href, children, onClick, className = '', isActive }: NavLinkP
     <Link
       href={href}
       onClick={onClick}
-      className={`relative inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200
+      className={`relative inline-flex items-center px-4.5 py-2.5 text-sm font-medium rounded-lg transition-all duration-200
         ${isActive
           ? 'text-blue-400 bg-blue-500/8'
           : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
@@ -30,7 +30,7 @@ function NavLink({ href, children, onClick, className = '', isActive }: NavLinkP
     >
       {children}
       {isActive && (
-        <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full" />
+        <span className="absolute bottom-0 left-4.5 right-4.5 h-0.5 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full" />
       )}
     </Link>
   );
@@ -192,7 +192,7 @@ export default function Navbar() {
             </Link>
 
             {/* ── Desktop Navigation ── */}
-            <div className="hidden lg:flex items-center gap-0.5">
+            <div className="hidden lg:flex items-center gap-3">
               {publicLinks.map(({ href, label }) => (
                 <NavLink key={href} href={href} isActive={pathname === href}>
                   {label}
@@ -207,7 +207,7 @@ export default function Navbar() {
             </div>
 
             {/* ── Desktop Auth / Actions ── */}
-            <div className="hidden lg:flex items-center gap-3">
+            <div className="hidden lg:flex items-center gap-5">
               {/* Role-based pills */}
               {user && isAdmin && (
                 <Link

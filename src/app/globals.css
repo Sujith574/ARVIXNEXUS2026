@@ -288,14 +288,37 @@ textarea::placeholder {
    SECTION SPACING
    ============================================ */
 .section-py {
-  padding-top: 4rem;
-  padding-bottom: 4rem;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
 }
 
 @media (min-width: 768px) {
   .section-py {
-    padding-top: 6rem;
-    padding-bottom: 6rem;
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .section-py {
+    padding-top: 10rem;
+    padding-bottom: 10rem;
+  }
+}
+
+.card-spacious {
+  padding: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .card-spacious {
+    padding: 2.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-spacious {
+    padding: 3rem;
   }
 }
 

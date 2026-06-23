@@ -119,7 +119,7 @@ export default function EventLandingPage() {
       {/* ═══════════════════════════════════
           HERO SECTION
           ═══════════════════════════════════ */}
-      <section className="relative overflow-hidden pt-20 sm:pt-28 lg:pt-36 pb-16 sm:pb-24">
+      <section className="relative overflow-hidden pt-28 sm:pt-36 lg:pt-48 pb-20 sm:pb-28 lg:pb-36">
         {/* Background glows */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-blue-600/8 rounded-full blur-3xl" />
@@ -133,52 +133,52 @@ export default function EventLandingPage() {
 
         <div className="relative container-page text-center flex flex-col items-center justify-center">
           {/* Live badge */}
-          <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 py-1.5 px-4 rounded-full text-xs font-bold uppercase tracking-wider mb-6 sm:mb-8">
+          <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 py-1.5 px-4 rounded-full text-xs font-bold uppercase tracking-wider mb-8 sm:mb-10">
             <Radio className="w-3.5 h-3.5 animate-pulse" />
             Hybrid Launch Ceremony & Hackathon 2026
           </div>
 
           {/* Hero heading */}
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-white tracking-tight leading-[1.1] mb-5 sm:mb-6 text-center">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-white tracking-tight leading-[1.15] mb-8 text-center">
             Unveiling the Future of
-            <span className="block bg-gradient-to-r from-blue-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent mt-1">
+            <span className="block bg-gradient-to-r from-blue-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent mt-1.5">
               Digital Governance
             </span>
           </h1>
 
-          <p className="text-slate-400 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed mb-8 sm:mb-10 text-center">
+          <p className="text-slate-400 text-base sm:text-lg lg:text-xl max-w-3xl mx-auto leading-relaxed mb-12 text-center">
             Join India&apos;s premier hybrid software hackathon. Connect with VIPs, industry mentors, and the brightest developer minds across the nation.
           </p>
 
           {/* Info chips */}
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10">
+          <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-12">
             {[
               { icon: Calendar, text: 'July 10–12, 2026' },
               { icon: MapPin, text: 'Vigyan Bhawan, New Delhi' },
               { icon: Users, text: '1000+ Participants' },
             ].map(({ icon: Icon, text }) => (
-              <div key={text} className="flex items-center gap-2 bg-slate-900/60 border border-slate-800 text-slate-300 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium">
-                <Icon className="w-4 h-4 text-blue-400 flex-shrink-0" />
+              <div key={text} className="flex items-center gap-2.5 bg-slate-900/60 border border-slate-800/80 text-slate-200 px-4 sm:px-5 py-3 rounded-2xl text-xs sm:text-sm font-semibold shadow-lg">
+                <Icon className="w-4.5 h-4.5 text-blue-400 flex-shrink-0" />
                 <span>{text}</span>
               </div>
             ))}
           </div>
 
           {/* CTA buttons */}
-          <div className="flex flex-col xs:flex-row gap-3 sm:gap-4 justify-center items-center">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center w-full sm:w-auto">
             <Link
               href="/event/rsvp"
-              className="w-full xs:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl font-bold text-sm sm:text-base shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-0.5"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 sm:py-4.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-2xl font-bold text-sm sm:text-base shadow-xl shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-0.5"
             >
               <span>RSVP Invitation</span>
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-5 h-5" />
             </Link>
             <Link
               href="/signup"
-              className="w-full xs:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 border border-slate-700 hover:border-slate-600 bg-slate-900/50 hover:bg-slate-800/60 text-slate-300 hover:text-white rounded-xl font-bold text-sm sm:text-base transition-all duration-300 hover:-translate-y-0.5"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 sm:py-4.5 border border-slate-700 hover:border-slate-650 bg-slate-900/50 hover:bg-slate-800/60 text-slate-200 hover:text-white rounded-2xl font-bold text-sm sm:text-base transition-all duration-300 hover:-translate-y-0.5"
             >
               <span>Register for Hackathon</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
         </div>
@@ -187,19 +187,21 @@ export default function EventLandingPage() {
       {/* ═══════════════════════════════════
           STATS STRIP
           ═══════════════════════════════════ */}
-      <section className="border-y border-slate-800/60 bg-slate-900/20">
-        <div className="container-page py-6 sm:py-8">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
+      <section className="border-y border-slate-800/40 bg-slate-950/40 py-16 sm:py-24">
+        <div className="container-page">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {[
               { value: '3', label: 'Evaluation Rounds', icon: Trophy },
               { value: '48h', label: 'Hackathon Duration', icon: Clock },
               { value: '₹10L+', label: 'Prize Pool', icon: Star },
               { value: '100%', label: 'Online Ready', icon: Zap },
             ].map(({ value, label, icon: Icon }) => (
-              <div key={label} className="text-center space-y-1.5 py-2">
-                <Icon className="w-5 h-5 text-blue-400 mx-auto mb-2" />
-                <p className="text-2xl sm:text-3xl font-black text-white">{value}</p>
-                <p className="text-xs sm:text-sm text-slate-500 font-medium">{label}</p>
+              <div key={label} className="bg-slate-900/20 border border-slate-850 rounded-2xl p-8 sm:p-10 text-center space-y-3 hover:bg-slate-900/30 transition-all duration-300">
+                <div className="mx-auto flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400">
+                  <Icon className="w-5 h-5" />
+                </div>
+                <p className="text-3xl sm:text-4xl lg:text-5xl font-black text-white">{value}</p>
+                <p className="text-sm text-slate-400 font-medium">{label}</p>
               </div>
             ))}
           </div>
@@ -213,25 +215,26 @@ export default function EventLandingPage() {
         <div className="container-page space-y-6 sm:space-y-8">
 
           {/* Countdown */}
-          <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-5 sm:p-8 flex flex-col sm:flex-row justify-between items-center gap-6">
-            <div className="text-center sm:text-left">
-              <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
-                <Clock className="w-5 h-5 text-blue-400" />
-                <h3 className="text-base sm:text-lg font-bold text-white uppercase tracking-wider">Countdown to Launch</h3>
+          <div className="bg-gradient-to-br from-slate-900/60 to-slate-900/20 border border-slate-800/80 rounded-3xl p-8 sm:p-12 lg:p-16 flex flex-col lg:flex-row justify-between items-center gap-8 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+            <div className="text-center lg:text-left space-y-2">
+              <div className="flex items-center justify-center lg:justify-start gap-3">
+                <Clock className="w-6 h-6 text-blue-400 animate-pulse" />
+                <h3 className="text-lg sm:text-xl font-extrabold text-white uppercase tracking-wider">Countdown to Launch</h3>
               </div>
-              <p className="text-slate-500 text-xs sm:text-sm">Vigyan Bhawan Inaugural session — New Delhi</p>
+              <p className="text-slate-400 text-sm max-w-md">Join the national digital transformation launch event at Vigyan Bhawan, New Delhi.</p>
             </div>
-            <div className="flex items-center gap-3 sm:gap-5">
+            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
               {countdownUnits.map((unit, i) => (
-                <div key={unit.label} className="flex items-center gap-3 sm:gap-5">
+                <div key={unit.label} className="flex items-center gap-4 sm:gap-6">
                   <div className="flex flex-col items-center">
-                    <div className="flex items-center justify-center w-14 h-14 sm:w-18 sm:h-18 rounded-xl bg-slate-950 border border-slate-800 text-xl sm:text-3xl font-black text-blue-400 tabular-nums shadow-inner">
+                    <div className="flex items-center justify-center w-16 h-16 sm:w-22 sm:h-22 rounded-2xl bg-slate-950 border border-slate-800 text-2xl sm:text-4xl font-black text-blue-400 tabular-nums shadow-2xl">
                       {String(unit.value).padStart(2, '0')}
                     </div>
-                    <span className="text-[9px] sm:text-[11px] uppercase font-bold tracking-widest text-slate-600 mt-1.5">{unit.label}</span>
+                    <span className="text-[10px] sm:text-xs uppercase font-bold tracking-widest text-slate-500 mt-2.5">{unit.label}</span>
                   </div>
                   {i < countdownUnits.length - 1 && (
-                    <span className="text-slate-700 text-xl font-bold pb-4">:</span>
+                    <span className="text-slate-800 text-2xl font-bold hidden xs:inline pb-6">:</span>
                   )}
                 </div>
               ))}
@@ -274,28 +277,28 @@ export default function EventLandingPage() {
       {/* ═══════════════════════════════════
           HACKATHON ROUNDS
           ═══════════════════════════════════ */}
-      <section className="py-12 sm:py-16 lg:py-20 border-t border-slate-800/60 bg-slate-900/10">
-        <div className="container-page">
-          <div className="text-center mb-10 sm:mb-14">
+      <section className="section-py border-t border-slate-800/60 bg-slate-900/10">
+        <div className="container-page animate-fade-in">
+          <div className="text-center mb-16 sm:mb-20">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-blue-400 mb-3">
               <Shield className="w-4 h-4" />
               Evaluation Structure
             </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight mb-3">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-4">
               3-Round Judging Timeline
             </h2>
-            <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto">
+            <p className="text-slate-400 text-base max-w-2xl mx-auto leading-relaxed">
               Our hackathon follows a structured 3-round evaluation. Ensure your team submits prototypes before each checkpoint.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
             {rounds.map((round, i) => {
               const colors = ROUND_COLORS[i % ROUND_COLORS.length];
               return (
                 <div
                   key={round.id || round.round_number}
-                  className={`relative h-full bg-slate-900/40 border border-slate-800 ${colors.border} rounded-2xl p-5 sm:p-6 flex flex-col gap-4 hover:bg-slate-900/60 transition-all duration-300 group overflow-hidden`}
+                  className={`relative h-full bg-slate-900/30 border border-slate-800 ${colors.border} rounded-3xl p-8 sm:p-10 flex flex-col gap-6 hover:bg-slate-900/50 hover:border-slate-700 transition-all duration-300 group overflow-hidden shadow-lg`}
                 >
                   {/* Top gradient bar */}
                   <div className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r ${colors.bg}`} />
@@ -331,51 +334,51 @@ export default function EventLandingPage() {
       {/* ═══════════════════════════════════
           AGENDA & SPEAKERS
           ═══════════════════════════════════ */}
-      <section className="py-12 sm:py-16 lg:py-20 border-t border-slate-800/60">
+      <section className="section-py border-t border-slate-800/60">
         <div className="container-page">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
 
             {/* Agenda — 3 cols */}
-            <div className="lg:col-span-3 space-y-6">
-              <div>
-                <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-blue-400 mb-2">
+            <div className="lg:col-span-3 space-y-10">
+              <div className="space-y-2">
+                <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-blue-400 mb-1">
                   <Calendar className="w-4 h-4" />
                   Day Schedule
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">Official Agenda</h2>
-                <p className="text-slate-500 text-sm mt-1">Time schedule for the inaugural day — subject to change.</p>
+                <h2 className="text-3xl font-black text-white tracking-tight">Official Agenda</h2>
+                <p className="text-slate-550 text-sm">Time schedule for the inaugural day — subject to change.</p>
               </div>
 
-              <div className="relative pl-8">
+              <div className="relative pl-10">
                 {/* Vertical timeline line */}
-                <div className="absolute left-3 top-2 bottom-2 w-px bg-gradient-to-b from-blue-500/50 via-slate-700/50 to-transparent" />
+                <div className="absolute left-4 top-2 bottom-2 w-px bg-gradient-to-b from-blue-500/50 via-slate-700/50 to-transparent" />
 
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {agenda.map((item, idx) => {
                     const typeStyle = AGENDA_TYPE_STYLES[item.type] || AGENDA_TYPE_STYLES.session;
                     return (
-                      <div key={idx} className="relative flex gap-3 sm:gap-4">
+                      <div key={idx} className="relative flex gap-4 sm:gap-6">
                         {/* Dot — positioned on the left track */}
-                        <div className="absolute -left-8 flex-shrink-0 flex items-start pt-1">
-                          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black border-2 z-10
+                        <div className="absolute -left-10 flex-shrink-0 flex items-start pt-1.5">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black border-2 z-10
                             ${item.type === 'keynote' ? 'bg-amber-500/20 border-amber-500/50 text-amber-400' : item.type === 'break' ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400' : 'bg-blue-500/20 border-blue-500/50 text-blue-400'}`}>
                             {idx + 1}
                           </div>
                         </div>
 
                         {/* Content card */}
-                        <div className="flex-grow min-w-0 bg-slate-900/40 border border-slate-800 rounded-xl p-3.5 sm:p-4 hover:border-slate-700 transition-colors">
-                          <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                            <span className="text-[10px] font-bold text-slate-500 flex items-center gap-1">
-                              <Clock className="w-3 h-3 text-blue-500" />
+                        <div className="flex-grow min-w-0 bg-slate-900/30 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 hover:bg-slate-900/45 transition-colors">
+                          <div className="flex flex-wrap items-center gap-2 mb-2">
+                            <span className="text-[11px] font-bold text-slate-400 flex items-center gap-1">
+                              <Clock className="w-3.5 h-3.5 text-blue-500" />
                               {item.time}
                             </span>
-                            <span className={`text-[9px] font-bold uppercase px-2 py-0.5 rounded-full border ${typeStyle}`}>
+                            <span className={`text-[9px] font-bold uppercase px-2.5 py-0.5 rounded-full border ${typeStyle}`}>
                               {item.type}
                             </span>
                           </div>
-                          <h4 className="font-semibold text-sm sm:text-base text-white leading-snug">{item.title}</h4>
-                          <p className="text-xs text-slate-500 mt-0.5 truncate">{item.speaker}</p>
+                          <h4 className="font-bold text-base text-white leading-snug">{item.title}</h4>
+                          <p className="text-xs text-slate-500 mt-1 truncate">{item.speaker}</p>
                         </div>
                       </div>
                     );
@@ -385,42 +388,42 @@ export default function EventLandingPage() {
             </div>
 
             {/* Speakers — 2 cols */}
-            <div className="lg:col-span-2 space-y-6">
-              <div>
-                <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-blue-400 mb-2">
+            <div className="lg:col-span-2 space-y-10">
+              <div className="space-y-2">
+                <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-blue-400 mb-1">
                   <Users className="w-4 h-4" />
                   Keynote Speakers
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">Distinguished Guests</h2>
-                <p className="text-slate-500 text-sm mt-1">Dignitaries conducting keynotes and panels.</p>
+                <h2 className="text-3xl font-black text-white tracking-tight">Distinguished Guests</h2>
+                <p className="text-slate-550 text-sm">Dignitaries conducting keynotes and panels.</p>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {speakers.map((sp, idx) => (
                   <div
                     key={idx}
-                    className="flex gap-4 bg-slate-900/40 border border-slate-800 hover:border-slate-700 rounded-xl p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20 group"
+                    className="flex gap-5 bg-slate-900/30 border border-slate-800 hover:border-slate-700 rounded-2xl p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/30 group"
                   >
                     <img
                       src={sp.image}
                       alt={sp.name}
-                      className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl object-cover border border-slate-700 flex-shrink-0 group-hover:border-slate-600 transition-colors"
+                      className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover border border-slate-700 flex-shrink-0 group-hover:border-slate-600 transition-colors"
                       loading="lazy"
                     />
-                    <div className="min-w-0 space-y-1">
-                      <h4 className="font-bold text-sm sm:text-base text-white truncate">{sp.name}</h4>
-                      <p className="text-[10px] sm:text-xs text-blue-400 font-bold uppercase tracking-wide leading-tight">{sp.role}</p>
-                      <p className="text-xs text-slate-500 leading-relaxed line-clamp-2">{sp.bio}</p>
+                    <div className="min-w-0 space-y-1.5 pt-1">
+                      <h4 className="font-bold text-base sm:text-lg text-white truncate">{sp.name}</h4>
+                      <p className="text-[11px] sm:text-xs text-blue-400 font-bold uppercase tracking-wide leading-tight">{sp.role}</p>
+                      <p className="text-xs sm:text-sm text-slate-400 leading-relaxed line-clamp-2">{sp.bio}</p>
                     </div>
                   </div>
                 ))}
               </div>
 
               {/* CTA Card */}
-              <div className="bg-gradient-to-br from-blue-900/20 to-indigo-900/20 border border-blue-800/30 rounded-xl p-5 text-center space-y-3">
-                <Trophy className="w-8 h-8 text-amber-400 mx-auto" />
-                <h4 className="font-bold text-white text-sm">Ready to Compete?</h4>
-                <p className="text-xs text-slate-400">Register your team and start building your prototype.</p>
+              <div className="bg-gradient-to-br from-blue-900/20 to-indigo-900/20 border border-blue-800/30 rounded-2xl p-8 text-center space-y-4 shadow-xl">
+                <Trophy className="w-10 h-10 text-amber-400 mx-auto" />
+                <h4 className="font-bold text-white text-base">Ready to Compete?</h4>
+                <p className="text-xs text-slate-450 leading-relaxed">Register your team and start building your prototype.</p>
                 <Link
                   href="/signup"
                   className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors"
@@ -436,30 +439,30 @@ export default function EventLandingPage() {
       {/* ═══════════════════════════════════
           PRESS KIT CTA
           ═══════════════════════════════════ */}
-      <section className="py-12 sm:py-16 border-t border-slate-800/60 bg-slate-900/10">
-        <div className="container-page">
-          <div className="text-center max-w-2xl mx-auto space-y-4 sm:space-y-5">
+      <section className="section-py border-t border-slate-800/60 bg-slate-900/10">
+        <div className="container-page animate-fade-in">
+          <div className="text-center max-w-2xl mx-auto space-y-5">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-blue-400">
               <Volume2 className="w-4 h-4" />
               Official Media
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">Media & Press Assets</h2>
-            <p className="text-slate-400 text-sm sm:text-base">
+            <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">Media & Press Assets</h2>
+            <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
               Download embargoed press releases, official photos, speaker bios, and stage itineraries in the digital press kit.
             </p>
-            <div className="flex flex-col xs:flex-row gap-3 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
               <Link
                 href="/event/press"
-                className="inline-flex items-center justify-center gap-2 py-2.5 px-6 border border-slate-700 hover:border-slate-600 bg-slate-900/60 hover:bg-slate-800/60 text-slate-300 hover:text-white rounded-xl text-sm font-semibold transition-all duration-200"
+                className="inline-flex items-center justify-center gap-2 py-3 px-8 border border-slate-700 hover:border-slate-600 bg-slate-900/60 hover:bg-slate-800/60 text-slate-200 hover:text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-md"
               >
-                <Volume2 className="w-4 h-4 text-blue-400" />
+                <Volume2 className="w-4.5 h-4.5 text-blue-400" />
                 Access Digital Press Kit
               </Link>
               <Link
                 href="/hackathon/leaderboard"
-                className="inline-flex items-center justify-center gap-2 py-2.5 px-6 border border-amber-800/40 bg-amber-950/20 hover:bg-amber-950/40 text-amber-400 hover:text-amber-300 rounded-xl text-sm font-semibold transition-all duration-200"
+                className="inline-flex items-center justify-center gap-2 py-3 px-8 border border-amber-800/40 bg-amber-950/20 hover:bg-amber-950/40 text-amber-400 hover:text-amber-300 rounded-xl text-sm font-semibold transition-all duration-200 shadow-md"
               >
-                <Trophy className="w-4 h-4" />
+                <Trophy className="w-4.5 h-4.5" />
                 View Leaderboard
               </Link>
             </div>
