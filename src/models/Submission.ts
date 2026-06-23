@@ -5,6 +5,7 @@ export interface ISubmission extends Document {
   title: string;
   description: string;
   repo_url: string;
+  live_url: string; // Live Link / Deployed Website URL
   demo_video_url?: string;
   screenshots: string[]; // List of storage paths
   document_url?: string; // Pitch deck path
@@ -18,6 +19,7 @@ const SubmissionSchema = new Schema<ISubmission>(
     title: { type: String, required: true },
     description: { type: String, required: true },
     repo_url: { type: String, required: true },
+    live_url: { type: String, required: true },
     demo_video_url: { type: String },
     screenshots: { type: [String], default: [] },
     document_url: { type: String },

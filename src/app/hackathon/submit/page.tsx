@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { FileCode, Upload, Eye, FileText, CheckCircle, Lock, Loader2, Link as LinkIcon, AlertTriangle } from 'lucide-react';
+import { FileCode, Eye, CheckCircle, Lock, Loader2, Link as LinkIcon, AlertTriangle, Globe } from 'lucide-react';
 import Link from 'next/link';
 
 export default function SubmitPage() {
@@ -16,6 +16,7 @@ export default function SubmitPage() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [repoUrl, setRepoUrl] = useState('');
+  const [liveUrl, setLiveUrl] = useState('');
   const [demoVideoUrl, setDemoVideoUrl] = useState('');
   const [uploadingScreen, setUploadingScreen] = useState(false);
   const [uploadingDoc, setUploadingDoc] = useState(false);
@@ -73,6 +74,7 @@ export default function SubmitPage() {
             setTitle(subData.title || '');
             setDescription(subData.description || '');
             setRepoUrl(subData.repo_url || '');
+            setLiveUrl(subData.live_url || '');
             setDemoVideoUrl(subData.demo_video_url || '');
             setScreenshots(subData.screenshots || []);
             setDocumentUrl(subData.document_url || '');
@@ -144,6 +146,7 @@ export default function SubmitPage() {
         title,
         description,
         repo_url: repoUrl,
+        live_url: liveUrl,
         demo_video_url: demoVideoUrl,
         screenshots,
         document_url: documentUrl,
@@ -297,134 +300,45 @@ export default function SubmitPage() {
                 </div>
               </div>
 
-              {/* Video URL */}
+              {/* Deployed Live Link */}
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
-                  Demo Video URL (YouTube/Vimeo)
+                  Live Website Link (Deployed URL)
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <LinkIcon className="h-4 w-4 text-slate-500" />
+                    <Globe className="h-4 w-4 text-slate-500" />
                   </div>
                   <input
                     type="url"
+                    required
                     disabled={readOnly}
-                    placeholder="https://youtu.be/..."
-                    value={demoVideoUrl}
-                    onChange={(e) => setDemoVideoUrl(e.target.value)}
+                    placeholder="https://your-project.vercel.app"
+                    value={liveUrl}
+                    onChange={(e) => setLiveUrl(e.target.value)}
                     className="block w-full pl-9 pr-3 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-white placeholder-slate-655 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm disabled:opacity-50"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Screenshots Upload */}
+            {/* Video URL */}
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
-                Screenshots (Max 3)
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
+                Demo Video URL (YouTube/Vimeo - Optional)
               </label>
-              
-              <div className="space-y-4">
-                {!readOnly && screenshots.length < 3 && (
-                  <div className="flex items-center justify-center w-full">
-                    <label className="flex flex-col items-center justify-center w-full h-28 border border-dashed border-slate-800 hover:border-slate-700 bg-slate-950/50 hover:bg-slate-950/80 rounded-lg cursor-pointer transition-all">
-                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        {uploadingScreen ? (
-                          <Loader2 className="w-6 h-6 animate-spin text-blue-500" />
-                        ) : (
-                          <>
-                            <Upload className="w-6 h-6 text-slate-500 mb-1" />
-                            <p className="text-xs text-slate-400 font-semibold">Click to upload screenshot</p>
-                          </>
-                        )}
-                      </div>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={(e) => handleFileUpload(e, 'screenshot')}
-                        disabled={uploadingScreen}
-                      />
-                    </label>
-                  </div>
-                )}
-
-                {/* Uploaded items */}
-                {screenshots.length > 0 && (
-                  <div className="grid grid-cols-3 gap-4">
-                    {screenshots.map((path, idx) => (
-                      <div key={idx} className="relative group bg-slate-950 border border-slate-850 p-2 rounded-lg text-center">
-                        <div className="text-[10px] text-slate-505 truncate mb-1">{path.split('/').pop()}</div>
-                        <div className="text-[11px] text-blue-400 flex items-center justify-center gap-1">
-                          <CheckCircle className="w-3.5 h-3.5 text-emerald-500" /> Uploaded
-                        </div>
-                        {!readOnly && (
-                          <button
-                            type="button"
-                            onClick={() => removeScreenshot(idx)}
-                            className="absolute -top-1.5 -right-1.5 bg-rose-900 border border-rose-800 text-white rounded-full p-0.5 text-xs hover:bg-rose-600 transition-colors"
-                          >
-                            ×
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Document Upload */}
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
-                Project PPT or PDF Document (Optional)
-              </label>
-              
-              <div className="space-y-3">
-                {!readOnly && !documentUrl && (
-                  <div className="flex items-center justify-center w-full">
-                    <label className="flex flex-col items-center justify-center w-full h-24 border border-dashed border-slate-800 hover:border-slate-700 bg-slate-950/50 hover:bg-slate-950/80 rounded-lg cursor-pointer transition-all">
-                      <div className="flex flex-col items-center justify-center">
-                        {uploadingDoc ? (
-                          <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
-                        ) : (
-                          <>
-                            <FileText className="w-5 h-5 text-slate-500 mb-1" />
-                            <p className="text-xs text-slate-400 font-semibold">Upload Pitch Deck (PDF/PPT)</p>
-                          </>
-                        )}
-                      </div>
-                      <input
-                        type="file"
-                        accept=".pdf,.ppt,.pptx"
-                        className="hidden"
-                        onChange={(e) => handleFileUpload(e, 'doc')}
-                        disabled={uploadingDoc}
-                      />
-                    </label>
-                  </div>
-                )}
-
-                {documentUrl && (
-                  <div className="flex items-center justify-between bg-slate-950 border border-slate-850 p-3.5 rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <FileText className="w-5 h-5 text-blue-400" />
-                      <div className="text-xs font-semibold truncate max-w-xs">{documentUrl.split('/').pop()}</div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs text-emerald-450 font-semibold">File Attached</span>
-                      {!readOnly && (
-                        <button
-                          type="button"
-                          onClick={() => setDocumentUrl('')}
-                          className="text-xs text-rose-400 hover:underline"
-                        >
-                          Remove
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                )}
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <LinkIcon className="h-4 w-4 text-slate-500" />
+                </div>
+                <input
+                  type="url"
+                  disabled={readOnly}
+                  placeholder="https://youtu.be/..."
+                  value={demoVideoUrl}
+                  onChange={(e) => setDemoVideoUrl(e.target.value)}
+                  className="block w-full pl-9 pr-3 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-white placeholder-slate-655 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm disabled:opacity-50"
+                />
               </div>
             </div>
 

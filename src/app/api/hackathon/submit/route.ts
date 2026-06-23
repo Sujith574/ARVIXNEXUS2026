@@ -78,10 +78,10 @@ export async function POST(request: Request) {
 
     // 4. Read body
     const body = await request.json();
-    const { title, description, repo_url, demo_video_url, screenshots, document_url, isFinalSubmit } = body;
+    const { title, description, repo_url, live_url, demo_video_url, screenshots, document_url, isFinalSubmit } = body;
 
-    if (!title || !description || !repo_url) {
-      return NextResponse.json({ error: 'Title, description, and repository URL are required.' }, { status: 400 });
+    if (!title || !description || !repo_url || !live_url) {
+      return NextResponse.json({ error: 'Title, description, repository URL, and live link are required.' }, { status: 400 });
     }
 
     // 5. Check if already submitted & locked
@@ -102,6 +102,7 @@ export async function POST(request: Request) {
       existingSubmission.title = title;
       existingSubmission.description = description;
       existingSubmission.repo_url = repo_url;
+      existingSubmission.live_url = live_url;
       existingSubmission.demo_video_url = demo_video_url || null;
       existingSubmission.screenshots = screenshots || [];
       existingSubmission.document_url = document_url || null;
@@ -115,6 +116,7 @@ export async function POST(request: Request) {
         title,
         description,
         repo_url,
+        live_url,
         demo_video_url: demo_video_url || null,
         screenshots: screenshots || [],
         document_url: document_url || null,

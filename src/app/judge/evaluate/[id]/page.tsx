@@ -3,7 +3,7 @@
 import { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { Award, Code, Video, FileText, ArrowLeft, Save, ShieldAlert, Loader2, Check } from 'lucide-react';
+import { Award, Code, Video, FileText, ArrowLeft, Save, ShieldAlert, Loader2, Check, Globe } from 'lucide-react';
 import Link from 'next/link';
 
 export default function EvaluatePage({ params }: { params: Promise<{ id: string }> }) {
@@ -172,62 +172,50 @@ export default function EvaluatePage({ params }: { params: Promise<{ id: string 
               </div>
 
               {/* Links */}
-              <div className="pt-6 border-t border-slate-850 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="pt-6 border-t border-slate-850 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <a
                   href={submission.repo_url}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-2.5 p-3.5 bg-slate-950 border border-slate-805 hover:border-slate-700 rounded-xl text-sm text-slate-300 hover:text-white transition-all group"
+                  className="flex items-center gap-2.5 p-3.5 bg-slate-950 border border-slate-800 hover:border-slate-700 rounded-xl text-sm text-slate-300 hover:text-white transition-all group"
                 >
                   <Code className="w-5 h-5 text-blue-400" />
                   <div>
                     <span className="font-semibold block">GitHub Repository</span>
-                    <span className="text-xs text-slate-500 group-hover:text-slate-405 transition-colors">View Source Code</span>
+                    <span className="text-xs text-slate-500 group-hover:text-slate-400 transition-colors">View Source Code</span>
                   </div>
                 </a>
+
+                {submission.live_url && (
+                  <a
+                    href={submission.live_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-2.5 p-3.5 bg-slate-950 border border-slate-800 hover:border-slate-700 rounded-xl text-sm text-slate-300 hover:text-white transition-all group"
+                  >
+                    <Globe className="w-5 h-5 text-emerald-400" />
+                    <div>
+                      <span className="font-semibold block">Live Website URL</span>
+                      <span className="text-xs text-slate-505 group-hover:text-slate-400 transition-colors">Open Deployed App</span>
+                    </div>
+                  </a>
+                )}
 
                 {submission.demo_video_url && (
                   <a
                     href={submission.demo_video_url}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-2.5 p-3.5 bg-slate-950 border border-slate-805 hover:border-slate-700 rounded-xl text-sm text-slate-300 hover:text-white transition-all group"
+                    className="flex items-center gap-2.5 p-3.5 bg-slate-950 border border-slate-800 hover:border-slate-700 rounded-xl text-sm text-slate-300 hover:text-white transition-all group"
                   >
                     <Video className="w-5 h-5 text-indigo-400" />
                     <div>
                       <span className="font-semibold block">Demo Video URL</span>
-                      <span className="text-xs text-slate-505 group-hover:text-slate-405 transition-colors">Watch Walkthrough</span>
+                      <span className="text-xs text-slate-505 group-hover:text-slate-400 transition-colors">Watch Walkthrough</span>
                     </div>
                   </a>
                 )}
               </div>
-
-              {/* Screenshots Display */}
-              {submission.screenshots && submission.screenshots.length > 0 && (
-                <div className="space-y-3 pt-6 border-t border-slate-850">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">Attached Screenshots</h4>
-                  <div className="grid grid-cols-3 gap-4">
-                    {submission.screenshots.map((path: string, idx: number) => (
-                      <div key={idx} className="bg-slate-955 border border-slate-850 p-2.5 rounded-lg text-center text-xs text-slate-400 truncate">
-                        {path.split('/').pop()}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* PPT/PDF Document */}
-              {submission.document_url && (
-                <div className="pt-6 border-t border-slate-850">
-                  <div className="flex items-center gap-3 bg-slate-950 p-4 border border-slate-855 rounded-xl">
-                    <FileText className="w-6 h-6 text-emerald-400" />
-                    <div className="text-xs">
-                      <span className="font-semibold text-slate-300 block">Project Pitch Deck</span>
-                      <span className="text-slate-505 truncate block max-w-xs">{submission.document_url.split('/').pop()}</span>
-                    </div>
-                  </div>
-                </div>
-              )}
 
             </div>
           </div>
