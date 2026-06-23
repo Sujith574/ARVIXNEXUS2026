@@ -254,7 +254,7 @@ export default function Navbar() {
                 <div className="flex items-center gap-2">
                   <Link
                     href="/login"
-                    className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white border border-slate-700/50 hover:border-slate-600 rounded-lg hover:bg-slate-800/50 transition-all duration-200"
+                    className="px-4 py-2 text-sm font-semibold text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 rounded-lg bg-slate-900/40 hover:bg-slate-850/60 transition-all duration-200"
                   >
                     Login
                   </Link>

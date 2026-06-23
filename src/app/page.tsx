@@ -156,12 +156,15 @@ export default function EventLandingPage() {
               { icon: Calendar, text: 'July 10–12, 2026' },
               { icon: MapPin, text: 'Vigyan Bhawan, New Delhi' },
               { icon: Users, text: '1000+ Participants' },
-            ].map(({ icon: Icon, text }) => (
-              <div key={text} className="flex items-center gap-2.5 bg-slate-900/60 border border-slate-800/80 text-slate-200 px-4 sm:px-5 py-3 rounded-2xl text-xs sm:text-sm font-semibold shadow-lg">
-                <Icon className="w-4.5 h-4.5 text-blue-400 flex-shrink-0" />
-                <span>{text}</span>
-              </div>
-            ))}
+            ].map((item) => {
+              const Icon = item.icon;
+              return (
+                <div key={item.text} className="flex items-center gap-2.5 bg-slate-900/60 border border-slate-800/80 text-slate-200 px-4 sm:px-5 py-3 rounded-2xl text-xs sm:text-sm font-semibold shadow-lg">
+                  <Icon className="w-4.5 h-4.5 text-blue-400 flex-shrink-0" />
+                  <span>{item.text}</span>
+                </div>
+              );
+            })}
           </div>
 
           {/* CTA buttons */}
@@ -187,7 +190,7 @@ export default function EventLandingPage() {
       {/* ═══════════════════════════════════
           STATS STRIP
           ═══════════════════════════════════ */}
-      <section className="border-y border-slate-800/40 bg-slate-950/40 py-16 sm:py-24">
+      <section className="section-py border-y border-slate-800/40 bg-slate-950/40">
         <div className="w-full max-w-[1400px] mx-auto px-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {[
@@ -211,8 +214,8 @@ export default function EventLandingPage() {
       {/* ═══════════════════════════════════
           COUNTDOWN & STREAM
           ═══════════════════════════════════ */}
-      <section className="py-12 sm:py-16 lg:py-20">
-        <div className="w-full max-w-[1400px] mx-auto px-6 space-y-6 sm:space-y-8">
+      <section className="section-py border-b border-slate-800/60 bg-slate-950/20">
+        <div className="w-full max-w-[1400px] mx-auto px-6 space-y-12">
 
           {/* Countdown */}
           <div className="bg-gradient-to-br from-slate-900/60 to-slate-900/20 border border-slate-800/80 rounded-3xl p-8 sm:p-12 lg:p-16 flex flex-col lg:flex-row justify-between items-center gap-8 shadow-2xl relative overflow-hidden">
@@ -298,14 +301,14 @@ export default function EventLandingPage() {
               return (
                 <div
                   key={round.id || round.round_number}
-                  className={`relative h-full bg-slate-900/30 border border-slate-800 ${colors.border} rounded-3xl p-8 sm:p-10 flex flex-col gap-6 hover:bg-slate-900/50 hover:border-slate-700 transition-all duration-300 group overflow-hidden shadow-lg`}
+                  className={`relative h-full bg-slate-900/30 border border-slate-800 ${colors.border} rounded-3xl px-8 py-8 sm:px-10 sm:py-10 flex flex-col gap-6 hover:bg-slate-900/50 hover:border-slate-700 transition-all duration-300 group overflow-hidden shadow-lg`}
                 >
                   {/* Top gradient bar */}
                   <div className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r ${colors.bg}`} />
 
                   {/* Round label + timeline stacked */}
-                  <div className="flex flex-col gap-1">
-                    <div className={`inline-flex items-center gap-1 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full border w-fit ${colors.badge}`}>
+                  <div className="flex flex-col gap-2.5">
+                    <div className={`inline-flex items-center gap-1 px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full border w-fit ${colors.badge}`}>
                       Round {round.round_number}
                     </div>
                     <p className="text-[11px] text-slate-500 font-medium leading-snug break-words">{round.timeline}</p>

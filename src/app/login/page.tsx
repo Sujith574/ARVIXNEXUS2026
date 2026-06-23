@@ -47,7 +47,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex-grow flex items-center justify-center py-16 sm:py-24 bg-slate-950">
+    <div className="flex-grow flex items-center justify-center section-py bg-slate-950">
       <div className="w-full max-w-md mx-auto px-6">
         <div className="space-y-8 bg-slate-900/50 p-8 sm:p-10 rounded-3xl border border-slate-800 backdrop-blur-sm shadow-2xl shadow-black/40">
         
@@ -148,9 +148,10 @@ export default function LoginPage() {
               )}
             </button>
 
-            <div className="relative my-4 flex items-center justify-center">
-              <span className="absolute bg-slate-900 px-3 text-xs text-slate-500 uppercase tracking-widest">Or</span>
-              <div className="w-full border-t border-slate-800"></div>
+            <div className="flex items-center gap-3 my-6">
+              <div className="flex-grow border-t border-slate-800"></div>
+              <span className="text-xs text-slate-500 uppercase tracking-widest font-semibold">Or</span>
+              <div className="flex-grow border-t border-slate-800"></div>
             </div>
 
             <button

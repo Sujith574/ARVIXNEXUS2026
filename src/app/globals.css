@@ -6,6 +6,21 @@
 
 @theme {
   --breakpoint-xs: 480px;
+
+  /* Custom colors used in the codebase */
+  --color-slate-450: #7c8ba1;
+  --color-slate-550: #56657a;
+  --color-slate-650: #3d4b5f;
+  --color-blue-450: #4da6ff;
+  --color-blue-550: #3172f9;
+  --color-blue-955: #0d1b3e;
+  --color-indigo-650: #4f46e5;
+  --color-emerald-450: #34d399;
+  --color-amber-450: #fbbf24;
+
+  /* Custom spacing values used in the codebase */
+  --spacing-4\.5: 1.125rem;
+  --spacing-22: 5.5rem;
 }
 
 /* ============================================

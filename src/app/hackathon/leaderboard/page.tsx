@@ -60,8 +60,8 @@ export default function LeaderboardPage() {
   const maxScore = leaderboard.length > 0 ? leaderboard[0]?.total_score || 40 : 40;
 
   return (
-    <div className="flex-grow bg-slate-950">
-      <div className="w-full max-w-[1400px] mx-auto px-6 py-10 sm:py-14 lg:py-16 space-y-6 sm:space-y-8">
+    <div className="flex-grow bg-slate-950 section-py">
+      <div className="w-full max-w-[1400px] mx-auto px-6 space-y-12">
 
         {/* Header */}
         <div className="text-center space-y-3">

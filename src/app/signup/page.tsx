@@ -94,7 +94,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex-grow flex items-center justify-center py-16 sm:py-24 bg-slate-950">
+    <div className="flex-grow flex items-center justify-center section-py bg-slate-950">
       <div className="w-full max-w-md mx-auto px-6">
         <div className="space-y-8 bg-slate-900/40 p-8 sm:p-10 rounded-3xl border border-slate-800 backdrop-blur-sm shadow-xl">
         
