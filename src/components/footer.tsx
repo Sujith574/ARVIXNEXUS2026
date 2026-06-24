@@ -7,12 +7,12 @@ import { Landmark, Mail, ShieldCheck, GitBranch, Globe, Phone, ExternalLink } fr
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const [settings, setSettings] = useState({
-    footer_logo_label: 'Government of India',
-    footer_logo_title: 'National Hackathon',
-    footer_description: 'Organised by the Ministry of Electronics & Information Technology (MeitY), promoting developer innovation, digital governance, and national tech capacity building.',
-    footer_copyright: `© ${currentYear} National Launch & Hybrid Hackathon. All rights reserved.`,
-    support_email: 'support@arvix2026.gov.in',
-    support_phone: '+91-11-2436-0199',
+    footer_logo_label: 'National Level Hackathon',
+    footer_logo_title: 'ARVIX NEXUS 2026',
+    footer_description: 'ARVIX NEXUS 2026 is a premier national-level innovation hackathon organized by the Arvix Team, hosted at Lovely Professional University. Empowering developers, creators, and innovators to build tomorrow\'s technology solutions.',
+    footer_copyright: `© ${currentYear} ARVIX NEXUS National Level Innovation Hackathon. All rights reserved.`,
+    support_email: 'sujithlavudu@gmail.com',
+    support_phone: '+91-7331161928',
   });
 
   useEffect(() => {
@@ -22,12 +22,12 @@ export default function Footer() {
         if (res.ok) {
           const data = await res.json();
           setSettings({
-            footer_logo_label: data.footer_logo_label || 'Government of India',
-            footer_logo_title: data.footer_logo_title || 'National Hackathon',
-            footer_description: data.footer_description || 'Organised by the Ministry of Electronics & Information Technology (MeitY), promoting developer innovation, digital governance, and national tech capacity building.',
-            footer_copyright: data.footer_copyright || `© ${currentYear} National Launch & Hybrid Hackathon. All rights reserved.`,
-            support_email: data.support_email || 'support@arvix2026.gov.in',
-            support_phone: data.support_phone || '+91-11-2436-0199',
+            footer_logo_label: data.footer_logo_label || 'National Level Hackathon',
+            footer_logo_title: data.footer_logo_title || 'ARVIX NEXUS 2026',
+            footer_description: data.footer_description || 'ARVIX NEXUS 2026 is a premier national-level innovation hackathon organized by the Arvix Team, hosted at Lovely Professional University. Empowering developers, creators, and innovators to build tomorrow\'s technology solutions.',
+            footer_copyright: data.footer_copyright || `© ${currentYear} ARVIX NEXUS National Level Innovation Hackathon. All rights reserved.`,
+            support_email: data.support_email || 'sujithlavudu@gmail.com',
+            support_phone: data.support_phone || '+91-7331161928',
           });
         }
       } catch (err) {
@@ -66,7 +66,7 @@ export default function Footer() {
             <div className="flex flex-wrap gap-2.5 pt-1">
               <div className="inline-flex items-center gap-1.5 text-xs bg-bg-primary/60 text-slate-400 py-1.5 px-3 rounded-full border border-white/5 shadow-sm">
                 <ShieldCheck className="w-3.5 h-3.5 text-success flex-shrink-0" />
-                <span>Secure SSL Portal</span>
+                <span>Verified Event</span>
               </div>
               <div className="inline-flex items-center gap-1.5 text-xs bg-bg-primary/60 text-slate-400 py-1.5 px-3 rounded-full border border-white/5">
                 <Globe className="w-3.5 h-3.5 text-primary flex-shrink-0" />
@@ -80,12 +80,11 @@ export default function Footer() {
             <h4 className="text-xs font-bold text-white uppercase tracking-widest">Navigation</h4>
             <ul className="space-y-3">
               {[
-                { href: '/', label: 'Home' },
-                { href: '/hackathon/problems', label: 'Problem Statements' },
-                { href: '/#timeline', label: 'Judging Timeline' },
-                { href: '/#speakers', label: 'Speakers & Guests' },
-                { href: '/hackathon/leaderboard', label: 'Live Leaderboard' },
-                { href: '/event/rsvp', label: 'RSVP Registration' },
+                { href: '/#about', label: 'About Event' },
+                { href: '/#themes', label: 'Problem Themes' },
+                { href: '/#timeline', label: 'Event Timeline' },
+                { href: '/#venue', label: 'Venue & Details' },
+                { href: '/#faqs', label: 'FAQs' },
               ].map(({ href, label }) => (
                 <li key={label}>
                   <Link
@@ -99,14 +98,21 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 3: Resources */}
+          {/* Column 3: Registration */}
           <div className="space-y-5 lg:pl-5">
-            <h4 className="text-xs font-bold text-white uppercase tracking-widest">Resources</h4>
+            <h4 className="text-xs font-bold text-white uppercase tracking-widest">Registration</h4>
             <ul className="space-y-3">
+              <li>
+                <a
+                  href="https://konfhub.com/checkout/arvix-nexus-2026-national-level-innovation-hackathon"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-slate-400 hover:text-primary hover:translate-x-1 transition-all duration-300 inline-block font-medium"
+                >
+                  Register on KonfHub
+                </a>
+              </li>
               {[
-                { href: '/event/press', label: 'Digital Press Kit' },
-                { href: '/signup', label: 'Participant Registry' },
-                { href: '/login', label: 'Organizer Portal' },
                 { href: '/terms', label: 'Terms & Conditions' },
                 { href: '/privacy', label: 'Privacy Policy' },
               ].map(({ href, label }) => (
@@ -126,7 +132,7 @@ export default function Footer() {
           <div className="space-y-5">
             <h4 className="text-xs font-bold text-white uppercase tracking-widest">Contact & Support</h4>
             <p className="text-sm text-slate-400 leading-relaxed">
-              Have questions about registration, team formation, or technical criteria? Reach out directly.
+              Have questions about registration, team formation, or guidelines? Reach out directly to the organizing committee.
             </p>
             <ul className="space-y-3">
               <li>
@@ -141,12 +147,15 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <div className="flex items-center gap-2.5 text-sm text-slate-400">
-                  <div className="w-8 h-8 rounded-lg bg-bg-primary flex items-center justify-center border border-white/5 flex-shrink-0">
-                    <Phone className="w-4 h-4 text-primary" />
+                <a
+                  href={`tel:${settings.support_phone}`}
+                  className="flex items-center gap-2.5 text-sm text-slate-400 hover:text-primary transition-colors duration-300 group"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-bg-primary flex items-center justify-center border border-white/5 group-hover:border-primary/20 transition-all duration-300 flex-shrink-0">
+                    <Phone className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
                   </div>
                   <span className="font-medium">{settings.support_phone}</span>
-                </div>
+                </a>
               </li>
             </ul>
           </div>

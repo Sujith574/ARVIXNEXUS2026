@@ -1,106 +1,91 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { 
-  Calendar, Clock, MapPin, Play, Radio, Users, ChevronRight, 
-  ChevronDown, Volume2, Trophy, ArrowRight, Zap, Shield, Star, 
-  Award, Landmark
+  Calendar, Clock, MapPin, Users, ChevronDown, Trophy, Zap, 
+  Shield, Star, Award, ArrowRight, Brain, Cpu, Globe, Building2
 } from 'lucide-react';
 
-const DEFAULT_AGENDA = [
-  { time: '09:00 AM', title: 'Delegate Registration & Welcome', speaker: 'Reception Desk', type: 'session', details: 'Check-in at the registration desks, collect delegate badges and kits, and proceed to the networking lobby.' },
-  { time: '10:00 AM', title: 'Inaugural Address & National Launch', speaker: 'Hon\'ble Minister, MeitY', type: 'keynote', details: 'Keynote speech launching the National Digital Stack 2026 and outline of digital policies for the coming fiscal year.' },
-  { time: '11:15 AM', title: 'Unveiling of the Digital Stack 2026', speaker: 'MeitY Secretary & Tech Leads', type: 'keynote', details: 'In-depth walk-through of the new public governance APIs, identity systems, and sandbox tools for participants.' },
-  { time: '12:00 PM', title: 'Panel: Scaling AI in Public Service Delivery', speaker: 'Industry Experts & Senior IAS Officers', type: 'session', details: 'A panel discussion on deploying scalable machine learning models in civic tech, municipal operations, and healthcare.' },
-  { time: '01:00 PM', title: 'Networking Lunch & Media Interaction', speaker: 'All Delegates', type: 'break', details: 'Catered lunch at the dining hall with slots for press interaction and stakeholder networking.' },
-  { time: '02:00 PM', title: 'National Hackathon Opening Ceremony', speaker: 'Hackathon Organizing Committee', type: 'session', details: 'Rules briefing, portal access walk-through, and official launch of the 48-hour hacking phase.' },
+const HACKATHON_THEMES = [
+  {
+    icon: Brain,
+    title: 'AI & Intelligent Systems',
+    desc: 'Harness the power of Generative AI, LLMs, NLP, and computer vision to solve complex real-world problems and automate human cognitive tasks.',
+    color: 'text-blue-500 bg-blue-500/10 border-blue-500/20'
+  },
+  {
+    icon: Cpu,
+    title: 'Smart Infrastructure & IoT',
+    desc: 'Build smart grids, automated logistics, intelligent transport networks, and smart campus automation using IoT-enabled hardware and software protocols.',
+    color: 'text-purple-500 bg-purple-500/10 border-purple-500/20'
+  },
+  {
+    icon: Globe,
+    title: 'Sustainable Tech & Green Energy',
+    desc: 'Develop solutions promoting carbon footprint mitigation, clean energy management, waste recycling, and water preservation techniques.',
+    color: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20'
+  },
+  {
+    icon: Shield,
+    title: 'Cybersecurity & Trust Systems',
+    desc: 'Innovate secure decentralized ledger networks, cryptography applications, phishing detection systems, and network security protocols.',
+    color: 'text-rose-500 bg-rose-500/10 border-rose-500/20'
+  },
+  {
+    icon: Building2,
+    title: 'Healthcare & Biotech Innovation',
+    desc: 'Design smart health assistance kits, early diagnostic models, digital medical record keepers, and tech enabling accessible rural healthcare.',
+    color: 'text-amber-500 bg-amber-500/10 border-amber-500/20'
+  }
 ];
 
-const DEFAULT_SPEAKERS = [
-  { name: 'Shri Ashwini Vaishnaw', role: 'Hon\'ble Minister', org: 'MeitY, Government of India', bio: 'Leading digital transformation initiatives, railways, and telecom infrastructure across the nation.', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face' },
-  { name: 'Dr. Neeta Verma', role: 'Director General', org: 'National Informatics Centre (NIC)', bio: 'Pioneered government cloud deployment and mobile-first citizen services across Indian districts.', image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face' },
-  { name: 'Dr. Rajendra Kumar, IAS', role: 'Additional Secretary', org: 'MeitY, Government of India', bio: 'Expert in e-governance policies, regional integration, and emerging tech implementations.', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face' },
+const SCHEDULE_DAY_1 = [
+  { time: '08:00 AM - 10:00 AM', title: 'Participant Registration & Kit Collection', desc: 'Arrive at the hacking hall at LPU, check in, collect your developer badges, event kits, and find your designated workspace.' },
+  { time: '10:00 AM - 11:30 AM', title: 'Grand Inauguration Ceremony', desc: 'Opening remarks from the Arvix Team and university delegates, followed by rules and evaluation briefing.' },
+  { time: '11:30 AM', title: 'Hacking Phase Starts', desc: 'The 36-hour countdown begins! Teams start brainstorming, developing, and building their innovative prototypes.' },
+  { time: '04:00 PM - 06:00 PM', title: 'Mentoring Session 1', desc: 'Meet your domain experts and technical advisors to refine your architecture, validate product direction, and address technical blocks.' }
 ];
 
-const DEFAULT_ROUNDS = [
-  { round_number: 1, title: 'Ideation & Stack Submission', date: 'July 10, 2026', timeline: '02:00 PM – 06:00 PM', description: 'Teams register, submit stacks, and pitch core ideas to review panels.' },
-  { round_number: 2, title: 'Prototype Evaluation', date: 'July 11, 2026', timeline: '10:00 AM – 05:00 PM', description: 'Mid-point checkin with technical mentors and initial scoring.' },
-  { round_number: 3, title: 'Grand Finale Pitching', date: 'July 12, 2026', timeline: '09:00 AM – 04:00 PM', description: 'Working prototypes presented to VIP guest panel for final grading.' },
+const SCHEDULE_DAY_2 = [
+  { time: '09:00 AM - 11:00 AM', title: 'Mentoring Session 2 & Progress Review', desc: 'A quick check-in by technical mentors. Show your prototype progress, get guidance on design, integration, and pitch preparation.' },
+  { time: '04:00 PM', title: 'Hacking Ends & Final Code Submission', desc: 'Hands off keyboard! Teams submit their repository links, hosting URLs, and summary documents through the submission system.' },
+  { time: '04:30 PM - 06:30 PM', title: 'Grand Pitching & Jury Evaluation', desc: 'Live project demos! Each team presents their functional prototype to our distinguished jury panel followed by Q&A.' },
+  { time: '07:00 PM - 08:00 PM', title: 'Award Ceremony & Valedictory', desc: 'Announcing winners, distributing cash rewards, certificates, cloud credits, and concluding closing statements.' }
 ];
 
-const ROUND_COLORS = [
-  { bg: 'from-primary to-blue-600', badge: 'bg-primary/10 text-primary border-primary/20', border: 'hover:border-primary/40' },
-  { bg: 'from-secondary to-indigo-650', badge: 'bg-secondary/10 text-secondary border-secondary/20', border: 'hover:border-secondary/40' },
-  { bg: 'from-emerald-500 to-teal-500', badge: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20', border: 'hover:border-emerald-500/40' },
+const FAQ_ITEMS = [
+  {
+    q: 'Who is eligible to participate?',
+    a: 'Students, young developers, UI/UX designers, and tech enthusiasts from universities across India are eligible to form a team and participate.'
+  },
+  {
+    q: 'What is the team size requirement?',
+    a: 'Teams can consist of 1 to 4 members. We encourage cross-functional teams with developers, designers, and domain thinkers.'
+  },
+  {
+    q: 'Is there a registration fee?',
+    a: 'No, registration is completely free. However, since seats are limited, registration and confirmation via KonfHub are mandatory.'
+  },
+  {
+    q: 'What facilities will be provided at LPU?',
+    a: 'Lovely Professional University will provide high-speed campus Wi-Fi, air-conditioned hacking spaces, power sockets at each desk, resting rooms, and meals (breakfast, lunch, dinner, snacks, and midnight coffee) during the hackathon.'
+  },
+  {
+    q: 'What should we bring with us?',
+    a: 'All participants must bring their laptops, chargers, extension boxes, physical college/govt IDs, and personal items like toiletries or medicines if they plan to stay overnight.'
+  }
 ];
-
-const AGENDA_TYPE_STYLES: Record<string, string> = {
-  keynote: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-  session: 'bg-primary/10 text-primary border-primary/20',
-  break: 'bg-success/10 text-success border-success/20',
-};
 
 export default function EventLandingPage() {
-  const [agenda, setAgenda] = useState<any[]>([]);
-  const [speakers, setSpeakers] = useState<any[]>([]);
-  const [rounds, setRounds] = useState<any[]>([]);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-  const [playStream, setPlayStream] = useState(false);
-  const [dataLoaded, setDataLoaded] = useState(false);
-  
-  // Agenda Accordion State
-  const [activeAgendaId, setActiveAgendaId] = useState<number | null>(1);
+  const [activeFaqId, setActiveFaqId] = useState<number | null>(null);
 
-  const eventDate = new Date('2026-07-10T09:00:00+05:30').getTime();
+  const eventDate = new Date('2026-09-03T09:00:00+05:30').getTime();
 
   useEffect(() => {
-    const fetchEventData = async () => {
-      try {
-        const res = await fetch('/api/event/landing');
-        if (!res.ok) throw new Error('Failed to fetch');
-        const data = await res.json();
-
-        if (data.agenda?.length > 0) {
-          setAgenda(data.agenda.map((item: any) => ({
-            time: new Date(item.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            title: item.title,
-            speaker: item.speaker?.full_name || item.description || 'Guest Speaker',
-            type: item.type,
-            details: item.description || 'No additional details provided.',
-          })));
-        } else {
-          setAgenda(DEFAULT_AGENDA);
-        }
-
-        if (data.speakers?.length > 0) {
-          setSpeakers(data.speakers.map((s: any) => ({
-            name: s.full_name,
-            role: s.linkedin || 'Senior Tech Lead',
-            org: s.organization || 'MeitY',
-            bio: s.bio || (s.skills?.length > 0 ? `Expertise in ${s.skills.join(', ')}` : 'Dedicated to national digital infrastructure.'),
-            image: s.avatar_url || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
-          })));
-        } else {
-          setSpeakers(DEFAULT_SPEAKERS);
-        }
-
-        setRounds(data.rounds?.length > 0 ? data.rounds : DEFAULT_ROUNDS);
-      } catch {
-        setAgenda(DEFAULT_AGENDA);
-        setSpeakers(DEFAULT_SPEAKERS);
-        setRounds(DEFAULT_ROUNDS);
-      } finally {
-        setDataLoaded(true);
-      }
-    };
-
-    fetchEventData();
-
-    const interval = setInterval(() => {
+    const updateCountdown = () => {
       const diff = eventDate - Date.now();
       if (diff <= 0) {
-        clearInterval(interval);
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       } else {
         setTimeLeft({
@@ -110,10 +95,12 @@ export default function EventLandingPage() {
           seconds: Math.floor((diff % 60000) / 1000),
         });
       }
-    }, 1000);
+    };
 
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [eventDate]);
 
   const countdownUnits = [
     { label: 'Days', value: timeLeft.days },
@@ -124,17 +111,12 @@ export default function EventLandingPage() {
 
   return (
     <div className="flex-grow bg-bg-primary text-slate-100 flex flex-col overflow-x-hidden">
-
-      {/* ═══════════════════════════════════
-          HERO SECTION
-          ═══════════════════════════════════ */}
+      
       <section className="relative overflow-hidden pt-28 sm:pt-36 lg:pt-40 pb-20 sm:pb-24 lg:pb-28">
-        {/* Background glows */}
         <div className="absolute inset-0 pointer-events-none z-0">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-primary/10 rounded-full blur-[120px]" />
           <div className="absolute top-1/3 left-1/4 w-80 h-80 bg-secondary/8 rounded-full blur-[90px] animate-pulse" />
           <div className="absolute top-1/4 right-1/4 w-80 h-80 bg-primary/5 rounded-full blur-[80px]" />
-          {/* Grid pattern */}
           <div className="absolute inset-0 opacity-[0.015]"
             style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)', backgroundSize: '60px 60px' }}
           />
@@ -143,31 +125,28 @@ export default function EventLandingPage() {
         <div className="relative w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             
-            {/* Left side content */}
             <div className="lg:col-span-7 space-y-8 text-left">
-              {/* Live badge */}
               <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary py-1.5 px-4 rounded-full text-xs font-bold uppercase tracking-wider">
-                <Radio className="w-3.5 h-3.5 animate-pulse" />
-                <span>National Hackathon & Launch 2026</span>
+                <Zap className="w-3.5 h-3.5 animate-pulse" />
+                <span>Registrations are Live</span>
               </div>
 
-              {/* Main Headline */}
               <h1 className="hero-heading tracking-tight text-white leading-none">
-                Unveiling the <br/>
-                <span className="gradient-text-accent">Digital Infrastructure</span> <br/>
-                of Tomorrow
+                ARVIX NEXUS 2026 <br/>
+                <span className="gradient-text-accent">National Level</span> <br/>
+                Innovation Hackathon
               </h1>
 
-              <p className="body-text max-w-2xl">
-                Join India&apos;s premier hybrid innovation initiative. Develop next-generation public stack APIs, secure systems, and tech frameworks that power citizen-centric governance.
+              <p className="body-text max-w-2xl text-slate-300">
+                Join India's premier innovation battleground at Lovely Professional University. Unleash your technical prowess, build real-world software solutions, and compete with elite developers nationwide.
               </p>
 
-              {/* Info chips */}
               <div className="flex flex-wrap gap-4 pt-2">
                 {[
-                  { icon: Calendar, text: 'July 10–12, 2026', color: 'text-primary' },
-                  { icon: MapPin, text: 'Vigyan Bhawan, New Delhi', color: 'text-secondary' },
-                  { icon: Users, text: '1000+ Teams Selected', color: 'text-emerald-400' },
+                  { icon: Calendar, text: 'September 3 – 4, 2026', color: 'text-primary' },
+                  { icon: MapPin, text: 'LPU Jalandhar, Punjab', color: 'text-secondary' },
+                  { icon: Users, text: 'Teams of 1–4 Members', color: 'text-emerald-400' },
+                  { icon: Award, text: 'Free Registration', color: 'text-amber-400' },
                 ].map((item) => {
                   const Icon = item.icon;
                   return (
@@ -179,102 +158,80 @@ export default function EventLandingPage() {
                 })}
               </div>
 
-              {/* CTA buttons */}
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <Link
-                  href="/event/rsvp"
+                <a
+                  href="https://konfhub.com/checkout/arvix-nexus-2026-national-level-innovation-hackathon"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4.5 bg-gradient-to-r from-primary to-secondary hover:opacity-95 text-white rounded-2xl font-bold text-base shadow-xl shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5"
                 >
-                  <span>RSVP Guest Invitation</span>
-                  <ChevronRight className="w-5 h-5" />
-                </Link>
-                <Link
-                  href="/signup"
+                  <span>Register Now (Free)</span>
+                  <ArrowRight className="w-5 h-5" />
+                </a>
+                <a
+                  href="#about"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4.5 border border-white/10 hover:border-white/20 bg-slate-900/40 hover:bg-slate-800/60 text-slate-200 hover:text-white rounded-2xl font-bold text-base transition-all duration-300 hover:-translate-y-0.5"
                 >
-                  <span>Register for Hackathon</span>
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-              </div>
-
-              {/* Trust Indicators */}
-              <div className="flex items-center gap-3 pt-6 border-t border-white/5 max-w-lg">
-                <div className="flex -space-x-3">
-                  <img className="w-9 h-9 rounded-full border-2 border-surface object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60&h=60&fit=crop" alt="avatar" />
-                  <img className="w-9 h-9 rounded-full border-2 border-surface object-cover" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=60&h=60&fit=crop" alt="avatar" />
-                  <img className="w-9 h-9 rounded-full border-2 border-surface object-cover" src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=60&h=60&fit=crop" alt="avatar" />
-                </div>
-                <p className="text-xs text-slate-450 font-medium">
-                  Supported by senior administrators, policy architects, and industry experts.
-                </p>
+                  <span>Learn More</span>
+                </a>
               </div>
             </div>
 
-            {/* Right side illustration / floating elements */}
             <div className="lg:col-span-5 relative flex items-center justify-center lg:justify-end">
-              {/* Behind lights */}
               <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-full filter blur-3xl opacity-60 z-0 pointer-events-none" />
 
               <div className="relative z-10 w-full max-w-[440px] space-y-6">
                 
-                {/* Visual Header / Holographic representation */}
                 <div className="glass-card card-padding gradient-border-glow animate-float">
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs font-bold uppercase tracking-widest text-primary">Live Prize Pool</span>
-                    <Star className="w-4 h-4 text-warning" />
+                    <span className="text-xs font-bold uppercase tracking-widest text-primary">Venue & Host</span>
+                    <Star className="w-4 h-4 text-warning animate-pulse" />
                   </div>
-                  <h3 className="text-4xl font-extrabold text-white">₹1,000,000+</h3>
-                  <p className="text-xs text-slate-450 mt-1">Cash rewards, grants & cloud credits for top prototypes.</p>
+                  <h3 className="text-2xl font-extrabold text-white leading-tight">Lovely Professional University</h3>
+                  <p className="text-xs text-slate-400 mt-1.5">Lovely Professional University (LPU), Grand Trunk Road, Phagwara, Punjab, India.</p>
                 </div>
 
-                {/* Event Highlights Floating Card */}
                 <div className="glass-card card-padding gradient-border-glow animate-float-delayed">
                   <div className="flex items-center gap-3.5 mb-3.5">
                     <div className="w-10 h-10 rounded-lg bg-secondary/15 flex items-center justify-center text-secondary">
                       <Trophy className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-white">National Recognition</h4>
-                      <p className="text-xs text-slate-450">Deploy into public systems</p>
+                      <h4 className="text-sm font-bold text-white">Innovation Battle</h4>
+                      <p className="text-xs text-slate-400">Cash prizes, certificates & developer goodies</p>
                     </div>
                   </div>
                   <div className="h-px bg-white/5 my-3" />
                   <div className="flex items-center justify-between text-xs text-slate-300">
-                    <span className="font-semibold text-slate-450">Track:</span>
-                    <span className="bg-primary/10 text-primary border border-primary/15 px-2.5 py-0.5 rounded-full font-bold">AI & Gov Tech</span>
+                    <span className="font-semibold text-slate-400">Duration:</span>
+                    <span className="bg-primary/10 text-primary border border-primary/15 px-2.5 py-0.5 rounded-full font-bold">36 Hours (Continuous)</span>
                   </div>
                 </div>
 
-                {/* Date Highlight Card */}
                 <div className="glass-card p-5 gradient-border-glow flex items-center gap-4">
                   <div className="w-11 h-11 bg-primary/10 rounded-xl flex items-center justify-center text-primary flex-shrink-0">
                     <Calendar className="w-5.5 h-5.5" />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-450 uppercase tracking-widest font-bold">Inauguration</p>
-                    <p className="text-sm font-extrabold text-white mt-0.5">July 10, 2026 @ 09:30 AM</p>
+                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold">Hackathon Launch</p>
+                    <p className="text-sm font-extrabold text-white mt-0.5">September 3, 2026 @ 09:00 AM</p>
                   </div>
                 </div>
-
               </div>
             </div>
-
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════
-          COUNTDOWN SECTION
-          ═══════════════════════════════════ */}
-      <section id="countdown" className="relative z-10 w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 mb-16">
+      <section className="relative z-10 w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 mb-16">
         <div className="glass-card gradient-border-glow p-8 sm:p-10 flex flex-col lg:flex-row justify-between items-center gap-8">
           <div className="text-center lg:text-left space-y-2 max-w-md">
             <div className="flex items-center justify-center lg:justify-start gap-2.5">
               <Clock className="w-5 h-5 text-primary animate-pulse" />
-              <h3 className="text-base font-extrabold text-white uppercase tracking-widest">Inauguration Countdown</h3>
+              <h3 className="text-base font-extrabold text-white uppercase tracking-widest">Time Remaining Until Kickoff</h3>
             </div>
             <p className="text-slate-400 text-sm">
-              Live broadcast begins July 10 at Vigyan Bhawan. Register now to claim your credential key.
+              Registrations are open but seats are limited. Secure your team slot today to avoid missing out on this major event.
             </p>
           </div>
           
@@ -296,345 +253,287 @@ export default function EventLandingPage() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════
-          STATISTICS SECTION
-          ═══════════════════════════════════ */}
-      <section className="relative z-10 w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[
-            { value: '25,000+', label: 'Applicants nationwide', icon: Users, color: 'text-primary' },
-            { value: '₹10 Lakhs', label: 'Total Prize Funding', icon: Trophy, color: 'text-warning' },
-            { value: '48 Hours', label: 'Continuous Building', icon: Clock, color: 'text-secondary' },
-            { value: '3 Rounds', label: 'Rigorous Evaluation', icon: Shield, color: 'text-emerald-400' },
-          ].map(({ value, label, icon: Icon, color }) => (
-            <div key={label} className="glass-card card-padding flex flex-col justify-between space-y-4">
-              <div className="w-11 h-11 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center">
-                <Icon className={`w-5 h-5 ${color}`} />
-              </div>
-              <div className="space-y-1">
-                <h4 className="text-3xl font-extrabold text-white tracking-tight">{value}</h4>
-                <p className="text-xs text-slate-450 font-bold uppercase tracking-wider">{label}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════
-          STREAM / VIDEO SECTION
-          ═══════════════════════════════════ */}
-      <section className="relative z-10 w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 py-12">
-        <div className="glass-card overflow-hidden gradient-border-glow relative aspect-video w-full max-w-[1000px] mx-auto shadow-2xl">
-          {!playStream ? (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-bg-primary/95 z-10 p-6 text-center space-y-5">
-              <div className="inline-flex items-center gap-2 bg-rose-500/10 border border-rose-500/20 text-rose-400 py-1.5 px-4 rounded-full text-xs font-bold uppercase tracking-wide">
-                <Radio className="w-3.5 h-3.5 animate-pulse" />
-                Live Broadcast Offline
-              </div>
-              <div className="space-y-1">
-                <h4 className="text-xl sm:text-2xl font-bold text-white">Stream goes Live July 10, 09:30 AM</h4>
-                <p className="text-slate-450 text-xs sm:text-sm max-w-sm mx-auto">Watch VIP addresses, digital stack walk-throughs, and judging queries live.</p>
-              </div>
-              <button
-                onClick={() => setPlayStream(true)}
-                className="flex items-center gap-2 py-3 px-6 bg-primary hover:opacity-90 text-white rounded-xl font-bold text-sm shadow-lg shadow-primary/20 transition-all hover:-translate-y-0.5"
-              >
-                <Play className="w-4 h-4 fill-white" />
-                <span>Preview Stream Setup</span>
-              </button>
-            </div>
-          ) : (
-            <iframe
-              className="w-full h-full"
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0&mute=1"
-              title="Government Launch Live Stream"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          )}
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════
-          TIMELINE SECTION (JUDGING TIMELINE)
-          ═══════════════════════════════════ */}
-      <section id="timeline" className="section-py relative z-10">
+      <section id="about" className="section-py relative z-10 border-t border-white/5">
         <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16">
-          <div className="text-center mb-16 max-w-2xl mx-auto space-y-3">
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
-              <Shield className="w-4 h-4" />
-              <span>Judging Progress</span>
-            </div>
-            <h2 className="section-heading text-white">Evaluation Timeline</h2>
-            <p className="body-text">
-              Our hackathon follows a structured three-round evaluation. Teams must submit progress milestones on the portal at each checkpoint.
-            </p>
-          </div>
-
-          {/* Horizontal Timeline */}
-          <div className="relative">
-            {/* Horizontal Line Connector */}
-            <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-primary/10 via-primary/30 to-secondary/10 -translate-y-1/2 z-0 hidden lg:block" />
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
-              {rounds.map((round, i) => {
-                const colors = ROUND_COLORS[i % ROUND_COLORS.length];
-                return (
-                  <div
-                    key={round.id || round.round_number}
-                    className={`glass-card p-8 sm:p-10 flex flex-col justify-between space-y-6 ${colors.border}`}
-                  >
-                    <div className="space-y-4">
-                      {/* Badge / Timeline Stack */}
-                      <div className="flex justify-between items-center">
-                        <div className={`inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full border ${colors.badge}`}>
-                          Round {round.round_number}
-                        </div>
-                        <span className="text-xs text-slate-500 font-medium">{round.timeline}</span>
-                      </div>
-
-                      {/* Header */}
-                      <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors">
-                        {round.title}
-                      </h3>
-                      
-                      <p className="text-sm text-slate-400 leading-relaxed">
-                        {round.description}
-                      </p>
-                    </div>
-
-                    <div className="pt-4 border-t border-white/5 flex items-center justify-between">
-                      <div>
-                        <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block">Submission Date</span>
-                        <span className="text-sm font-semibold text-slate-200">{round.date}</span>
-                      </div>
-                      <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${colors.bg} flex items-center justify-center text-white text-xs font-bold`}>
-                        {round.round_number}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════
-          AGENDA SECTION
-          ═══════════════════════════════════ */}
-      <section className="section-py relative bg-surface/30 border-y border-white/5">
-        <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
-            {/* Left Col Info */}
-            <div className="lg:col-span-4 space-y-6 text-left">
+            <div className="lg:col-span-6 space-y-6 text-left">
               <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
-                <Calendar className="w-4 h-4" />
-                <span>Itinerary</span>
+                <Zap className="w-4 h-4" />
+                <span>The Nexus of Innovation</span>
               </div>
-              <h2 className="section-heading text-white">Event Agenda</h2>
-              <p className="body-text">
-                Check schedule coordinates for keynotes, digital stack walkthroughs, panels, and networking hours.
+              <h2 className="section-heading text-white">About ARVIX NEXUS 2026</h2>
+              <p className="body-text text-slate-300 leading-relaxed">
+                ARVIX NEXUS 2026 is a national-level innovation hackathon that brings together bright student minds and technical visionaries across the country. Hosted at Lovely Professional University, Phagwara, this 36-hour continuous hackathon provides a platform for teams to address complex real-world challenges.
+              </p>
+              <p className="body-text text-slate-300 leading-relaxed">
+                Whether you want to deploy generative AI, secure systems, smart IoT gadgets, or build green energy technology, this is your canvas. Meet tech mentors, pitch to an esteemed panel of judges, and win exciting cash prizes, goodies, and cloud credits!
               </p>
               
-              <div className="p-6 bg-bg-primary/60 border border-white/5 rounded-2xl space-y-4">
-                <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Landmark className="w-4.5 h-4.5 text-primary" />
-                  <span>Important Notice</span>
-                </h4>
-                <p className="text-xs text-slate-450 leading-relaxed">
-                  Agenda items are scheduled in India Standard Time (IST). Links to virtual session rooms will activate 10 minutes prior to execution.
-                </p>
+              <div className="pt-2">
+                <a
+                  href="https://konfhub.com/checkout/arvix-nexus-2026-national-level-innovation-hackathon"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-secondary hover:opacity-95 text-white rounded-xl font-bold text-sm shadow-md transition-all hover:-translate-y-0.5"
+                >
+                  <span>Register Free on KonfHub</span>
+                  <ArrowRight className="w-4 h-4" />
+                </a>
               </div>
             </div>
 
-            {/* Right Col Interactive Accordion */}
-            <div className="lg:col-span-8 space-y-4">
-              {agenda.map((item, idx) => {
-                const typeStyle = AGENDA_TYPE_STYLES[item.type] || AGENDA_TYPE_STYLES.session;
-                const isExpanded = activeAgendaId === idx;
-                return (
-                  <div
-                    key={idx}
-                    className={`glass-card overflow-hidden transition-all duration-300 ${
-                      isExpanded ? 'border-primary/30 bg-surface/60' : 'border-white/5'
-                    }`}
-                  >
-                    {/* Header bar */}
-                    <button
-                      onClick={() => setActiveAgendaId(isExpanded ? null : idx)}
-                      className="w-full p-6 sm:p-7 flex items-center justify-between text-left gap-4"
-                    >
-                      <div className="flex flex-wrap items-center gap-3 sm:gap-4.5 min-w-0">
-                        {/* Time */}
-                        <span className="text-sm font-bold text-primary flex items-center gap-1.5 flex-shrink-0">
-                          <Clock className="w-4 h-4" />
-                          {item.time}
-                        </span>
-                        
-                        {/* Session Type Badge */}
-                        <span className={`text-[9px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${typeStyle} flex-shrink-0`}>
-                          {item.type}
-                        </span>
-
-                        {/* Title */}
-                        <h4 className="text-sm sm:text-base font-bold text-white truncate leading-snug">
-                          {item.title}
-                        </h4>
-                      </div>
-
-                      <ChevronDown
-                        className={`w-5 h-5 text-slate-500 flex-shrink-0 transition-transform duration-300 ${
-                          isExpanded ? 'rotate-180 text-primary' : ''
-                        }`}
-                      />
-                    </button>
-
-                    {/* Expandable details */}
-                    <div
-                      className={`transition-all duration-300 ease-in-out ${
-                        isExpanded ? 'max-h-[250px] border-t border-white/5' : 'max-h-0'
-                      } overflow-hidden`}
-                    >
-                      <div className="p-6 sm:p-7 space-y-4 bg-bg-primary/30">
-                        <p className="text-sm text-slate-400 leading-relaxed">
-                          {item.details || 'Join the session to learn about government stack development schemes.'}
-                        </p>
-                        
-                        <div className="flex items-center justify-between pt-3 border-t border-white/5">
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs text-slate-500 font-bold uppercase tracking-wider">Speaker:</span>
-                            <span className="text-xs text-slate-200 font-semibold">{item.speaker}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+            <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {[
+                { title: '36 Hours', desc: 'Continuous Coding, Brainstorming & Development', color: 'text-primary border-primary/20' },
+                { title: 'Elite Jury', desc: 'Evaluated by Senior Architects, Engineers & Founders', color: 'text-purple-400 border-purple-500/20' },
+                { title: 'Great Venue', desc: 'Hosted at Lovely Professional University Jalandhar Campus', color: 'text-emerald-400 border-emerald-500/20' },
+                { title: 'Free Support', desc: 'Catering, Wi-Fi, Resting Halls & Mentoring Provided', color: 'text-amber-400 border-amber-500/20' }
+              ].map((stat, i) => (
+                <div key={i} className={`glass-card p-6 border flex flex-col justify-between space-y-3 ${stat.color}`}>
+                  <h4 className="text-2xl font-black text-white">{stat.title}</h4>
+                  <p className="text-xs text-slate-400 leading-relaxed">{stat.desc}</p>
+                </div>
+              ))}
             </div>
-
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════
-          SPEAKERS SECTION
-          ═══════════════════════════════════ */}
-      <section id="speakers" className="section-py relative z-10">
+      <section id="themes" className="section-py relative z-10 bg-surface/30 border-y border-white/5">
         <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16">
           <div className="text-center mb-16 max-w-2xl mx-auto space-y-3">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
-              <Users className="w-4 h-4" />
-              <span>Dignitaries</span>
+              <Cpu className="w-4 h-4" />
+              <span>Hacking Themes</span>
             </div>
-            <h2 className="section-heading text-white">Distinguished Guests</h2>
-            <p className="body-text">
-              Learn about the policymakers, technology directors, and industry specialists leading our panels and evaluation keys.
+            <h2 className="section-heading text-white">Innovation Tracks</h2>
+            <p className="body-text text-slate-350">
+              Choose from our curated themes and build software or hardware prototypes that create a positive, scalable impact on society.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {speakers.map((sp, idx) => (
-              <div
-                key={idx}
-                className="glass-card overflow-hidden group flex flex-col h-full"
-              >
-                {/* Profile Photo */}
-                <div className="relative aspect-square w-full bg-slate-900 overflow-hidden">
-                  <img
-                    src={sp.image}
-                    alt={sp.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
-                  />
-                  {/* Subtle Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-80" />
-                </div>
-
-                {/* Details */}
-                <div className="p-8 flex-grow flex flex-col justify-between space-y-6">
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-wide">
-                      <Landmark className="w-3.5 h-3.5" />
-                      <span>{sp.org}</span>
-                    </div>
-                    <h4 className="text-xl font-extrabold text-white">{sp.name}</h4>
-                    <p className="text-xs text-secondary font-bold uppercase tracking-wider">{sp.role}</p>
-                    <p className="text-sm text-slate-400 leading-relaxed pt-2">
-                      {sp.bio}
-                    </p>
+            {HACKATHON_THEMES.map((theme, i) => {
+              const Icon = theme.icon;
+              return (
+                <div key={i} className="glass-card p-8 border border-white/5 flex flex-col space-y-5 hover:border-primary/30 transition-all duration-300 group">
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${theme.color} group-hover:scale-105 transition-transform duration-300`}>
+                    <Icon className="w-6 h-6" />
                   </div>
-
-                  <div className="pt-4 border-t border-white/5 flex items-center justify-between">
-                    <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Keynote Speaker</span>
-                    <a
-                      href="#"
-                      className="w-8 h-8 rounded-lg bg-white/5 hover:bg-primary/25 border border-white/5 hover:border-primary/20 flex items-center justify-center text-slate-400 hover:text-white transition-all duration-300"
-                      aria-label="LinkedIn"
-                    >
-                      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                      </svg>
-                    </a>
-                  </div>
+                  <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors duration-300">{theme.title}</h3>
+                  <p className="text-sm text-slate-400 leading-relaxed flex-grow">{theme.desc}</p>
                 </div>
-              </div>
-            ))}
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section id="timeline" className="section-py relative z-10">
+        <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16">
+          <div className="text-center mb-16 max-w-2xl mx-auto space-y-3">
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
+              <Clock className="w-4 h-4" />
+              <span>Event Schedule</span>
+            </div>
+            <h2 className="section-heading text-white">Itinerary Timeline</h2>
+            <p className="body-text text-slate-350">
+              Review our schedule outlines to ensure your team hits all checkpoints, mentoring rounds, and final pitching reviews.
+            </p>
           </div>
 
-          {/* Bottom Card CTA */}
-          <div className="mt-16 bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20 rounded-3xl p-8 sm:p-12 text-center max-w-3xl mx-auto space-y-6 shadow-xl">
-            <Trophy className="w-12 h-12 text-warning mx-auto animate-bounce" />
-            <div className="space-y-2">
-              <h3 className="text-2xl font-black text-white">Think You Have What It Takes?</h3>
-              <p className="text-sm text-slate-400 max-w-lg mx-auto leading-relaxed">
-                Join thousands of designers, developers, and blockchain architects solving critical civic tech challenges.
-              </p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            
+            <div className="space-y-8">
+              <div className="flex items-center gap-3 pb-2 border-b border-white/5">
+                <span className="w-2.5 h-2.5 rounded-full bg-primary" />
+                <h3 className="text-xl font-extrabold text-white">Day 1 — September 3, 2026</h3>
+              </div>
+              <div className="space-y-6 relative pl-6 border-l border-white/10 ml-1">
+                {SCHEDULE_DAY_1.map((item, idx) => (
+                  <div key={idx} className="relative space-y-2">
+                    <span className="absolute -left-[30px] top-1.5 w-3 h-3 rounded-full bg-slate-950 border-2 border-primary" />
+                    <span className="text-xs font-bold text-primary block">{item.time}</span>
+                    <h4 className="text-base font-extrabold text-white">{item.title}</h4>
+                    <p className="text-sm text-slate-400 leading-relaxed">{item.desc}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="pt-2">
-              <Link
-                href="/signup"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-primary hover:opacity-95 text-white rounded-xl font-bold text-sm shadow-lg shadow-primary/20 transition-all hover:-translate-y-0.5"
-              >
-                <span>Create Registration Key</span>
-                <ChevronRight className="w-4.5 h-4.5" />
-              </Link>
+
+            <div className="space-y-8">
+              <div className="flex items-center gap-3 pb-2 border-b border-white/5">
+                <span className="w-2.5 h-2.5 rounded-full bg-secondary" />
+                <h3 className="text-xl font-extrabold text-white">Day 2 — September 4, 2026</h3>
+              </div>
+              <div className="space-y-6 relative pl-6 border-l border-white/10 ml-1">
+                {SCHEDULE_DAY_2.map((item, idx) => (
+                  <div key={idx} className="relative space-y-2">
+                    <span className="absolute -left-[30px] top-1.5 w-3 h-3 rounded-full bg-slate-950 border-2 border-secondary" />
+                    <span className="text-xs font-bold text-secondary block">{item.time}</span>
+                    <h4 className="text-base font-extrabold text-white">{item.title}</h4>
+                    <p className="text-sm text-slate-400 leading-relaxed">{item.desc}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════
-          MEDIA ASSETS CTA
-          ═══════════════════════════════════ */}
-      <section className="section-py bg-surface/20 border-t border-white/5">
+      <section id="venue" className="section-py relative z-10 bg-surface/20 border-t border-white/5">
         <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16">
-          <div className="text-center max-w-2xl mx-auto space-y-6">
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
-              <Volume2 className="w-4.5 h-4.5" />
-              <span>Resources</span>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <div className="lg:col-span-5 space-y-6 text-left">
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
+                <MapPin className="w-4 h-4" />
+                <span>Location Details</span>
+              </div>
+              <h2 className="section-heading text-white">The Campus Venue</h2>
+              <p className="body-text text-slate-350 leading-relaxed">
+                ARVIX NEXUS 2026 is hosted on-site at <strong>Lovely Professional University (LPU)</strong>, one of India's largest and most technologically advanced campuses.
+              </p>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3.5">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary flex-shrink-0 mt-0.5">
+                    <Building2 className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white">Full Address</h4>
+                    <p className="text-xs text-slate-400 mt-1">Lovely Professional University, Grand Trunk Road, Phagwara, Punjab, 144411, India.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3.5">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary flex-shrink-0 mt-0.5">
+                    <MapPin className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white">How to Reach</h4>
+                    <p className="text-xs text-slate-400 mt-1">The university is situated on the NH-1 highway, easily accessible by train via Phagwara Junction (Phagwara) or Jalandhar City Railway Stations.</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <h2 className="section-heading text-white">Media & Press Assets</h2>
-            <p className="body-text">
-              Download official platform logos, speaker photos, digital flyers, and media itineraries in the digital press kit.
+
+            <div className="lg:col-span-7">
+              <div className="glass-card overflow-hidden gradient-border-glow p-3 shadow-2xl relative">
+                <div className="relative aspect-video rounded-xl bg-slate-900 overflow-hidden flex items-center justify-center">
+                  <div className="absolute inset-0 bg-slate-950/70 z-10 flex flex-col items-center justify-center text-center p-6 space-y-4">
+                    <MapPin className="w-10 h-10 text-primary animate-bounce" />
+                    <div>
+                      <h4 className="text-lg font-bold text-white">Lovely Professional University</h4>
+                      <p className="text-xs text-slate-450 mt-1">Phagwara, Punjab, India</p>
+                    </div>
+                    <a
+                      href="https://maps.google.com/?q=Lovely+Professional+University"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 py-2 px-4 bg-primary hover:opacity-90 text-white rounded-lg font-bold text-xs shadow-md transition-all"
+                    >
+                      <span>Open in Google Maps</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                  <div className="absolute inset-0 opacity-15"
+                    style={{ backgroundImage: 'radial-gradient(rgba(79, 124, 255, 0.4) 1px, transparent 1px)', backgroundSize: '24px 24px' }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="faqs" className="section-py relative z-10 border-t border-white/5 bg-surface/10">
+        <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16">
+          <div className="text-center mb-16 max-w-2xl mx-auto space-y-3">
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
+              <Shield className="w-4 h-4" />
+              <span>Got Questions?</span>
+            </div>
+            <h2 className="section-heading text-white">Frequently Asked Questions</h2>
+            <p className="body-text text-slate-350">
+              Find answers to general questions regarding registration, guidelines, and what to expect during the event.
             </p>
+          </div>
+
+          <div className="max-w-3xl mx-auto space-y-4">
+            {FAQ_ITEMS.map((item, idx) => {
+              const isExpanded = activeFaqId === idx;
+              return (
+                <div
+                  key={idx}
+                  className={`glass-card overflow-hidden transition-all duration-300 ${
+                    isExpanded ? 'border-primary/30 bg-surface/60' : 'border-white/5'
+                  }`}
+                >
+                  <button
+                    onClick={() => setActiveFaqId(isExpanded ? null : idx)}
+                    className="w-full p-6 flex items-center justify-between text-left gap-4"
+                  >
+                    <h4 className="text-base font-bold text-white">{item.q}</h4>
+                    <ChevronDown
+                      className={`w-5 h-5 text-slate-500 flex-shrink-0 transition-transform duration-300 ${
+                        isExpanded ? 'rotate-180 text-primary' : ''
+                      }`}
+                    />
+                  </button>
+
+                  <div
+                    className={`transition-all duration-300 ease-in-out ${
+                      isExpanded ? 'max-h-[200px] border-t border-white/5' : 'max-h-0'
+                    } overflow-hidden`}
+                  >
+                    <div className="p-6 bg-bg-primary/30 text-sm text-slate-400 leading-relaxed">
+                      {item.a}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="section-py relative z-10 border-t border-white/5 bg-gradient-to-br from-primary/5 to-secondary/5">
+        <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 text-center">
+          <div className="max-w-3xl mx-auto space-y-8">
+            <Trophy className="w-16 h-16 text-warning mx-auto animate-bounce" />
+            <div className="space-y-3">
+              <h2 className="text-3xl sm:text-4xl font-black text-white">Join the Hacking Nexus!</h2>
+              <p className="text-slate-300 text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
+                Registrations are free and fully managed on KonfHub. Form your team of 1–4, choose your track, and prepare to code.
+              </p>
+            </div>
+            
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
-              <Link
-                href="/event/press"
-                className="inline-flex items-center justify-center gap-2.5 py-3.5 px-8 border border-white/10 hover:border-white/20 bg-slate-900/40 hover:bg-slate-800/60 text-slate-200 hover:text-white rounded-xl text-sm font-bold transition-all hover:-translate-y-0.5 shadow-sm"
+              <a
+                href="https://konfhub.com/checkout/arvix-nexus-2026-national-level-innovation-hackathon"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4.5 bg-gradient-to-r from-primary to-secondary hover:opacity-95 text-white rounded-2xl font-bold text-base shadow-xl shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5"
               >
-                <Volume2 className="w-4 h-4 text-primary" />
-                <span>Access Press Kit</span>
-              </Link>
-              <Link
-                href="/hackathon/leaderboard"
-                className="inline-flex items-center justify-center gap-2.5 py-3.5 px-8 border border-warning/20 bg-warning/10 hover:bg-warning/20 text-warning hover:text-white rounded-xl text-sm font-bold transition-all hover:-translate-y-0.5 shadow-sm"
-              >
-                <Trophy className="w-4 h-4" />
-                <span>View Live Standings</span>
-              </Link>
+                <span>Register Now on KonfHub</span>
+                <ArrowRight className="w-5 h-5" />
+              </a>
+            </div>
+
+            {/* Organizing details */}
+            <div className="pt-12 border-t border-white/5 grid grid-cols-1 sm:grid-cols-3 gap-6 text-left max-w-2xl mx-auto">
+              <div className="space-y-1">
+                <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block">Organizer</span>
+                <span className="text-sm font-semibold text-slate-200 font-figtree">Arvix Team</span>
+              </div>
+              <div className="space-y-1">
+                <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block">Support Email</span>
+                <a href="mailto:sujithlavudu@gmail.com" className="text-sm font-semibold text-primary hover:underline block break-all font-figtree">sujithlavudu@gmail.com</a>
+              </div>
+              <div className="space-y-1">
+                <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block">Support Phone</span>
+                <a href="tel:+917331161928" className="text-sm font-semibold text-slate-200 block font-figtree">+91-7331161928</a>
+              </div>
             </div>
           </div>
         </div>
