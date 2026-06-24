@@ -11,46 +11,53 @@ const HACKATHON_THEMES = [
     icon: Brain,
     title: 'AI & Intelligent Systems',
     desc: 'Harness the power of Generative AI, LLMs, NLP, and computer vision to solve complex real-world problems and automate human cognitive tasks.',
-    color: 'text-blue-500 bg-blue-500/10 border-blue-500/20'
+    color: 'text-blue-500 bg-blue-500/10 border-blue-500/20',
+    category: 'Software Track',
+    difficulty: 'Advanced'
   },
   {
     icon: Cpu,
     title: 'Smart Infrastructure & IoT',
     desc: 'Build smart grids, automated logistics, intelligent transport networks, and smart campus automation using IoT-enabled hardware and software protocols.',
-    color: 'text-purple-500 bg-purple-500/10 border-purple-500/20'
+    color: 'text-purple-500 bg-purple-500/10 border-purple-500/20',
+    category: 'Hardware & IoT Track',
+    difficulty: 'Intermediate'
   },
   {
     icon: Globe,
     title: 'Sustainable Tech & Green Energy',
     desc: 'Develop solutions promoting carbon footprint mitigation, clean energy management, waste recycling, and water preservation techniques.',
-    color: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20'
+    color: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20',
+    category: 'Socio-Green Track',
+    difficulty: 'All Levels'
   },
   {
     icon: Shield,
     title: 'Cybersecurity & Trust Systems',
     desc: 'Innovate secure decentralized ledger networks, cryptography applications, phishing detection systems, and network security protocols.',
-    color: 'text-rose-500 bg-rose-500/10 border-rose-500/20'
+    color: 'text-rose-500 bg-rose-500/10 border-rose-500/20',
+    category: 'Web3 & Cyber Track',
+    difficulty: 'Advanced'
   },
   {
     icon: Building2,
     title: 'Healthcare & Biotech Innovation',
     desc: 'Design smart health assistance kits, early diagnostic models, digital medical record keepers, and tech enabling accessible rural healthcare.',
-    color: 'text-amber-500 bg-amber-500/10 border-amber-500/20'
+    color: 'text-amber-500 bg-amber-500/10 border-amber-500/20',
+    category: 'Biotech Track',
+    difficulty: 'Intermediate'
   }
 ];
 
-const SCHEDULE_DAY_1 = [
-  { time: '08:00 AM - 10:00 AM', title: 'Participant Registration & Kit Collection', desc: 'Arrive at the hacking hall at LPU, check in, collect your developer badges, event kits, and find your designated workspace.' },
-  { time: '10:00 AM - 11:30 AM', title: 'Grand Inauguration Ceremony', desc: 'Opening remarks from the Arvix Team and university delegates, followed by rules and evaluation briefing.' },
-  { time: '11:30 AM', title: 'Hacking Phase Starts', desc: 'The 36-hour countdown begins! Teams start brainstorming, developing, and building their innovative prototypes.' },
-  { time: '04:00 PM - 06:00 PM', title: 'Mentoring Session 1', desc: 'Meet your domain experts and technical advisors to refine your architecture, validate product direction, and address technical blocks.' }
-];
-
-const SCHEDULE_DAY_2 = [
-  { time: '09:00 AM - 11:00 AM', title: 'Mentoring Session 2 & Progress Review', desc: 'A quick check-in by technical mentors. Show your prototype progress, get guidance on design, integration, and pitch preparation.' },
-  { time: '04:00 PM', title: 'Hacking Ends & Final Code Submission', desc: 'Hands off keyboard! Teams submit their repository links, hosting URLs, and summary documents through the submission system.' },
-  { time: '04:30 PM - 06:30 PM', title: 'Grand Pitching & Jury Evaluation', desc: 'Live project demos! Each team presents their functional prototype to our distinguished jury panel followed by Q&A.' },
-  { time: '07:00 PM - 08:00 PM', title: 'Award Ceremony & Valedictory', desc: 'Announcing winners, distributing cash rewards, certificates, cloud credits, and concluding closing statements.' }
+const UNIFIED_TIMELINE = [
+  { day: 1, time: '08:00 AM - 10:00 AM', title: 'Participant Registration & Kit Collection', desc: 'Arrive at the hacking hall at LPU, check in, collect your developer badges, event kits, and find your designated workspace.' },
+  { day: 1, time: '10:00 AM - 11:30 AM', title: 'Grand Inauguration Ceremony', desc: 'Opening remarks from the Arvix Team and university delegates, followed by rules and evaluation briefing.' },
+  { day: 1, time: '11:30 AM', title: 'Hacking Phase Starts', desc: 'The 36-hour countdown begins! Teams start brainstorming, developing, and building their innovative prototypes.' },
+  { day: 1, time: '04:00 PM - 06:00 PM', title: 'Mentoring Session 1', desc: 'Meet your domain experts and technical advisors to refine your architecture, validate product direction, and address technical blocks.' },
+  { day: 2, time: '09:00 AM - 11:00 AM', title: 'Mentoring Session 2 & Progress Review', desc: 'A quick check-in by technical mentors. Show your prototype progress, get guidance on design, integration, and pitch preparation.' },
+  { day: 2, time: '04:00 PM', title: 'Hacking Ends & Final Code Submission', desc: 'Hands off keyboard! Teams submit their repository links, hosting URLs, and summary documents through the submission system.' },
+  { day: 2, time: '04:30 PM - 06:30 PM', title: 'Grand Pitching & Jury Evaluation', desc: 'Live project demos! Each team presents their functional prototype to our distinguished jury panel followed by Q&A.' },
+  { day: 2, time: '07:00 PM - 08:00 PM', title: 'Award Ceremony & Valedictory', desc: 'Announcing winners, distributing cash rewards, certificates, cloud credits, and concluding closing statements.' }
 ];
 
 const FAQ_ITEMS = [
@@ -112,20 +119,21 @@ export default function EventLandingPage() {
   return (
     <div className="flex-grow bg-bg-primary text-slate-100 flex flex-col overflow-x-hidden">
       
-      <section className="relative overflow-hidden pt-28 sm:pt-36 lg:pt-40 pb-20 sm:pb-24 lg:pb-28">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden pt-36 sm:pt-44 lg:pt-48 pb-24 sm:pb-32 lg:pb-36">
+        {/* Glowing backdrops & grid pattern overlay */}
         <div className="absolute inset-0 pointer-events-none z-0">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-primary/10 rounded-full blur-[120px]" />
-          <div className="absolute top-1/3 left-1/4 w-80 h-80 bg-secondary/8 rounded-full blur-[90px] animate-pulse" />
-          <div className="absolute top-1/4 right-1/4 w-80 h-80 bg-primary/5 rounded-full blur-[80px]" />
-          <div className="absolute inset-0 opacity-[0.015]"
-            style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)', backgroundSize: '60px 60px' }}
-          />
+          <div className="absolute inset-0 grid-overlay opacity-30" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-primary/10 rounded-full blur-[140px] animate-pulse pointer-events-none" />
+          <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px] animate-pulse-slow pointer-events-none" />
+          <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[90px] pointer-events-none" />
         </div>
 
-        <div className="relative w-full max-w-[1280px] mx-auto px-8 md:px-16 lg:px-20 z-10">
+        <div className="relative w-full max-w-[1280px] mx-auto px-8 md:px-16 lg:px-20 z-10 space-y-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             
-            <div className="space-y-8 text-left">
+            {/* Left Content column */}
+            <div className="space-y-10 text-left">
               <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary py-1.5 px-4 rounded-full text-xs font-bold uppercase tracking-wider">
                 <Zap className="w-3.5 h-3.5 animate-pulse" />
                 <span>Registrations are Live</span>
@@ -137,11 +145,11 @@ export default function EventLandingPage() {
                 Innovation Hackathon
               </h1>
 
-              <p className="body-text max-w-2xl text-slate-300">
+              <p className="body-text max-w-[650px] text-slate-350">
                 Join India's premier innovation battleground at Lovely Professional University. Unleash your technical prowess, build real-world software solutions, and compete with elite developers nationwide.
               </p>
 
-              <div className="flex flex-wrap gap-4 pt-2">
+              <div className="flex flex-wrap gap-4">
                 {[
                   { icon: Calendar, text: 'September 3 – 4, 2026', color: 'text-primary' },
                   { icon: MapPin, text: 'LPU Jalandhar, Punjab', color: 'text-secondary' },
@@ -158,7 +166,7 @@ export default function EventLandingPage() {
                 })}
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <div className="flex flex-col sm:flex-row gap-4 pt-2">
                 <a
                   href="https://konfhub.com/arvix-nexus-2026-national-level-innovation-hackathon"
                   target="_blank"
@@ -177,6 +185,7 @@ export default function EventLandingPage() {
               </div>
             </div>
 
+            {/* Right Card column */}
             <div className="relative w-full flex items-center justify-center lg:justify-end">
               <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-full filter blur-3xl opacity-60 z-0 pointer-events-none" />
 
@@ -220,11 +229,31 @@ export default function EventLandingPage() {
               </div>
             </div>
           </div>
+
+          {/* Trust Indicators Grid */}
+          <div className="pt-12 border-t border-white/5">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-6 text-center">
+              {[
+                { value: '5000+', label: 'Expected Participants' },
+                { value: '100+', label: 'Colleges Represented' },
+                { value: '36 Hours', label: 'Continuous Coding' },
+                { value: '₹5,00,000', label: 'Prize Pool Value' },
+                { value: '50+', label: 'Expert Tech Mentors' }
+              ].map((stat, i) => (
+                <div key={i} className="space-y-1 py-4 px-2 glass-card border border-white/5 bg-surface/20 premium-hover-lift">
+                  <span className="block text-2xl md:text-3xl font-extrabold text-white tracking-tight bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">{stat.value}</span>
+                  <span className="block text-[10px] uppercase font-bold text-slate-500 tracking-wider mt-1">{stat.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
       </section>
 
+      {/* Countdown section */}
       <section className="relative z-10 w-full max-w-[1280px] mx-auto px-8 md:px-16 lg:px-20 mb-16">
-        <div className="glass-card gradient-border-glow p-6 sm:p-8 lg:p-10 flex flex-col lg:flex-row justify-between items-center gap-8">
+        <div className="glass-card gradient-border-glow p-8 md:p-12 flex flex-col lg:flex-row justify-between items-center gap-8 bg-surface/40">
           <div className="text-center lg:text-left space-y-2 max-w-md">
             <div className="flex items-center justify-center lg:justify-start gap-2.5">
               <Clock className="w-5 h-5 text-primary animate-pulse" />
@@ -253,21 +282,19 @@ export default function EventLandingPage() {
         </div>
       </section>
 
+      {/* About Section */}
       <section id="about" className="section-py relative z-10 border-t border-white/5">
         <div className="w-full max-w-[1280px] mx-auto px-8 md:px-16 lg:px-20">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
             
-            <div className="space-y-6 text-left">
+            <div className="lg:col-span-5 space-y-8 text-left">
               <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
                 <Zap className="w-4 h-4" />
                 <span>The Nexus of Innovation</span>
               </div>
               <h2 className="section-heading text-white">About ARVIX NEXUS 2026</h2>
-              <p className="body-text text-slate-300 leading-relaxed">
-                ARVIX NEXUS 2026 is a national-level innovation hackathon that brings together bright student minds and technical visionaries across the country. Hosted at Lovely Professional University, Phagwara, this 36-hour continuous hackathon provides a platform for teams to address complex real-world challenges.
-              </p>
-              <p className="body-text text-slate-300 leading-relaxed">
-                Whether you want to deploy generative AI, secure systems, smart IoT gadgets, or build green energy technology, this is your canvas. Meet tech mentors, pitch to an esteemed panel of judges, and win exciting cash prizes, goodies, and cloud credits!
+              <p className="body-text text-slate-350 leading-relaxed max-w-[650px]">
+                ARVIX NEXUS 2026 is India\'s premier national-level innovation hackathon, bringing together the country\'s most talented developers, designers, and creators. Hosted at Lovely Professional University, this 36-hour sprint challenges participants to solve real-world problems through cutting-edge technology.
               </p>
               
               <div className="pt-2">
@@ -283,16 +310,19 @@ export default function EventLandingPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {/* Redesigned 2-column Statistics visual cards next to text content */}
+            <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               {[
-                { title: '36 Hours', desc: 'Continuous Coding, Brainstorming & Development', color: 'text-primary border-primary/20' },
-                { title: 'Elite Jury', desc: 'Evaluated by Senior Architects, Engineers & Founders', color: 'text-purple-400 border-purple-500/20' },
-                { title: 'Great Venue', desc: 'Hosted at Lovely Professional University Jalandhar Campus', color: 'text-emerald-400 border-emerald-500/20' },
-                { title: 'Free Support', desc: 'Catering, Wi-Fi, Resting Halls & Mentoring Provided', color: 'text-amber-400 border-amber-500/20' }
+                { title: '36 Hours', desc: 'Continuous Coding & Rapid Prototyping', color: 'text-primary border-primary/10' },
+                { title: 'National Level', desc: 'Compete with elite student minds pan-India', color: 'text-purple-400 border-purple-500/10' },
+                { title: '1-4 Members', desc: 'Collaborative squads with cross-functional talent', color: 'text-emerald-400 border-emerald-500/10' },
+                { title: 'Free Registration', desc: 'No fees required, with full hospitality provided', color: 'text-amber-400 border-amber-500/10' },
+                { title: 'Expert Mentors', desc: '1-on-1 guidance from tech leaders and architects', color: 'text-blue-400 border-blue-500/10' },
+                { title: 'Industry Jury', desc: 'Projects evaluated by senior engineers and founders', color: 'text-rose-400 border-rose-500/10' }
               ].map((stat, i) => (
-                <div key={i} className={`glass-card p-6 border flex flex-col justify-between space-y-3 ${stat.color}`}>
-                  <h4 className="text-2xl font-black text-white">{stat.title}</h4>
-                  <p className="text-xs text-slate-400 leading-relaxed">{stat.desc}</p>
+                <div key={i} className={`glass-card p-6 border flex flex-col justify-between space-y-4 premium-hover-lift ${stat.color}`}>
+                  <h4 className="text-xl font-black text-white leading-tight">{stat.title}</h4>
+                  <p className="text-[11px] text-slate-400 leading-relaxed">{stat.desc}</p>
                 </div>
               ))}
             </div>
@@ -300,6 +330,7 @@ export default function EventLandingPage() {
         </div>
       </section>
 
+      {/* Themes Section */}
       <section id="themes" className="section-py relative z-10 bg-surface/30 border-y border-white/5">
         <div className="w-full max-w-[1280px] mx-auto px-8 md:px-16 lg:px-20">
           <div className="text-center mb-16 max-w-2xl mx-auto space-y-3">
@@ -308,7 +339,7 @@ export default function EventLandingPage() {
               <span>Hacking Themes</span>
             </div>
             <h2 className="section-heading text-white">Innovation Tracks</h2>
-            <p className="body-text text-slate-350">
+            <p className="body-text text-slate-350 max-w-[650px] mx-auto">
               Choose from our curated themes and build software or hardware prototypes that create a positive, scalable impact on society.
             </p>
           </div>
@@ -317,12 +348,20 @@ export default function EventLandingPage() {
             {HACKATHON_THEMES.map((theme, i) => {
               const Icon = theme.icon;
               return (
-                <div key={i} className="glass-card p-6 sm:p-8 border border-white/5 flex flex-col space-y-5 hover:border-primary/30 transition-all duration-300 group">
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${theme.color} group-hover:scale-105 transition-transform duration-300`}>
-                    <Icon className="w-6 h-6" />
+                <div key={i} className="glass-card p-8 border border-white/5 flex flex-col space-y-6 hover:border-primary/30 transition-all duration-300 group premium-hover-lift h-full justify-between">
+                  <div className="space-y-5">
+                    <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider">
+                      <span className="text-primary bg-primary/10 border border-primary/20 px-2.5 py-0.5 rounded-full">{theme.category}</span>
+                      <span className="text-slate-400 bg-white/5 px-2.5 py-0.5 rounded-full">{theme.difficulty}</span>
+                    </div>
+
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${theme.color} group-hover:scale-110 transition-transform duration-300`}>
+                      <Icon className="w-6 h-6" />
+                    </div>
+                    
+                    <h3 className="card-title text-white group-hover:text-primary transition-colors duration-300 leading-tight">{theme.title}</h3>
+                    <p className="text-sm text-slate-400 leading-relaxed">{theme.desc}</p>
                   </div>
-                  <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors duration-300">{theme.title}</h3>
-                  <p className="text-sm text-slate-400 leading-relaxed flex-grow">{theme.desc}</p>
                 </div>
               );
             })}
@@ -330,58 +369,51 @@ export default function EventLandingPage() {
         </div>
       </section>
 
+      {/* Timeline Section */}
       <section id="timeline" className="section-py relative z-10">
         <div className="w-full max-w-[1280px] mx-auto px-8 md:px-16 lg:px-20">
-          <div className="text-center mb-16 max-w-2xl mx-auto space-y-3">
+          <div className="text-center mb-20 max-w-2xl mx-auto space-y-3">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
               <Clock className="w-4 h-4" />
               <span>Event Schedule</span>
             </div>
             <h2 className="section-heading text-white">Itinerary Timeline</h2>
-            <p className="body-text text-slate-350">
+            <p className="body-text text-slate-350 max-w-[650px] mx-auto">
               Review our schedule outlines to ensure your team hits all checkpoints, mentoring rounds, and final pitching reviews.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            
-            <div className="space-y-8">
-              <div className="flex items-center gap-3 pb-2 border-b border-white/5">
-                <span className="w-2.5 h-2.5 rounded-full bg-primary" />
-                <h3 className="text-xl font-extrabold text-white">Day 1 — September 3, 2026</h3>
-              </div>
-              <div className="space-y-8 relative border-l-2 border-white/10 ml-6 md:ml-8">
-                {SCHEDULE_DAY_1.map((item, idx) => (
-                  <div key={idx} className="relative pl-8 space-y-2.5">
-                    <span className="absolute -left-[7px] top-2 w-3 h-3 rounded-full bg-slate-950 border-2 border-primary" />
-                    <span className="text-xs font-bold text-primary block">{item.time}</span>
-                    <h4 className="text-base font-extrabold text-white">{item.title}</h4>
-                    <p className="text-sm text-slate-400 leading-relaxed">{item.desc}</p>
+          {/* Redesigned Modern Vertical Timeline (Alternating Layout on Desktop) */}
+          <div className="relative border-l-2 border-white/10 lg:border-l-0 lg:before:absolute lg:before:left-1/2 lg:before:-translate-x-1/2 lg:before:h-full lg:before:w-0.5 lg:before:bg-white/10 space-y-16 max-w-5xl mx-auto">
+            {UNIFIED_TIMELINE.map((item, idx) => {
+              const isEven = idx % 2 === 0;
+              return (
+                <div key={idx} className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between w-full">
+                  {/* Connection Dot */}
+                  <div className="absolute -left-[9px] lg:left-1/2 lg:-translate-x-1/2 w-4 h-4 rounded-full bg-slate-950 border-2 border-primary z-20 shadow-[0_0_15px_rgba(79,124,255,0.4)]" />
+                  
+                  {/* Timeline Card */}
+                  <div className={`w-full lg:w-[calc(50%-2rem)] pl-8 lg:pl-0 ${isEven ? 'lg:text-right lg:ml-auto lg:pl-0 lg:pr-8' : 'lg:mr-auto lg:pr-0 lg:pl-8'}`}>
+                    <div className="glass-card p-6 inline-block w-full text-left premium-hover-lift border border-white/5">
+                      <div className="flex items-center justify-between gap-3 mb-2">
+                        <span className="text-[10px] font-bold text-primary tracking-widest uppercase bg-primary/10 border border-primary/25 px-2.5 py-0.5 rounded-full">{item.time}</span>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase bg-white/5 px-2 py-0.5 rounded-full">Day {item.day}</span>
+                      </div>
+                      <h4 className="text-lg font-extrabold text-white mb-2 leading-snug">{item.title}</h4>
+                      <p className="text-xs text-slate-400 leading-relaxed">{item.desc}</p>
+                    </div>
                   </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-8">
-              <div className="flex items-center gap-3 pb-2 border-b border-white/5">
-                <span className="w-2.5 h-2.5 rounded-full bg-secondary" />
-                <h3 className="text-xl font-extrabold text-white">Day 2 — September 4, 2026</h3>
-              </div>
-              <div className="space-y-8 relative border-l-2 border-white/10 ml-6 md:ml-8">
-                {SCHEDULE_DAY_2.map((item, idx) => (
-                  <div key={idx} className="relative pl-8 space-y-2.5">
-                    <span className="absolute -left-[7px] top-2 w-3 h-3 rounded-full bg-slate-950 border-2 border-secondary" />
-                    <span className="text-xs font-bold text-secondary block">{item.time}</span>
-                    <h4 className="text-base font-extrabold text-white">{item.title}</h4>
-                    <p className="text-sm text-slate-400 leading-relaxed">{item.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+                  
+                  {/* Spacer Column */}
+                  <div className="hidden lg:block w-[calc(50%-2rem)]" />
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
+      {/* Venue Section */}
       <section id="venue" className="section-py relative z-10 bg-surface/20 border-t border-white/5">
         <div className="w-full max-w-[1280px] mx-auto px-8 md:px-16 lg:px-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
@@ -392,8 +424,8 @@ export default function EventLandingPage() {
                 <span>Location Details</span>
               </div>
               <h2 className="section-heading text-white">The Campus Venue</h2>
-              <p className="body-text text-slate-350 leading-relaxed">
-                ARVIX NEXUS 2026 is hosted on-site at <strong>Lovely Professional University (LPU)</strong>, one of India's largest and most technologically advanced campuses.
+              <p className="body-text text-slate-350 leading-relaxed max-w-[650px]">
+                ARVIX NEXUS 2026 is hosted on-site at <strong>Lovely Professional University (LPU)</strong>, one of India\'s largest and most technologically advanced campuses.
               </p>
               <div className="space-y-4">
                 <div className="flex items-start gap-3.5">
@@ -446,6 +478,7 @@ export default function EventLandingPage() {
         </div>
       </section>
 
+      {/* FAQ Section */}
       <section id="faqs" className="section-py relative z-10 border-t border-white/5 bg-surface/10">
         <div className="w-full max-w-[1280px] mx-auto px-8 md:px-16 lg:px-20">
           <div className="text-center mb-16 max-w-2xl mx-auto space-y-3">
@@ -454,7 +487,7 @@ export default function EventLandingPage() {
               <span>Got Questions?</span>
             </div>
             <h2 className="section-heading text-white">Frequently Asked Questions</h2>
-            <p className="body-text text-slate-350">
+            <p className="body-text text-slate-350 max-w-[650px] mx-auto">
               Find answers to general questions regarding registration, guidelines, and what to expect during the event.
             </p>
           </div>
@@ -497,43 +530,69 @@ export default function EventLandingPage() {
         </div>
       </section>
 
-      <section className="section-py relative z-10 border-t border-white/5 bg-gradient-to-br from-primary/5 to-secondary/5">
-        <div className="w-full max-w-[1280px] mx-auto px-8 md:px-16 lg:px-20 text-center">
-          <div className="max-w-3xl mx-auto space-y-8">
-            <Trophy className="w-16 h-16 text-warning mx-auto animate-bounce" />
-            <div className="space-y-3">
-              <h2 className="text-3xl sm:text-4xl font-black text-white">Join the Hacking Nexus!</h2>
-              <p className="text-slate-300 text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
-                Registrations are free and fully managed on KonfHub. Form your team of 1–4, choose your track, and prepare to code.
-              </p>
-            </div>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
-              <a
-                href="https://konfhub.com/arvix-nexus-2026-national-level-innovation-hackathon"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4.5 bg-gradient-to-r from-primary to-secondary hover:opacity-95 text-white rounded-2xl font-bold text-base shadow-xl shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5"
-              >
-                <span>Register Now on KonfHub</span>
-                <ArrowRight className="w-5 h-5" />
-              </a>
-            </div>
+      {/* Registration Section (Redesigned visual CTA block) */}
+      <section className="section-py relative z-10 overflow-hidden border-t border-white/5">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/5 to-transparent pointer-events-none" />
+        <div className="absolute -bottom-48 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-secondary/10 rounded-full blur-[100px] pointer-events-none" />
 
-            {/* Organizing details */}
-            <div className="pt-12 border-t border-white/5 grid grid-cols-1 sm:grid-cols-3 gap-6 text-left max-w-2xl mx-auto">
-              <div className="space-y-1">
-                <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block">Organizer</span>
-                <span className="text-sm font-semibold text-slate-200 font-figtree">Arvix Team</span>
+        <div className="w-full max-w-[1280px] mx-auto px-8 md:px-16 lg:px-20 relative z-10">
+          <div className="glass-card p-8 md:p-16 text-center max-w-4xl mx-auto relative overflow-hidden bg-gradient-to-r from-surface/80 to-slate-900/80 border border-white/5">
+            <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary animate-gradient-shift" />
+
+            <div className="max-w-2xl mx-auto space-y-8">
+              <Trophy className="w-16 h-16 text-warning mx-auto animate-bounce" />
+              
+              <div className="space-y-4">
+                <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">Join the Hacking Nexus!</h2>
+                <p className="text-slate-350 text-sm md:text-base leading-relaxed">
+                  Registrations are free and fully managed on KonfHub. Form your team of 1–4, choose your track, and prepare to code.
+                </p>
               </div>
-              <div className="space-y-1">
-                <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block">Support Email</span>
-                <a href="mailto:sujithlavudu@gmail.com" className="text-sm font-semibold text-primary hover:underline block break-all font-figtree">sujithlavudu@gmail.com</a>
+
+              {/* Benefits Checklist Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-left max-w-xl mx-auto py-2">
+                {[
+                  'Free Registration',
+                  'Limited Seats',
+                  'Certificates for All',
+                  'Cash Prize Pool',
+                  'Industry Recognition'
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-2.5 text-xs font-semibold text-slate-300">
+                    <span className="w-1.5 h-1.5 rounded-full bg-success flex-shrink-0" />
+                    <span>{item}</span>
+                  </div>
+                ))}
               </div>
-              <div className="space-y-1">
-                <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block">Support Phone</span>
-                <a href="tel:+917331161928" className="text-sm font-semibold text-slate-200 block font-figtree">+91-7331161928</a>
+
+              <div className="pt-4">
+                <a
+                  href="https://konfhub.com/arvix-nexus-2026-national-level-innovation-hackathon"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-10 py-5 bg-gradient-to-r from-primary to-secondary hover:opacity-95 text-white rounded-2xl font-black text-lg shadow-2xl shadow-primary/20 hover:shadow-primary/40 hover:scale-[1.02] transition-all duration-300"
+                >
+                  <span>Register Now on KonfHub</span>
+                  <ArrowRight className="w-5 h-5" />
+                </a>
               </div>
+
+              {/* Organizing details */}
+              <div className="pt-10 mt-6 border-t border-white/5 grid grid-cols-1 sm:grid-cols-3 gap-6 text-left max-w-xl mx-auto">
+                <div className="space-y-1">
+                  <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block">Organizer</span>
+                  <span className="text-sm font-semibold text-slate-200">Arvix Team</span>
+                </div>
+                <div className="space-y-1">
+                  <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block">Support Email</span>
+                  <a href="mailto:sujithlavudu@gmail.com" className="text-sm font-semibold text-primary hover:underline block break-all">sujithlavudu@gmail.com</a>
+                </div>
+                <div className="space-y-1">
+                  <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block">Support Phone</span>
+                  <a href="tel:+917331161928" className="text-sm font-semibold text-slate-200 block">+91-7331161928</a>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>

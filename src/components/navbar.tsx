@@ -75,9 +75,28 @@ export default function Navbar() {
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
-  // Scroll effect for navbar styling
+  const [activeSection, setActiveSection] = useState('');
+
+  // Scroll effect for navbar styling & active section highlights
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+
+      const sections = ['about', 'themes', 'timeline', 'venue', 'faqs'];
+      const scrollPosition = window.scrollY + 200;
+
+      for (const section of sections) {
+        const el = document.getElementById(section);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            setActiveSection(`#${section}`);
+            break;
+          }
+        }
+      }
+    };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -92,16 +111,20 @@ export default function Navbar() {
 
   // Helper to check active state including hash links
   const isLinkActive = (href: string) => {
+    if (href.startsWith('/#')) {
+      const hash = href.substring(1);
+      return activeSection === hash;
+    }
     return pathname === href;
   };
 
   return (
     <>
       <nav
-        className={`sticky top-0 z-50 transition-all duration-300 w-full
+        className={`sticky top-0 z-50 transition-all duration-300 w-full border-b backdrop-blur-xl
           ${scrolled
-            ? 'bg-bg-primary/80 backdrop-blur-xl border-b border-primary/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] py-3'
-            : 'bg-bg-primary/40 backdrop-blur-md border-b border-white/5 py-5'
+            ? 'bg-bg-primary/75 border-white/[0.06] shadow-[0_8px_30px_rgba(0,0,0,0.6)] py-3.5'
+            : 'bg-bg-primary/30 border-transparent py-6'
           }`}
       >
         <div className="w-full max-w-[1280px] mx-auto px-8 md:px-16 lg:px-20">
