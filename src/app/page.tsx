@@ -122,10 +122,10 @@ export default function EventLandingPage() {
           />
         </div>
 
-        <div className="relative w-full max-w-[1400px] mx-auto px-6 xs:px-8 md:px-12 lg:px-16 z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <div className="relative w-full max-w-[1280px] mx-auto px-8 md:px-16 lg:px-20 z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             
-            <div className="lg:col-span-7 space-y-8 text-left">
+            <div className="space-y-8 text-left">
               <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary py-1.5 px-4 rounded-full text-xs font-bold uppercase tracking-wider">
                 <Zap className="w-3.5 h-3.5 animate-pulse" />
                 <span>Registrations are Live</span>
@@ -177,7 +177,7 @@ export default function EventLandingPage() {
               </div>
             </div>
 
-            <div className="lg:col-span-5 relative flex items-center justify-center lg:justify-end">
+            <div className="relative w-full flex items-center justify-center lg:justify-end">
               <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-full filter blur-3xl opacity-60 z-0 pointer-events-none" />
 
               <div className="relative z-10 w-full max-w-[440px] space-y-6">
@@ -223,7 +223,7 @@ export default function EventLandingPage() {
         </div>
       </section>
 
-      <section className="relative z-10 w-full max-w-[1400px] mx-auto px-6 xs:px-8 md:px-12 lg:px-16 mb-16">
+      <section className="relative z-10 w-full max-w-[1280px] mx-auto px-8 md:px-16 lg:px-20 mb-16">
         <div className="glass-card gradient-border-glow p-6 sm:p-8 lg:p-10 flex flex-col lg:flex-row justify-between items-center gap-8">
           <div className="text-center lg:text-left space-y-2 max-w-md">
             <div className="flex items-center justify-center lg:justify-start gap-2.5">
@@ -254,10 +254,10 @@ export default function EventLandingPage() {
       </section>
 
       <section id="about" className="section-py relative z-10 border-t border-white/5">
-        <div className="w-full max-w-[1400px] mx-auto px-6 xs:px-8 md:px-12 lg:px-16">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="w-full max-w-[1280px] mx-auto px-8 md:px-16 lg:px-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             
-            <div className="lg:col-span-6 space-y-6 text-left">
+            <div className="space-y-6 text-left">
               <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
                 <Zap className="w-4 h-4" />
                 <span>The Nexus of Innovation</span>
@@ -283,7 +283,7 @@ export default function EventLandingPage() {
               </div>
             </div>
 
-            <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {[
                 { title: '36 Hours', desc: 'Continuous Coding, Brainstorming & Development', color: 'text-primary border-primary/20' },
                 { title: 'Elite Jury', desc: 'Evaluated by Senior Architects, Engineers & Founders', color: 'text-purple-400 border-purple-500/20' },
@@ -301,7 +301,7 @@ export default function EventLandingPage() {
       </section>
 
       <section id="themes" className="section-py relative z-10 bg-surface/30 border-y border-white/5">
-        <div className="w-full max-w-[1400px] mx-auto px-6 xs:px-8 md:px-12 lg:px-16">
+        <div className="w-full max-w-[1280px] mx-auto px-8 md:px-16 lg:px-20">
           <div className="text-center mb-16 max-w-2xl mx-auto space-y-3">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
               <Cpu className="w-4 h-4" />
@@ -331,7 +331,7 @@ export default function EventLandingPage() {
       </section>
 
       <section id="timeline" className="section-py relative z-10">
-        <div className="w-full max-w-[1400px] mx-auto px-6 xs:px-8 md:px-12 lg:px-16">
+        <div className="w-full max-w-[1280px] mx-auto px-8 md:px-16 lg:px-20">
           <div className="text-center mb-16 max-w-2xl mx-auto space-y-3">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
               <Clock className="w-4 h-4" />
@@ -350,10 +350,10 @@ export default function EventLandingPage() {
                 <span className="w-2.5 h-2.5 rounded-full bg-primary" />
                 <h3 className="text-xl font-extrabold text-white">Day 1 — September 3, 2026</h3>
               </div>
-              <div className="space-y-6 relative border-l border-white/10 ml-4 md:ml-6">
+              <div className="space-y-8 relative border-l-2 border-white/10 ml-6 md:ml-8">
                 {SCHEDULE_DAY_1.map((item, idx) => (
-                  <div key={idx} className="relative pl-6 space-y-2">
-                    <span className="absolute -left-[6px] top-1.5 w-3 h-3 rounded-full bg-slate-950 border-2 border-primary" />
+                  <div key={idx} className="relative pl-8 space-y-2.5">
+                    <span className="absolute -left-[7px] top-2 w-3 h-3 rounded-full bg-slate-950 border-2 border-primary" />
                     <span className="text-xs font-bold text-primary block">{item.time}</span>
                     <h4 className="text-base font-extrabold text-white">{item.title}</h4>
                     <p className="text-sm text-slate-400 leading-relaxed">{item.desc}</p>
@@ -367,10 +367,10 @@ export default function EventLandingPage() {
                 <span className="w-2.5 h-2.5 rounded-full bg-secondary" />
                 <h3 className="text-xl font-extrabold text-white">Day 2 — September 4, 2026</h3>
               </div>
-              <div className="space-y-6 relative border-l border-white/10 ml-4 md:ml-6">
+              <div className="space-y-8 relative border-l-2 border-white/10 ml-6 md:ml-8">
                 {SCHEDULE_DAY_2.map((item, idx) => (
-                  <div key={idx} className="relative pl-6 space-y-2">
-                    <span className="absolute -left-[6px] top-1.5 w-3 h-3 rounded-full bg-slate-950 border-2 border-secondary" />
+                  <div key={idx} className="relative pl-8 space-y-2.5">
+                    <span className="absolute -left-[7px] top-2 w-3 h-3 rounded-full bg-slate-950 border-2 border-secondary" />
                     <span className="text-xs font-bold text-secondary block">{item.time}</span>
                     <h4 className="text-base font-extrabold text-white">{item.title}</h4>
                     <p className="text-sm text-slate-400 leading-relaxed">{item.desc}</p>
@@ -383,10 +383,10 @@ export default function EventLandingPage() {
       </section>
 
       <section id="venue" className="section-py relative z-10 bg-surface/20 border-t border-white/5">
-        <div className="w-full max-w-[1400px] mx-auto px-6 xs:px-8 md:px-12 lg:px-16">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="w-full max-w-[1280px] mx-auto px-8 md:px-16 lg:px-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             
-            <div className="lg:col-span-5 space-y-6 text-left">
+            <div className="space-y-6 text-left">
               <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
                 <MapPin className="w-4 h-4" />
                 <span>Location Details</span>
@@ -417,7 +417,7 @@ export default function EventLandingPage() {
               </div>
             </div>
 
-            <div className="lg:col-span-7">
+            <div className="w-full">
               <div className="glass-card overflow-hidden gradient-border-glow p-3 shadow-2xl relative">
                 <div className="relative aspect-video rounded-xl bg-slate-900 overflow-hidden flex items-center justify-center">
                   <div className="absolute inset-0 bg-slate-950/70 z-10 flex flex-col items-center justify-center text-center p-6 space-y-4">
@@ -447,7 +447,7 @@ export default function EventLandingPage() {
       </section>
 
       <section id="faqs" className="section-py relative z-10 border-t border-white/5 bg-surface/10">
-        <div className="w-full max-w-[1400px] mx-auto px-6 xs:px-8 md:px-12 lg:px-16">
+        <div className="w-full max-w-[1280px] mx-auto px-8 md:px-16 lg:px-20">
           <div className="text-center mb-16 max-w-2xl mx-auto space-y-3">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
               <Shield className="w-4 h-4" />
@@ -498,7 +498,7 @@ export default function EventLandingPage() {
       </section>
 
       <section className="section-py relative z-10 border-t border-white/5 bg-gradient-to-br from-primary/5 to-secondary/5">
-        <div className="w-full max-w-[1400px] mx-auto px-6 xs:px-8 md:px-12 lg:px-16 text-center">
+        <div className="w-full max-w-[1280px] mx-auto px-8 md:px-16 lg:px-20 text-center">
           <div className="max-w-3xl mx-auto space-y-8">
             <Trophy className="w-16 h-16 text-warning mx-auto animate-bounce" />
             <div className="space-y-3">
