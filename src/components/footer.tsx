@@ -104,7 +104,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <a
-                  href="https://konfhub.com/checkout/arvix-nexus-2026-national-level-innovation-hackathon"
+                  href="https://konfhub.com/arvix-nexus-2026-national-level-innovation-hackathon"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-slate-400 hover:text-primary hover:translate-x-1 transition-all duration-300 inline-block font-medium"

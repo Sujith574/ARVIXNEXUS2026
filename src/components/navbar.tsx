@@ -143,7 +143,7 @@ export default function Navbar() {
             {/* ── Desktop Action ── */}
             <div className="hidden lg:flex items-center gap-4">
               <a
-                href="https://konfhub.com/checkout/arvix-nexus-2026-national-level-innovation-hackathon"
+                href="https://konfhub.com/arvix-nexus-2026-national-level-innovation-hackathon"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-5 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-primary to-secondary hover:opacity-95 hover:scale-[1.02] rounded-xl shadow-lg shadow-primary/15 hover:shadow-primary/25 transition-all duration-300"
@@ -226,7 +226,7 @@ export default function Navbar() {
           {/* Register Action */}
           <div className="px-5 mt-auto pt-6 border-t border-white/5 mt-6">
             <a
-              href="https://konfhub.com/checkout/arvix-nexus-2026-national-level-innovation-hackathon"
+              href="https://konfhub.com/arvix-nexus-2026-national-level-innovation-hackathon"
               target="_blank"
               rel="noopener noreferrer"
               onClick={closeMenu}

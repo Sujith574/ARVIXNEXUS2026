@@ -160,7 +160,7 @@ export default function EventLandingPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <a
-                  href="https://konfhub.com/checkout/arvix-nexus-2026-national-level-innovation-hackathon"
+                  href="https://konfhub.com/arvix-nexus-2026-national-level-innovation-hackathon"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4.5 bg-gradient-to-r from-primary to-secondary hover:opacity-95 text-white rounded-2xl font-bold text-base shadow-xl shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5"
@@ -224,7 +224,7 @@ export default function EventLandingPage() {
       </section>
 
       <section className="relative z-10 w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 mb-16">
-        <div className="glass-card gradient-border-glow p-8 sm:p-10 flex flex-col lg:flex-row justify-between items-center gap-8">
+        <div className="glass-card gradient-border-glow p-6 sm:p-8 lg:p-10 flex flex-col lg:flex-row justify-between items-center gap-8">
           <div className="text-center lg:text-left space-y-2 max-w-md">
             <div className="flex items-center justify-center lg:justify-start gap-2.5">
               <Clock className="w-5 h-5 text-primary animate-pulse" />
@@ -272,7 +272,7 @@ export default function EventLandingPage() {
               
               <div className="pt-2">
                 <a
-                  href="https://konfhub.com/checkout/arvix-nexus-2026-national-level-innovation-hackathon"
+                  href="https://konfhub.com/arvix-nexus-2026-national-level-innovation-hackathon"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-secondary hover:opacity-95 text-white rounded-xl font-bold text-sm shadow-md transition-all hover:-translate-y-0.5"
@@ -317,7 +317,7 @@ export default function EventLandingPage() {
             {HACKATHON_THEMES.map((theme, i) => {
               const Icon = theme.icon;
               return (
-                <div key={i} className="glass-card p-8 border border-white/5 flex flex-col space-y-5 hover:border-primary/30 transition-all duration-300 group">
+                <div key={i} className="glass-card p-6 sm:p-8 border border-white/5 flex flex-col space-y-5 hover:border-primary/30 transition-all duration-300 group">
                   <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${theme.color} group-hover:scale-105 transition-transform duration-300`}>
                     <Icon className="w-6 h-6" />
                   </div>
@@ -353,7 +353,7 @@ export default function EventLandingPage() {
               <div className="space-y-6 relative pl-6 border-l border-white/10 ml-1">
                 {SCHEDULE_DAY_1.map((item, idx) => (
                   <div key={idx} className="relative space-y-2">
-                    <span className="absolute -left-[30px] top-1.5 w-3 h-3 rounded-full bg-slate-950 border-2 border-primary" />
+                    <span className="absolute -left-[6px] top-1.5 w-3 h-3 rounded-full bg-slate-950 border-2 border-primary" />
                     <span className="text-xs font-bold text-primary block">{item.time}</span>
                     <h4 className="text-base font-extrabold text-white">{item.title}</h4>
                     <p className="text-sm text-slate-400 leading-relaxed">{item.desc}</p>
@@ -370,7 +370,7 @@ export default function EventLandingPage() {
               <div className="space-y-6 relative pl-6 border-l border-white/10 ml-1">
                 {SCHEDULE_DAY_2.map((item, idx) => (
                   <div key={idx} className="relative space-y-2">
-                    <span className="absolute -left-[30px] top-1.5 w-3 h-3 rounded-full bg-slate-950 border-2 border-secondary" />
+                    <span className="absolute -left-[6px] top-1.5 w-3 h-3 rounded-full bg-slate-950 border-2 border-secondary" />
                     <span className="text-xs font-bold text-secondary block">{item.time}</span>
                     <h4 className="text-base font-extrabold text-white">{item.title}</h4>
                     <p className="text-sm text-slate-400 leading-relaxed">{item.desc}</p>
@@ -510,7 +510,7 @@ export default function EventLandingPage() {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
               <a
-                href="https://konfhub.com/checkout/arvix-nexus-2026-national-level-innovation-hackathon"
+                href="https://konfhub.com/arvix-nexus-2026-national-level-innovation-hackathon"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4.5 bg-gradient-to-r from-primary to-secondary hover:opacity-95 text-white rounded-2xl font-bold text-base shadow-xl shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5"
