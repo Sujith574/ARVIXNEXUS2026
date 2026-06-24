@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap');
-@import "tailwindcss" source("../..");
-
-/* Define custom xs breakpoint (480px) for Tailwind v4 */
+@import "tailwindcss";/* Define custom xs breakpoint (480px) for Tailwind v4 */
 @custom-media --xs-screen (min-width: 480px);
 
 @theme {
@@ -155,14 +153,14 @@ p {
 }
 
 .hero-heading {
-  font-size: clamp(48px, 7vw, 88px);
+  font-size: clamp(36px, 5vw, 64px);
   font-weight: 900;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .section-heading {
-  font-size: clamp(32px, 4.5vw, 56px);
+  font-size: clamp(28px, 4vw, 48px);
   font-weight: 800;
   line-height: 1.2;
   letter-spacing: -0.02em;
